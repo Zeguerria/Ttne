@@ -1,0 +1,1805 @@
+/* =========================================
+FUTURE TABLE PREMIUM CSS V2
+========================================= */
+
+:root{
+
+    --future-primary:#00e5ff;
+    --future-success:#00ff9f;
+    --future-danger:#ff4d6d;
+    --future-warning:#ffb703;
+    --future-info:#3a86ff;
+
+    --future-bg:
+        rgba(15,15,25,.78);
+
+    --future-card:
+        rgba(255,255,255,.04);
+
+    --future-border:
+        rgba(255,255,255,.08);
+
+    --future-text:#ffffff;
+
+    --future-shadow:
+        0 0 35px rgba(0,229,255,.08);
+
+}
+
+
+
+/* =========================================
+BODY
+========================================= */
+
+body{
+
+    background:
+        #060816;
+
+    color:
+        var(--future-text);
+
+    font-family:
+        "Inter",
+        sans-serif;
+
+}
+
+
+
+/* =========================================
+WRAPPER
+========================================= */
+
+.futureTableWrapper{
+
+    width:100%;
+
+    padding:20px;
+
+}
+
+
+
+/* =========================================
+CARD
+========================================= */
+
+.futureTableCard{
+
+    position:relative;
+
+    background:
+        var(--future-bg);
+
+    backdrop-filter:
+        blur(18px);
+
+    border:
+        1px solid var(--future-border);
+
+    border-radius:
+        28px;
+
+    overflow:hidden;
+
+    box-shadow:
+        var(--future-shadow);
+
+}
+
+
+
+/* =========================================
+HEADER
+========================================= */
+
+.futureTableHeader{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+
+    padding:25px;
+
+    border-bottom:
+        1px solid var(--future-border);
+
+}
+
+
+.futureTableLeft,
+.futureTableRight{
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    flex-wrap:wrap;
+
+}
+
+
+
+/* =========================================
+BUTTONS
+========================================= */
+
+.futureBtn{
+
+    border:none;
+
+    padding:
+        12px 18px;
+
+    border-radius:
+        14px;
+
+    font-weight:600;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    transition:
+        .3s ease;
+
+    cursor:pointer;
+
+}
+
+
+.futureBtn:hover{
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.25);
+
+}
+
+
+.primaryBtn{
+
+    background:
+        var(--future-primary);
+
+    color:black;
+
+}
+
+
+.successBtn{
+
+    background:
+        var(--future-success);
+
+    color:black;
+
+}
+
+
+.warningBtn{
+
+    background:
+        var(--future-warning);
+
+    color:black;
+
+}
+
+
+.dangerBtn{
+
+    background:
+        var(--future-danger);
+
+    color:white;
+
+}
+
+
+.infoBtn{
+
+    background:
+        var(--future-info);
+
+    color:white;
+
+}
+
+
+
+/* =========================================
+SEARCH
+========================================= */
+
+.futureSearchBox{
+
+    position:relative;
+
+    width:320px;
+
+}
+
+
+.futureSearchBox i{
+
+    position:absolute;
+
+    top:50%;
+    left:15px;
+
+    transform:
+        translateY(-50%);
+
+    opacity:.7;
+
+}
+
+
+.futureSearchBox input{
+
+    width:100%;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid var(--future-border);
+
+    border-radius:
+        14px;
+
+    padding:
+        12px 18px 12px 45px;
+
+    color:white;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+
+.futureSearchBox input:focus{
+
+    border-color:
+        var(--future-primary);
+
+    box-shadow:
+        0 0 15px rgba(0,229,255,.15);
+
+}
+
+
+
+/* =========================================
+EXPORT GROUP
+========================================= */
+
+.futureExportGroup{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+
+
+/* =========================================
+TABLE
+========================================= */
+
+.futureTableResponsive{
+
+    width:100%;
+
+    overflow:hidden;
+
+}
+
+
+/* HIDE SCROLLBAR */
+
+.futureTableResponsive::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+.futureTableResponsive{
+
+    scrollbar-width:none;
+
+    -ms-overflow-style:none;
+
+}
+
+
+.futureTable{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+
+.futureTable thead{
+
+    background:
+        rgba(255,255,255,.04);
+
+}
+
+
+.futureTable th{
+
+    padding:18px;
+
+    text-transform:uppercase;
+
+    font-size:13px;
+
+    letter-spacing:1px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+}
+
+
+.futureTable td{
+
+    padding:18px;
+
+    border-top:
+        1px solid var(--future-border);
+
+    vertical-align:middle;
+
+}
+
+
+.futureRow{
+
+    transition:
+        .3s ease;
+
+}
+
+
+.futureRow:hover{
+
+    background:
+        rgba(255,255,255,.03);
+
+}
+
+
+
+/* =========================================
+BADGES
+========================================= */
+
+.futureBadge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:
+        7px 12px;
+
+    border-radius:
+        999px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+
+.futureBadge.success{
+
+    background:
+        rgba(0,255,159,.15);
+
+    color:
+        var(--future-success);
+
+}
+
+
+.futureBadge.danger{
+
+    background:
+        rgba(255,77,109,.15);
+
+    color:
+        var(--future-danger);
+
+}
+
+
+
+/* =========================================
+ACTIONS
+========================================= */
+
+.futureActions{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+}
+
+
+.futureMiniBtn{
+
+    width:38px;
+    height:38px;
+
+    border:none;
+
+    border-radius:
+        12px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+.futureMiniBtn:hover{
+
+    transform:
+        translateY(-3px) scale(1.03);
+
+}
+
+
+
+/* =========================================
+CHECKBOX
+========================================= */
+
+.futureCheckbox{
+
+    width:18px;
+    height:18px;
+
+    accent-color:
+        var(--future-primary);
+
+    cursor:pointer;
+
+}
+
+
+
+/* =========================================
+FOOTER
+========================================= */
+
+.futureTableFooter{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+
+    padding:20px;
+
+    border-top:
+        1px solid var(--future-border);
+
+}
+
+
+
+/* =========================================
+SELECTED ACTIONS
+========================================= */
+
+.futureSelectedActions{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+
+
+/* =========================================
+PAGINATION
+========================================= */
+
+.futurePaginationWrapper{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:20px;
+
+    width:100%;
+
+}
+
+
+.futurePaginationLeft{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+
+.futurePagination{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+
+.futurePageBtn{
+
+    width:42px;
+    height:42px;
+
+    border:none;
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    color:white;
+
+    transition:.3s;
+
+    cursor:pointer;
+
+}
+
+
+.futurePageBtn:hover{
+
+    transform:
+        translateY(-3px);
+
+}
+
+
+.futurePageBtn.active{
+
+    background:
+        var(--future-primary);
+
+    color:black;
+
+    font-weight:700;
+
+}
+
+
+
+/* =========================================
+SELECT
+========================================= */
+
+.futureSelect{
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid var(--future-border);
+
+    color:white;
+
+    border-radius:
+        12px;
+
+    padding:
+        10px 15px;
+
+    outline:none;
+
+    min-width:90px;
+
+}
+
+
+.futureSelect option{
+
+    background:
+        #0d111f;
+
+    color:white;
+
+}
+
+
+
+/* =========================================
+MOBILE CARDS
+========================================= */
+
+.futureMobileCards{
+
+    display:none;
+
+    flex-direction:column;
+
+    gap:20px;
+
+    padding:20px;
+
+}
+
+
+.futureMobileCard{
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid var(--future-border);
+
+    border-radius:
+        22px;
+
+    padding:20px;
+
+    backdrop-filter:
+        blur(10px);
+
+}
+
+
+.futureMobileTop{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    margin-bottom:20px;
+
+    gap:20px;
+
+}
+
+
+.futureMobileTop h5{
+
+    margin:0;
+
+    font-size:18px;
+
+    font-weight:700;
+
+}
+
+
+.futureMobileTop p{
+
+    margin-top:5px;
+
+    opacity:.7;
+
+    font-size:14px;
+
+}
+
+
+.futureMobileBody{
+
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+
+}
+
+
+.futureMobileItem{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+}
+
+
+.futureMobileActions{
+
+    display:flex;
+    gap:10px;
+
+    margin-top:20px;
+
+}
+
+
+
+/* =========================================
+EMPTY STATE
+========================================= */
+
+.futureEmpty{
+
+    text-align:center;
+
+    padding:60px 20px;
+
+    opacity:.7;
+
+}
+
+
+
+/* =========================================
+RESPONSIVE
+========================================= */
+
+@media(max-width:992px){
+
+    .futureTableHeader{
+
+        flex-direction:column;
+        align-items:stretch;
+
+    }
+
+    .futureTableLeft,
+    .futureTableRight{
+
+        width:100%;
+
+    }
+
+    .futureSearchBox{
+
+        width:100%;
+
+    }
+
+}
+
+
+@media(max-width:768px){
+
+    .futureTableResponsive{
+
+        display:none;
+
+    }
+
+    .futureMobileCards{
+
+        display:flex;
+
+    }
+
+    .futureTableFooter{
+
+        flex-direction:column;
+        align-items:stretch;
+
+    }
+
+    .futurePaginationWrapper{
+
+        flex-direction:column;
+        align-items:stretch;
+
+    }
+
+    .futurePaginationLeft,
+    .futurePagination{
+
+        justify-content:center;
+
+    }
+
+    .futureBtn{
+
+        width:100%;
+        justify-content:center;
+
+    }
+
+    .futureExportGroup{
+
+        width:100%;
+
+    }
+
+}
+
+
+@media(max-width:576px){
+
+    .futureTableWrapper{
+
+        padding:10px;
+
+    }
+
+    .futureTableCard{
+
+        border-radius:20px;
+
+    }
+
+    .futureTableHeader{
+
+        padding:20px;
+
+    }
+
+    .futureMobileCard{
+
+        padding:18px;
+
+    }
+
+}
+    /* =========================================
+STATS WRAPPER
+========================================= */
+
+.futureTableStats{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:20px;
+
+}
+
+
+
+/* =========================================
+STAT CARD
+========================================= */
+
+.futureStatCard{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:14px 18px;
+
+    border-radius:18px;
+
+    min-width:170px;
+
+    transition:.3s;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.08);
+
+}
+
+
+
+/* =========================================
+HOVER
+========================================= */
+
+.futureStatCard:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.12);
+
+}
+
+
+
+/* =========================================
+ICON
+========================================= */
+
+.futureStatCard i{
+
+    width:48px;
+
+    height:48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:14px;
+
+    font-size:18px;
+
+    flex-shrink:0;
+
+}
+
+
+
+/* =========================================
+TEXT
+========================================= */
+
+.futureStatCard small{
+
+    display:block;
+
+    font-size:12px;
+
+    opacity:.85;
+
+    margin-top:3px;
+
+}
+
+
+
+.futureStatValue{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    line-height:1;
+
+}
+
+
+
+/* =========================================
+PRIMARY
+========================================= */
+
+.futureStatCard.primary{
+
+    background:
+        linear-gradient(
+            135deg,
+            #0d6efd,
+            #3d8bfd
+        );
+
+    color:#ffffff;
+
+}
+
+
+
+.futureStatCard.primary i{
+
+    background:
+        rgba(255,255,255,.18);
+
+    color:#ffffff;
+
+}
+
+
+
+/* =========================================
+DANGER
+========================================= */
+
+.futureStatCard.danger{
+
+    background:
+        linear-gradient(
+            135deg,
+            #dc3545,
+            #ff5c75
+        );
+
+    color:#ffffff;
+
+}
+
+
+
+.futureStatCard.danger i{
+
+    background:
+        rgba(255,255,255,.18);
+
+    color:#ffffff;
+
+}
+
+
+
+/* =========================================
+GLOBAL ACTIONS
+========================================= */
+
+.futureGlobalActions{
+
+    position:relative;
+
+    margin-left:auto;
+
+}
+
+
+
+/* =========================================
+GLOBAL BUTTON
+========================================= */
+
+#futureGlobalActionBtn{
+
+    width:48px;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:16px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #1f2937
+        );
+
+    color:#ffffff;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.15);
+
+}
+
+
+
+#futureGlobalActionBtn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+
+
+/* =========================================
+DROPDOWN
+========================================= */
+
+.futureGlobalDropdown{
+
+    position:absolute;
+
+    top:60px;
+
+    right:0;
+
+    width:260px;
+
+    background:#111827;
+
+    border-radius:18px;
+
+    padding:10px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.25);
+
+    z-index:9999;
+
+
+
+    /*
+    HIDDEN
+    */
+
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transform:
+        translateY(10px)
+        scale(.98);
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease,
+        visibility .25s;
+
+}
+
+
+
+/* =========================================
+ACTIVE
+========================================= */
+
+.futureGlobalActions.active
+.futureGlobalDropdown{
+
+    opacity:1;
+
+    visibility:visible;
+
+    pointer-events:auto;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+
+/* =========================================
+DROPDOWN ITEMS
+========================================= */
+
+.futureDropdownItem{
+
+    width:100%;
+
+    border:none;
+
+    background:none;
+
+    padding:14px 15px;
+
+    border-radius:14px;
+
+    text-align:left;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-weight:600;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    color:#f9fafb;
+
+}
+
+
+
+/* =========================================
+ITEM ICON
+========================================= */
+
+.futureDropdownItem i{
+
+    width:18px;
+
+    text-align:center;
+
+    color:inherit;
+
+}
+
+
+
+/* =========================================
+HOVER
+========================================= */
+
+.futureDropdownItem:hover{
+
+    background:
+        rgba(255,255,255,.08);
+
+    transform:translateX(3px);
+
+}
+
+
+
+/* =========================================
+SPECIAL COLORS
+========================================= */
+
+#futureDeleteAllBtn{
+
+    color:#f87171;
+
+}
+
+
+
+#futureRestoreAllBtn{
+
+    color:#4ade80;
+
+}
+
+
+
+#futureForceDeleteBtn{
+
+    color:#fb7185;
+
+}
+
+
+
+/* =========================================
+RESPONSIVE
+========================================= */
+
+@media(max-width:768px){
+
+    .futureTableStats{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+
+
+    .futureStatCard{
+
+        width:100%;
+
+    }
+
+
+
+    .futureGlobalActions{
+
+        width:100%;
+
+    }
+
+
+
+    #futureGlobalActionBtn{
+
+        width:100%;
+
+    }
+
+
+
+    .futureGlobalDropdown{
+
+        width:100%;
+
+        top:65px;
+
+    }
+
+}
+    /* =========================================
+STATS WRAPPER
+========================================= */
+
+.futureTableStats{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:20px;
+
+}
+
+
+
+/* =========================================
+STAT CARD
+========================================= */
+
+.futureStatCard{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:14px 18px;
+
+    border-radius:18px;
+
+    min-width:170px;
+
+    transition:.3s;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.08);
+
+}
+
+
+
+/* =========================================
+HOVER
+========================================= */
+
+.futureStatCard:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.12);
+
+}
+
+
+
+/* =========================================
+ICON
+========================================= */
+
+.futureStatCard i{
+
+    width:48px;
+
+    height:48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:14px;
+
+    font-size:18px;
+
+    flex-shrink:0;
+
+}
+
+
+
+/* =========================================
+TEXT
+========================================= */
+
+.futureStatCard small{
+
+    display:block;
+
+    font-size:12px;
+
+    opacity:.85;
+
+    margin-top:3px;
+
+}
+
+
+
+.futureStatValue{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    line-height:1;
+
+}
+
+
+
+/* =========================================
+PRIMARY
+========================================= */
+
+.futureStatCard.primary{
+
+    background:
+        linear-gradient(
+            135deg,
+            #0d6efd,
+            #3d8bfd
+        );
+
+    color:#ffffff;
+
+}
+
+
+
+.futureStatCard.primary i{
+
+    background:
+        rgba(255,255,255,.18);
+
+    color:#ffffff;
+
+}
+
+
+
+/* =========================================
+DANGER
+========================================= */
+
+.futureStatCard.danger{
+
+    background:
+        linear-gradient(
+            135deg,
+            #dc3545,
+            #ff5c75
+        );
+
+    color:#ffffff;
+
+}
+
+
+
+.futureStatCard.danger i{
+
+    background:
+        rgba(255,255,255,.18);
+
+    color:#ffffff;
+
+}
+
+
+
+/* =========================================
+GLOBAL ACTIONS
+========================================= */
+
+.futureGlobalActions{
+
+    position:relative;
+
+    margin-left:auto;
+
+}
+
+
+
+/* =========================================
+GLOBAL BUTTON
+========================================= */
+
+#futureGlobalActionBtn{
+
+    width:48px;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:16px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #1f2937
+        );
+
+    color:#ffffff;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.15);
+
+}
+
+
+
+#futureGlobalActionBtn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+
+
+/* =========================================
+DROPDOWN
+========================================= */
+
+.futureGlobalDropdown{
+
+    position:absolute;
+
+    top:60px;
+
+    right:0;
+
+    width:260px;
+
+    background:#111827;
+
+    border-radius:18px;
+
+    padding:10px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.25);
+
+    z-index:9999;
+
+
+
+    /*
+    HIDDEN
+    */
+
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transform:
+        translateY(10px)
+        scale(.98);
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease,
+        visibility .25s;
+
+}
+
+
+
+/* =========================================
+ACTIVE
+========================================= */
+
+.futureGlobalActions.active
+.futureGlobalDropdown{
+
+    opacity:1;
+
+    visibility:visible;
+
+    pointer-events:auto;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+
+/* =========================================
+DROPDOWN ITEMS
+========================================= */
+
+.futureDropdownItem{
+
+    width:100%;
+
+    border:none;
+
+    background:none;
+
+    padding:14px 15px;
+
+    border-radius:14px;
+
+    text-align:left;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-weight:600;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    color:#f9fafb;
+
+}
+
+
+
+/* =========================================
+ITEM ICON
+========================================= */
+
+.futureDropdownItem i{
+
+    width:18px;
+
+    text-align:center;
+
+    color:inherit;
+
+}
+
+
+
+/* =========================================
+HOVER
+========================================= */
+
+.futureDropdownItem:hover{
+
+    background:
+        rgba(255,255,255,.08);
+
+    transform:translateX(3px);
+
+}
+
+
+
+/* =========================================
+SPECIAL COLORS
+========================================= */
+
+#futureDeleteAllBtn{
+
+    color:#f87171;
+
+}
+
+
+
+#futureRestoreAllBtn{
+
+    color:#4ade80;
+
+}
+
+
+
+#futureForceDeleteBtn{
+
+    color:#fb7185;
+
+}
+
+
+
+/* =========================================
+RESPONSIVE
+========================================= */
+
+@media(max-width:768px){
+
+    .futureTableStats{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+
+
+    .futureStatCard{
+
+        width:100%;
+
+    }
+
+
+
+    .futureGlobalActions{
+
+        width:100%;
+
+    }
+
+
+
+    #futureGlobalActionBtn{
+
+        width:100%;
+
+    }
+
+
+
+    .futureGlobalDropdown{
+
+        width:100%;
+
+        top:65px;
+
+    }
+
+}

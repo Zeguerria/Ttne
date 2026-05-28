@@ -7,18 +7,23 @@
     <title>TnE - @yield('titre')</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        #tsparticles {
-    position: fixed; /* ou absolute selon ton besoin */
-    width: 100%;
-    height: 100%;
-    color:blue;
-    top: 0;
-    left: 0;
-    z-index: -1; /* pour passer derrière ton contenu */
-}
-    </style>
+      <!-- 🔐 CSRF TOKEN -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    {{-- CONSOMMABLES DEBUT --}}
+        {{-- SELECT2 --}}
+        <link rel="stylesheet" href="{{asset('dependances/templates/consomables/selects/select2.css')}}">
+        {{-- FONTAWS --}}
+        <link rel="stylesheet" href="{{asset('dependances/templates/admins/css/font-awesome.min.css')}}">
+
+        {{-- <link rel="stylesheet" href="{{asset('dependances/templates/consomables/autres/monstyle.css')}}"> --}}
+        {{-- MONSTYLE --}}
+        <link rel="stylesheet" href="{{asset('dependances/templates/consomables/autres/monstyle.css')}}">
+        <link rel="stylesheet" href="{{asset('dependances/templates/consomables/autres/histopage.css')}}">
+        {{-- MON DATA TABLE DEBUT --}}
+            <link rel="stylesheet" href="{{asset('dependances/templates/consomables/tables/table.css')}}">
+        {{-- MON DATA TABLE FIN --}}
+    {{-- CONSOMMABLES FIN --}}
     <!-- favicon
 		============================================ -->
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
@@ -36,6 +41,11 @@
     <link rel="stylesheet" href="{{asset('dependances/templates/admins/css/owl.carousel.css')}}">
     <link rel="stylesheet" href="{{asset('dependances/templates/admins/css/owl.theme.css')}}">
     <link rel="stylesheet" href="{{asset('dependances/templates/admins/css/owl.transitions.css')}}">
+
+
+    <link rel="stylesheet" href="{{asset('dependances/templates/admins/admins/css/data-table/bootstrap-table.css')}}">
+    <link rel="stylesheet" href="{{asset('dependances/templates/admins/admins/css/data-table/bootstrap-editable.css')}}">
+
     <!-- animate CSS
 		============================================ -->
     <link rel="stylesheet" href="{{asset('dependances/templates/admins/css/animate.css')}}">
@@ -76,7 +86,7 @@
     <script src="{{asset('dependances/templates/admins/js/vendor/modernizr-2.8.3.min.js')}}"></script>
 </head>
 
-<body>
+<body x-data>
 
     @yield('header')
     <!--[if lt IE 8]>
@@ -95,10 +105,10 @@
                         <li class="active">
                             <a class="has-arrow" href="index.html">
 								   <span class="educate-icon educate-home icon-wrap"></span>
-								   <span class="mini-click-non">Education</span>
+								   <span class="mini-click-non">Paramétrages</span>
 								</a>
                             <ul class="submenu-angle" aria-expanded="true">
-                                <li><a title="Dashboard v.1" href="index.html"><span class="mini-sub-pro">Dashboard v.1</span></a></li>
+                                <li><a title="Dashboard v.1" href="{{route('ADM-TP-type')}}"><span class="mini-sub-pro">Type de Paramétre</span></a></li>
                                 <li><a title="Dashboard v.2" href="index-1.html"><span class="mini-sub-pro">Dashboard v.2</span></a></li>
                                 <li><a title="Dashboard v.3" href="index-2.html"><span class="mini-sub-pro">Dashboard v.3</span></a></li>
                                 <li><a title="Analytics" href="analytics.html"><span class="mini-sub-pro">Analytics</span></a></li>
@@ -1054,7 +1064,7 @@
                 </div>
             </div>
             <!-- Mobile Menu end -->
-            <div class="breadcome-area">
+            {{-- <div class="breadcome-area">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -1072,7 +1082,7 @@
                                         <ul class="breadcome-menu">
                                             <li><a href="#">Home</a> <span class="bread-slash">/</span>
                                             </li>
-                                            <li><span class="bread-blod">Dashboard V.1</span>
+                                            <li><span class="bread-blod">Dashboard V.1ç</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -1081,9 +1091,556 @@
                         </div>
                     </div>
                 </div>
+            </div> --}}
+           <div class="futureBreadWrapper">
+
+    <div class="futureBreadCard">
+
+        <div class="futureBreadContent">
+
+            {{-- LEFT --}}
+            <div class="futureBreadLeft">
+
+                {{-- BREADCRUMB --}}
+                <ul class="futureBreadList">
+
+                    <li>
+                        <a href="#">
+                            Home
+                        </a>
+                    </li>
+
+                    <li class="futureBreadSeparator">
+                        /
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li class="futureBreadSeparator">
+                        /
+                    </li>
+
+                    <li class="active">
+
+                        <span>
+                            Type de paramètre
+                        </span>
+
+                    </li>
+
+                </ul>
+
             </div>
+
+
+
+            {{-- RIGHT --}}
+            <div class="futureBreadRight">
+
+                {{-- SEARCH --}}
+                <div class="futureBreadSearch">
+
+                    <i class="fa fa-search"></i>
+
+                    <input
+                        type="text"
+                        placeholder="Rechercher..."
+                    >
+
+                </div>
+
+            </div>
+
         </div>
-        <div id="tsparticles"></div>
+
+    </div>
+
+</div>
+<style>
+    /* =========================================
+FUTURE BREAD PREMIUM CSS
+========================================= */
+
+
+
+/* =========================================
+WRAPPER
+========================================= */
+
+.futureBreadWrapper{
+
+    width:100%;
+
+    padding:20px;
+
+    margin-bottom:25px;
+
+}
+
+
+
+/* =========================================
+CARD
+========================================= */
+
+.futureBreadCard{
+
+    position:relative;
+
+    background:
+        var(--future-bg);
+
+    backdrop-filter:
+        blur(18px);
+
+    border:
+        1px solid var(--future-border);
+
+    border-radius:
+        28px;
+
+    overflow:hidden;
+
+    box-shadow:
+        var(--future-shadow);
+
+}
+
+
+
+/* =========================================
+CONTENT
+========================================= */
+
+.futureBreadContent{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    padding:22px 25px;
+
+}
+
+
+
+/* =========================================
+LEFT
+========================================= */
+
+.futureBreadLeft{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+
+
+/* =========================================
+RIGHT
+========================================= */
+
+.futureBreadRight{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    margin-left:auto;
+
+}
+
+
+
+/* =========================================
+SEARCH
+========================================= */
+
+.futureBreadSearch{
+
+    position:relative;
+
+    width:320px;
+
+    margin-left:auto;
+
+}
+
+
+
+/* ICON */
+
+.futureBreadSearch i{
+
+    position:absolute;
+
+    top:50%;
+
+    left:16px;
+
+    transform:translateY(-50%);
+
+    color:
+        rgba(255,255,255,.65);
+
+}
+
+
+
+/* INPUT */
+
+.futureBreadSearch input{
+
+    width:100%;
+
+    height:48px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:14px;
+
+    padding:
+        0 18px 0 45px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid var(--future-border);
+
+    color:#ffffff;
+
+    transition:.25s;
+
+}
+
+
+
+/* PLACEHOLDER */
+
+.futureBreadSearch input::placeholder{
+
+    color:
+        rgba(255,255,255,.55);
+
+}
+
+
+
+/* FOCUS */
+
+.futureBreadSearch input:focus{
+
+    border-color:
+        var(--future-primary);
+
+    box-shadow:
+        0 0 20px rgba(0,229,255,.15);
+
+}
+
+
+
+/* =========================================
+BREAD LIST
+========================================= */
+
+.futureBreadList{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin:0;
+
+    padding:0;
+
+    list-style:none;
+
+    flex-wrap:wrap;
+
+}
+
+
+
+/* =========================================
+ITEMS
+========================================= */
+
+.futureBreadList li{
+
+    display:flex;
+
+    align-items:center;
+
+    font-size:14px;
+
+}
+
+
+
+/* =========================================
+LINKS
+========================================= */
+
+.futureBreadList li a{
+
+    color:
+        rgba(255,255,255,.75);
+
+    text-decoration:none;
+
+    transition:.25s;
+
+    font-weight:500;
+
+}
+
+
+
+/* HOVER */
+
+.futureBreadList li a:hover{
+
+    color:
+        var(--future-primary);
+
+}
+
+
+
+/* =========================================
+ACTIVE
+========================================= */
+
+.futureBreadList li.active span{
+
+    color:#ffffff;
+
+    font-weight:700;
+
+}
+
+
+
+/* =========================================
+SEPARATOR
+========================================= */
+
+.futureBreadSeparator{
+
+    color:
+        rgba(255,255,255,.35);
+
+}
+
+
+
+/* =========================================
+OPTIONAL TAG / CHIP
+========================================= */
+
+.futureBreadTag{
+
+    padding:
+        6px 12px;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    color:#ffffff;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+
+
+/* =========================================
+OPTIONAL ACTIONS
+========================================= */
+
+.futureBreadActions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+
+
+/* =========================================
+OPTIONAL MINI BUTTON
+========================================= */
+
+.futureBreadMiniBtn{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:14px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    color:#ffffff;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+
+
+/* HOVER */
+
+.futureBreadMiniBtn:hover{
+
+    transform:
+        translateY(-2px);
+
+    background:
+        rgba(255,255,255,.08);
+
+}
+
+
+
+/* =========================================
+RESPONSIVE
+========================================= */
+
+@media(max-width:992px){
+
+    .futureBreadContent{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+
+
+    .futureBreadLeft,
+    .futureBreadRight{
+
+        width:100%;
+
+    }
+
+
+
+    .futureBreadRight{
+
+        justify-content:flex-start;
+
+        margin-left:0;
+
+    }
+
+
+
+    .futureBreadSearch{
+
+        width:100%;
+
+    }
+
+}
+
+
+
+/* =========================================
+MOBILE
+========================================= */
+
+@media(max-width:576px){
+
+    .futureBreadWrapper{
+
+        padding:10px;
+
+    }
+
+
+
+    .futureBreadCard{
+
+        border-radius:20px;
+
+    }
+
+
+
+    .futureBreadContent{
+
+        padding:18px;
+
+    }
+
+
+
+    .futureBreadList{
+
+        gap:8px;
+
+    }
+
+
+
+    .futureBreadSearch input{
+
+        height:45px;
+
+    }
+
+}
+</style>
+        </div>
+
 
 
         @yield('corps')
@@ -1163,13 +1720,2883 @@
     <script src="{{asset('dependances/templates/admins/js/tawk-chat.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 
+
+
+
+
+
+ {{-- DATA TABLE DEBUT --}}
+        <script src="{{asset('dependances/templates/admins/js/data-table/bootstrap-table.js')}}"></script>
+        <script src="{{asset('dependances/templates/admins/js/data-table/tableExport.js')}}"></script>
+        <script src="{{asset('dependances/templates/admins/js/data-table/data-table-active.js')}}"></script>
+        <script src="{{asset('dependances/templates/admins/js/data-table/bootstrap-table-editable.js')}}"></script>
+        <script src="{{asset('dependances/templates/admins/js/data-table/bootstrap-editable.js')}}"></script>
+        <script src="{{asset('dependances/templates/admins/js/data-table/bootstrap-table-resizable.js')}}"></script>
+        <script src="{{asset('dependances/templates/admins/js/data-table/colResizable-1.5.source.js')}}"></script>
+        <script src="{{asset('dependances/templates/admins/js/data-table/bootstrap-table-export.js')}}"></script>
+    {{-- DATA TABLE FIN --}}
+     <!-- select2 JS
+		============================================ -->
+        <script src="{{asset('dependances/templates/admins/js/select2/select2.full.min.js')}}"></script>
+        <script src="{{asset('dependances/templates/admins/js/select2/select2-active.js')}}"></script>
+         <!-- chosen JS
+		============================================ -->
+    <script src="{{asset('dependances/templates/admins/js/chosen/chosen.jquery.js')}}"></script>
+    <script src="{{asset('dependances/templates/admins/js/chosen/chosen-active.js')}}"></script>
+
+    <!-- summernote JS
+		============================================ -->
+        <script src="{{asset('dependances/templates/admins/js/summernote/summernote.min.js')}}"></script>
+        <script src="{{asset('dependances/templates/admins/js/summernote/summernote-active.js')}}"></script>
+        {{-- CONSOMMABLES DEBUT --}}
+
+            {{-- ALPINE --}}
+            <script src="{{asset('dependances/templates/consomables/alpines/alpine.js')}}"></script>
+            {{-- SELECT --}}
+            <script src="{{asset('dependances/templates/consomables/selects/select2.js')}}"></script>
+            <script src="{{asset('dependances/templates/consomables/selects/script.js')}}"></script>
+            {{-- POPPS --}}
+            <script src="{{asset('dependances/templates/consomables/popps/pop.js')}}"></script>
+            {{-- JQUERRY --}}
+            <script src="{{asset('dependances/templates/consomables/jquerys/jq.js')}}"></script>
+            {{-- GSAP --}}
+            <script src="{{asset('dependances/templates/consomables/gsaps/gsap.js')}}"></script>
+           {{-- MON DATA TABLE DEBUT --}}
+
+{{-- XLSX --}}
+<script src="{{asset('dependances/templates/consomables/tables/xlsx.js')}}"></script>
+
+{{-- PDF --}}
+<script src="{{asset('dependances/templates/consomables/tables/pdf.js')}}"></script>
+
+{{-- AUTO --}}
+<script src="{{asset('dependances/templates/consomables/tables/auto.js')}}"></script>
+
+{{-- TABLE --}}
+<script src="{{asset('dependances/templates/consomables/tables/table.js')}}"></script>
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    tsParticles.load("tsparticles", {
-        /* ta config */
-    });
-});
+
+    /* =========================================
+    FUTURE TABLE ENGINE V6
+    RESPONSIVE + MOBILE SYNC + EXPORT FIX
+    ========================================= */
+
+    class FutureTable {
+
+        constructor(config = {}) {
+
+            /* =========================================
+            CONFIG
+            ========================================= */
+
+            this.tableSelector =
+                config.table || ".futureTable";
+
+            this.searchSelector =
+                config.search || "#futureSearch";
+
+            this.paginationSelector =
+                config.pagination || "#pagination";
+
+            this.perPageSelector =
+                config.perPage || "#rowsPerPage";
+
+            this.selectAllSelector =
+                config.selectAll || "#selectAll";
+
+
+
+            /* =========================================
+            ELEMENTS
+            ========================================= */
+
+            this.table =
+                document.querySelector(
+                    this.tableSelector
+                );
+
+            if(!this.table) return;
+
+
+
+            this.tbody =
+                this.table.querySelector("tbody");
+
+            this.headers =
+                Array.from(
+                    this.table.querySelectorAll("thead th")
+                );
+
+            this.rows =
+                Array.from(
+                    this.table.querySelectorAll(
+                        "tbody tr.futureRow"
+                    )
+                );
+
+
+
+            this.mobileCards =
+                Array.from(
+                    document.querySelectorAll(
+                        ".futureMobileCard"
+                    )
+                );
+
+
+
+            this.searchInput =
+                document.querySelector(
+                    this.searchSelector
+                );
+
+            this.pagination =
+                document.querySelector(
+                    this.paginationSelector
+                );
+
+            this.rowsPerPage =
+                document.querySelector(
+                    this.perPageSelector
+                );
+
+            this.selectAll =
+                document.querySelector(
+                    this.selectAllSelector
+                );
+
+
+
+            /*
+            EXPORT BUTTONS
+            */
+
+            this.exportExcelBtn =
+                document.getElementById(
+                    "exportExcel"
+                );
+
+            this.exportPDFBtn =
+                document.getElementById(
+                    "exportPDF"
+                );
+
+            this.exportXMLBtn =
+                document.getElementById(
+                    "exportXML"
+                );
+
+            this.exportCSVBtn =
+                document.getElementById(
+                    "exportCSV"
+                );
+
+
+
+            /*
+            BULK EXPORT
+            */
+
+            this.bulkExportSelect =
+                document.getElementById(
+                    "bulkExportSelect"
+                );
+
+
+
+            /*
+            FILTER
+            */
+
+            this.filterBtn =
+                document.getElementById(
+                    "futureFilterBtn"
+                );
+
+
+
+            /* =========================================
+            STATE
+            ========================================= */
+
+            this.currentPage = 1;
+
+            this.perPage = 10;
+
+            this.sortColumn = null;
+
+            this.sortDirection = "asc";
+
+            this.activeFilter = "all";
+
+
+
+            /* =========================================
+            INIT
+            ========================================= */
+
+            this.init();
+
+        }
+
+
+
+        /* =========================================
+        INIT
+        ========================================= */
+
+        init() {
+
+            this.search();
+
+            this.paginationSystem();
+
+            this.selectSystem();
+
+            this.mobileCheckboxSync();
+
+            this.sortSystem();
+
+            this.filterSystem();
+
+            this.bulkExportSystem();
+
+            this.exportExcel();
+
+            this.exportPDF();
+
+            this.exportXML();
+
+            this.exportCSV();
+
+            this.renderTable();
+
+            this.gsapAnimations();
+
+        }
+
+
+
+        /* =========================================
+        SEARCH
+        ========================================= */
+
+        search() {
+
+            if(!this.searchInput) return;
+
+            this.searchInput.addEventListener(
+                "keyup",
+                () => {
+
+                    this.currentPage = 1;
+
+                    this.renderTable();
+
+                }
+            );
+
+        }
+
+
+
+        /* =========================================
+        PAGINATION
+        ========================================= */
+
+        paginationSystem() {
+
+            if(!this.rowsPerPage) return;
+
+            this.rowsPerPage.addEventListener(
+                "change",
+                () => {
+
+                    this.perPage =
+                        this.rowsPerPage.value === "all"
+                        ? "all"
+                        : parseInt(
+                            this.rowsPerPage.value
+                        );
+
+                    this.currentPage = 1;
+
+                    this.renderTable();
+
+                }
+            );
+
+        }
+
+
+
+        /* =========================================
+        FILTER SYSTEM
+        ========================================= */
+
+        filterSystem() {
+
+            if(!this.filterBtn) return;
+
+            this.filterBtn.addEventListener(
+                "click",
+                () => {
+
+                    this.activeFilter =
+                        this.activeFilter === "all"
+                        ? "withDescription"
+                        : "all";
+
+                    this.filterBtn.classList.toggle(
+                        "active"
+                    );
+
+                    this.currentPage = 1;
+
+                    this.renderTable();
+
+                }
+            );
+
+        }
+
+
+
+        /* =========================================
+        GET FILTERED ROWS
+        ========================================= */
+
+        getFilteredRows() {
+
+            let searchValue =
+                this.searchInput
+                ? this.searchInput.value
+                    .toLowerCase()
+                    .trim()
+                : "";
+
+
+
+            return this.rows.filter(row => {
+
+                /*
+                SEARCH
+                */
+
+                let text =
+                    row.innerText.toLowerCase();
+
+                let matchSearch =
+                    text.includes(searchValue);
+
+
+
+                /*
+                FILTER
+                */
+
+                let matchFilter = true;
+
+                if(
+                    this.activeFilter ===
+                    "withDescription"
+                ){
+
+                    let description =
+                        row.children[4]
+                        ?.innerText
+                        .trim()
+                        .toLowerCase();
+
+                    matchFilter =
+                        description &&
+                        description !==
+                        "aucune observation";
+
+                }
+
+
+
+                return (
+                    matchSearch &&
+                    matchFilter
+                );
+
+            });
+
+        }
+
+
+
+        /* =========================================
+        RENDER TABLE
+        ========================================= */
+
+        renderTable() {
+
+            let filteredRows =
+                this.getFilteredRows();
+
+
+
+            /*
+            RESET TABLE ROWS
+            */
+
+            this.rows.forEach(row => {
+
+                row.style.display = "none";
+
+                row.style.opacity = "1";
+
+                row.style.transform =
+                    "translateY(0px)";
+
+            });
+
+
+
+            /*
+            RESET MOBILE CARDS
+            */
+
+            this.mobileCards.forEach(card => {
+
+                card.style.display = "none";
+
+            });
+
+
+
+            let visibleRows = [];
+
+
+
+            /*
+            PAGINATION
+            */
+
+            if(this.perPage === "all"){
+
+                visibleRows = filteredRows;
+
+            }
+
+            else{
+
+                let start =
+                    (this.currentPage - 1)
+                    * this.perPage;
+
+                let end =
+                    start + this.perPage;
+
+                visibleRows =
+                    filteredRows.slice(start, end);
+
+            }
+
+
+
+            /*
+            SHOW ROWS
+            */
+
+            visibleRows.forEach(row => {
+
+                row.style.display = "";
+
+
+
+                /*
+                MOBILE CARD SYNC
+                */
+
+                let rowId =
+                    row.dataset.row;
+
+                let mobileCard =
+                    document.querySelector(
+                        `.futureMobileCard[data-row="${rowId}"]`
+                    );
+
+                if(mobileCard){
+
+                    mobileCard.style.display =
+                        "block";
+
+                }
+
+            });
+
+
+
+            /*
+            GSAP
+            */
+
+            gsap.killTweensOf(
+                visibleRows
+            );
+
+            gsap.fromTo(
+
+                visibleRows,
+
+                {
+                    opacity:0,
+                    y:15
+                },
+
+                {
+                    opacity:1,
+                    y:0,
+                    stagger:.03,
+                    duration:.35,
+                    ease:"power2.out",
+                    clearProps:"all"
+                }
+
+            );
+
+
+
+            this.renderPagination(
+                filteredRows.length
+            );
+
+        }
+
+
+
+        /* =========================================
+        PAGINATION BUTTONS
+        ========================================= */
+
+        renderPagination(totalRows) {
+
+            if(!this.pagination) return;
+
+            this.pagination.innerHTML = "";
+
+
+
+            if(this.perPage === "all") return;
+
+
+
+            let totalPages =
+                Math.ceil(
+                    totalRows / this.perPage
+                );
+
+
+
+            /*
+            PREVIOUS
+            */
+
+            if(this.currentPage > 1){
+
+                let prevBtn =
+                    document.createElement(
+                        "button"
+                    );
+
+                prevBtn.classList.add(
+                    "futurePageBtn"
+                );
+
+                prevBtn.innerHTML =
+                    '<i class="fa fa-angle-left"></i>';
+
+
+
+                prevBtn.addEventListener(
+                    "click",
+                    () => {
+
+                        this.currentPage--;
+
+                        this.renderTable();
+
+                    }
+                );
+
+
+
+                this.pagination.appendChild(
+                    prevBtn
+                );
+
+            }
+
+
+
+            /*
+            PAGES
+            */
+
+            for(
+                let i = 1;
+                i <= totalPages;
+                i++
+            ){
+
+                let btn =
+                    document.createElement(
+                        "button"
+                    );
+
+                btn.classList.add(
+                    "futurePageBtn"
+                );
+
+
+
+                if(i === this.currentPage){
+
+                    btn.classList.add(
+                        "active"
+                    );
+
+                }
+
+
+
+                btn.innerText = i;
+
+
+
+                btn.addEventListener(
+                    "click",
+                    () => {
+
+                        this.currentPage = i;
+
+                        this.renderTable();
+
+                    }
+                );
+
+
+
+                this.pagination.appendChild(
+                    btn
+                );
+
+            }
+
+
+
+            /*
+            NEXT
+            */
+
+            if(
+                this.currentPage <
+                totalPages
+            ){
+
+                let nextBtn =
+                    document.createElement(
+                        "button"
+                    );
+
+                nextBtn.classList.add(
+                    "futurePageBtn"
+                );
+
+                nextBtn.innerHTML =
+                    '<i class="fa fa-angle-right"></i>';
+
+
+
+                nextBtn.addEventListener(
+                    "click",
+                    () => {
+
+                        this.currentPage++;
+
+                        this.renderTable();
+
+                    }
+                );
+
+
+
+                this.pagination.appendChild(
+                    nextBtn
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================================
+        SELECT SYSTEM
+        ========================================= */
+
+        selectSystem() {
+
+            if(!this.selectAll) return;
+
+
+
+            this.selectAll.addEventListener(
+                "change",
+                () => {
+
+                    let desktopCheckboxes =
+                        this.table.querySelectorAll(
+                            ".rowCheckbox"
+                        );
+
+                    let mobileCheckboxes =
+                        document.querySelectorAll(
+                            ".futureMobileCheckbox"
+                        );
+
+
+
+                    desktopCheckboxes.forEach(
+                        checkbox => {
+
+                            checkbox.checked =
+                                this.selectAll.checked;
+
+                        }
+                    );
+
+
+
+                    mobileCheckboxes.forEach(
+                        checkbox => {
+
+                            checkbox.checked =
+                                this.selectAll.checked;
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        /* =========================================
+        MOBILE CHECKBOX SYNC
+        ========================================= */
+
+        mobileCheckboxSync() {
+
+            /*
+            MOBILE -> DESKTOP
+            */
+
+            document
+            .querySelectorAll(
+                ".futureMobileCheckbox"
+            )
+            .forEach(mobileCheckbox => {
+
+                mobileCheckbox
+                .addEventListener(
+                    "change",
+                    () => {
+
+                        let rowId =
+                            mobileCheckbox
+                            .dataset
+                            .row;
+
+                        let desktopCheckbox =
+                            document.querySelector(
+                                `.rowCheckbox[data-row="${rowId}"]`
+                            );
+
+                        if(desktopCheckbox){
+
+                            desktopCheckbox.checked =
+                                mobileCheckbox.checked;
+
+                        }
+
+                    }
+                );
+
+            });
+
+
+
+            /*
+            DESKTOP -> MOBILE
+            */
+
+            document
+            .querySelectorAll(
+                ".rowCheckbox"
+            )
+            .forEach(desktopCheckbox => {
+
+                desktopCheckbox
+                .addEventListener(
+                    "change",
+                    () => {
+
+                        let rowId =
+                            desktopCheckbox
+                            .dataset
+                            .row;
+
+                        let mobileCheckbox =
+                            document.querySelector(
+                                `.futureMobileCheckbox[data-row="${rowId}"]`
+                            );
+
+                        if(mobileCheckbox){
+
+                            mobileCheckbox.checked =
+                                desktopCheckbox.checked;
+
+                        }
+
+                    }
+                );
+
+            });
+
+        }
+
+
+
+        /* =========================================
+        SORT SYSTEM
+        ========================================= */
+
+        sortSystem() {
+
+            this.headers.forEach(
+                (header, index) => {
+
+                    if(
+                        header.dataset.sort
+                        === "false"
+                    ) return;
+
+
+
+                    header.style.cursor =
+                        "pointer";
+
+
+
+                    if(
+                        !header.querySelector(
+                            ".futureSortIcon"
+                        )
+                    ){
+
+                        header.innerHTML += `
+                            <i class="fa fa-sort futureSortIcon ms-2"></i>
+                        `;
+
+                    }
+
+
+
+                    header.addEventListener(
+                        "click",
+                        () => {
+
+                            this.headers
+                            .forEach(h => {
+
+                                let icon =
+                                    h.querySelector(
+                                        ".futureSortIcon"
+                                    );
+
+                                if(icon){
+
+                                    icon.className =
+                                        "fa fa-sort futureSortIcon ms-2";
+
+                                }
+
+                            });
+
+
+
+                            this.sortDirection =
+                                this.sortColumn
+                                === index
+                                &&
+                                this.sortDirection
+                                === "asc"
+                                ? "desc"
+                                : "asc";
+
+
+
+                            this.sortColumn =
+                                index;
+
+
+
+                            let currentIcon =
+                                header.querySelector(
+                                    ".futureSortIcon"
+                                );
+
+
+
+                            if(currentIcon){
+
+                                currentIcon.className =
+                                    this.sortDirection
+                                    === "asc"
+                                    ? "fa fa-sort-up futureSortIcon ms-2"
+                                    : "fa fa-sort-down futureSortIcon ms-2";
+
+                            }
+
+
+
+                            this.rows.sort(
+                                (a, b) => {
+
+                                    let aText =
+                                        a.children[index]
+                                        ?.innerText
+                                        .trim()
+                                        .toLowerCase();
+
+                                    let bText =
+                                        b.children[index]
+                                        ?.innerText
+                                        .trim()
+                                        .toLowerCase();
+
+
+
+                                    let aNum =
+                                        parseFloat(
+                                            aText
+                                        );
+
+                                    let bNum =
+                                        parseFloat(
+                                            bText
+                                        );
+
+
+
+                                    if(
+                                        !isNaN(aNum)
+                                        &&
+                                        !isNaN(bNum)
+                                    ){
+
+                                        return this
+                                        .sortDirection
+                                        === "asc"
+                                            ? aNum - bNum
+                                            : bNum - aNum;
+
+                                    }
+
+
+
+                                    return this
+                                    .sortDirection
+                                    === "asc"
+                                        ? aText.localeCompare(
+                                            bText
+                                        )
+                                        : bText.localeCompare(
+                                            aText
+                                        );
+
+                                }
+                            );
+
+
+
+                            this.rows.forEach(
+                                row => {
+
+                                    this.tbody.appendChild(
+                                        row
+                                    );
+
+                                }
+                            );
+
+
+
+                            this.renderTable();
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        /* =========================================
+        GET SELECTED ROWS
+        ========================================= */
+
+        getSelectedRows() {
+
+            return this.rows.filter(
+                row => {
+
+                    let checkbox =
+                        row.querySelector(
+                            ".rowCheckbox"
+                        );
+
+                    return checkbox?.checked;
+
+                }
+            );
+
+        }
+
+
+
+        /* =========================================
+        BULK EXPORT
+        ========================================= */
+
+        bulkExportSystem() {
+
+            if(!this.bulkExportSelect)
+            return;
+
+
+
+            this.bulkExportSelect
+            .addEventListener(
+                "change",
+                e => {
+
+                    let type =
+                        e.target.value;
+
+                    if(!type) return;
+
+
+
+                    let selectedRows =
+                        this.getSelectedRows();
+
+
+
+                    if(
+                        selectedRows.length <= 0
+                    ){
+
+                        alert(
+                            "Veuillez sélectionner au moins une ligne."
+                        );
+
+                        e.target.value = "";
+
+                        return;
+
+                    }
+
+
+
+                    switch(type){
+
+                        case "excel":
+
+                            this.exportSelectedExcel(
+                                selectedRows
+                            );
+
+                        break;
+
+
+
+                        case "csv":
+
+                            this.exportSelectedCSV(
+                                selectedRows
+                            );
+
+                        break;
+
+
+
+                        case "xml":
+
+                            this.exportSelectedXML(
+                                selectedRows
+                            );
+
+                        break;
+
+
+
+                        case "pdf":
+
+                            this.exportSelectedPDF(
+                                selectedRows
+                            );
+
+                        break;
+
+                    }
+
+
+
+                    e.target.value = "";
+
+                }
+            );
+
+        }
+
+
+
+        /* =========================================
+        EXPORT SELECTED EXCEL
+        ========================================= */
+
+        exportSelectedExcel(rows) {
+
+            let table =
+                this.generateExportTable(
+                    rows
+                );
+
+            let wb =
+                XLSX.utils.table_to_book(
+                    table
+                );
+
+            XLSX.writeFile(
+                wb,
+                "selection.xlsx"
+            );
+
+        }
+
+
+
+        /* =========================================
+        EXPORT SELECTED PDF
+        ========================================= */
+
+        exportSelectedPDF(rows) {
+
+            const { jsPDF } =
+                window.jspdf;
+
+            let doc =
+                new jsPDF();
+
+            let table =
+                this.generateExportTable(
+                    rows
+                );
+
+            doc.autoTable({
+
+                html:table,
+
+                theme:"grid",
+
+                styles:{
+                    fontSize:9
+                }
+
+            });
+
+            doc.save(
+                "selection.pdf"
+            );
+
+        }
+
+
+
+        /* =========================================
+        EXPORT SELECTED XML
+        ========================================= */
+
+        exportSelectedXML(rows) {
+
+            let xml =
+            `<?xml version="1.0" encoding="UTF-8"?>
+            <data>\n`;
+
+
+
+            let exportableHeaders =
+                this.headers.filter(
+                    header =>
+                    header.dataset.export
+                    !== "false"
+                );
+
+
+
+            rows.forEach(row => {
+
+                xml += `    <row>\n`;
+
+
+
+                exportableHeaders.forEach(
+                    header => {
+
+                        let index =
+                            this.headers.indexOf(
+                                header
+                            );
+
+                        let cell =
+                            row.children[index];
+
+                        let tag =
+                            header.innerText
+                            .trim()
+                            .toLowerCase()
+                            .replace(
+                                /\s+/g,
+                                "_"
+                            );
+
+
+
+                        xml += `
+<${tag}>
+${cell.innerText.trim()}
+</${tag}>\n`;
+
+                    }
+                );
+
+
+
+                xml += `    </row>\n`;
+
+            });
+
+
+
+            xml += `</data>`;
+
+
+
+            let blob =
+                new Blob(
+                    [xml],
+                    {
+                        type:
+                        "application/xml"
+                    }
+                );
+
+
+
+            let a =
+                document.createElement(
+                    "a"
+                );
+
+            a.href =
+                URL.createObjectURL(
+                    blob
+                );
+
+            a.download =
+                "selection.xml";
+
+            a.click();
+
+        }
+
+
+
+        /* =========================================
+        EXPORT SELECTED CSV
+        ========================================= */
+
+        exportSelectedCSV(rows) {
+
+            let csv = [];
+
+
+
+            let exportableHeaders =
+                this.headers.filter(
+                    header =>
+                    header.dataset.export
+                    !== "false"
+                );
+
+
+
+            csv.push(
+
+                exportableHeaders
+                    .map(
+                        header =>
+                        `"${header.innerText.trim()}"`
+                    )
+                    .join(",")
+
+            );
+
+
+
+            rows.forEach(row => {
+
+                let rowData = [];
+
+
+
+                exportableHeaders.forEach(
+                    header => {
+
+                        let index =
+                            this.headers.indexOf(
+                                header
+                            );
+
+                        let cell =
+                            row.children[index];
+
+                        rowData.push(
+                            `"${cell.innerText.trim()}"`
+                        );
+
+                    }
+                );
+
+
+
+                csv.push(
+                    rowData.join(",")
+                );
+
+            });
+
+
+
+            let blob =
+                new Blob(
+                    [csv.join("\n")],
+                    {
+                        type:"text/csv"
+                    }
+                );
+
+
+
+            let a =
+                document.createElement(
+                    "a"
+                );
+
+            a.href =
+                URL.createObjectURL(
+                    blob
+                );
+
+            a.download =
+                "selection.csv";
+
+            a.click();
+
+        }
+
+
+
+        /* =========================================
+        GENERATE EXPORT TABLE
+        ========================================= */
+
+        generateExportTable(rows) {
+
+            let table =
+                document.createElement(
+                    "table"
+                );
+
+            let thead =
+                document.createElement(
+                    "thead"
+                );
+
+            let tbody =
+                document.createElement(
+                    "tbody"
+                );
+
+            let headerRow =
+                document.createElement(
+                    "tr"
+                );
+
+
+
+            let exportableHeaders =
+                this.headers.filter(
+                    header =>
+                    header.dataset.export
+                    !== "false"
+                );
+
+
+
+            exportableHeaders.forEach(
+                header => {
+
+                    let th =
+                        document.createElement(
+                            "th"
+                        );
+
+                    th.innerText =
+                        header.innerText.trim();
+
+                    headerRow.appendChild(
+                        th
+                    );
+
+                }
+            );
+
+
+
+            thead.appendChild(
+                headerRow
+            );
+
+
+
+            rows.forEach(row => {
+
+                let tr =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+
+                exportableHeaders.forEach(
+                    header => {
+
+                        let index =
+                            this.headers.indexOf(
+                                header
+                            );
+
+                        let td =
+                            document.createElement(
+                                "td"
+                            );
+
+                        td.innerText =
+                            row.children[index]
+                            ?.innerText
+                            .trim();
+
+                        tr.appendChild(td);
+
+                    }
+                );
+
+
+
+                tbody.appendChild(tr);
+
+            });
+
+
+
+            table.appendChild(thead);
+
+            table.appendChild(tbody);
+
+
+
+            return table;
+
+        }
+
+
+
+        /* =========================================
+        EXPORT ALL
+        ========================================= */
+
+        exportExcel() {
+
+            if(!this.exportExcelBtn)
+            return;
+
+
+
+            this.exportExcelBtn
+            .addEventListener(
+                "click",
+                () => {
+
+                    let clone =
+                        this.cleanExportTable();
+
+                    let wb =
+                        XLSX.utils
+                        .table_to_book(
+                            clone
+                        );
+
+                    XLSX.writeFile(
+                        wb,
+                        "future-table.xlsx"
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        exportPDF() {
+
+            if(!this.exportPDFBtn)
+            return;
+
+
+
+            this.exportPDFBtn
+            .addEventListener(
+                "click",
+                () => {
+
+                    const { jsPDF } =
+                        window.jspdf;
+
+                    let doc =
+                        new jsPDF();
+
+                    doc.autoTable({
+
+                        html:
+                            this.cleanExportTable(),
+
+                        theme:"grid",
+
+                        styles:{
+                            fontSize:9
+                        }
+
+                    });
+
+                    doc.save(
+                        "future-table.pdf"
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        exportXML() {
+
+            if(!this.exportXMLBtn)
+            return;
+
+
+
+            this.exportXMLBtn
+            .addEventListener(
+                "click",
+                () => {
+
+                    this.exportSelectedXML(
+                        this.getFilteredRows()
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        exportCSV() {
+
+            if(!this.exportCSVBtn)
+            return;
+
+
+
+            this.exportCSVBtn
+            .addEventListener(
+                "click",
+                () => {
+
+                    this.exportSelectedCSV(
+                        this.getFilteredRows()
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        /* =========================================
+        CLEAN EXPORT TABLE
+        ========================================= */
+
+        cleanExportTable() {
+
+            return this.generateExportTable(
+                this.getFilteredRows()
+            );
+
+        }
+
+
+
+        /* =========================================
+        GSAP CLEAN
+        ========================================= */
+
+        gsapAnimations() {
+
+            gsap.set(
+
+                [
+
+                    ".futureBtn",
+                    ".futureMiniBtn",
+                    ".futureTableCard",
+                    ".futurePagination",
+                    ".futureSelectedActions",
+                    ".futureExportGroup"
+
+                ],
+
+                {
+                    opacity:1,
+                    y:0,
+                    x:0,
+                    scale:1,
+                    clearProps:"all"
+                }
+
+            );
+
+
+
+            gsap.from(
+
+                ".futureTableCard",
+
+                {
+                    opacity:0,
+                    y:25,
+                    duration:.5,
+                    ease:"power2.out",
+                    clearProps:"all"
+                }
+
+            );
+
+
+
+            gsap.from(
+
+                ".futureBtn",
+
+                {
+                    opacity:0,
+                    y:-15,
+                    stagger:.04,
+                    duration:.35,
+                    ease:"power2.out",
+                    clearProps:"all"
+                }
+
+            );
+
+
+
+            gsap.from(
+
+                ".futureMiniBtn",
+
+                {
+                    opacity:0,
+                    scale:.8,
+                    stagger:.02,
+                    duration:.25,
+                    delay:.15,
+                    ease:"back.out(1.7)",
+                    clearProps:"all"
+                }
+
+            );
+
+
+
+            gsap.from(
+
+                ".futureRow",
+
+                {
+                    opacity:0,
+                    y:15,
+                    stagger:.02,
+                    duration:.3,
+                    delay:.1,
+                    ease:"power2.out",
+                    clearProps:"all"
+                }
+
+            );
+
+
+
+            gsap.from(
+
+                ".futureTableFooter",
+
+                {
+                    opacity:0,
+                    y:15,
+                    duration:.4,
+                    delay:.2,
+                    ease:"power2.out",
+                    clearProps:"all"
+                }
+
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================================
+    INIT
+    ========================================= */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+            new FutureTable({
+
+                table: ".futureTable",
+
+                search: "#futureSearch",
+
+                pagination: "#pagination",
+
+                perPage: "#rowsPerPage",
+
+                selectAll: "#selectAll"
+
+            });
+
+        }
+    );
+
 </script>
+
+
+
+<script>
+
+    /* =========================================
+    GLOBAL DROPDOWN ACTIONS
+    ========================================= */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+            const globalBtn =
+                document.getElementById(
+                    "futureGlobalActionBtn"
+                );
+
+            const globalActions =
+                document.querySelector(
+                    ".futureGlobalActions"
+                );
+
+            const globalDropdown =
+                document.querySelector(
+                    ".futureGlobalDropdown"
+                );
+
+
+
+            /*
+            SECURITY
+            */
+
+            if(
+                !globalBtn
+                ||
+                !globalActions
+                ||
+                !globalDropdown
+            ){
+                return;
+            }
+
+
+
+            /* =========================================
+            TOGGLE
+            ========================================= */
+
+            globalBtn.addEventListener(
+                "click",
+                (e) => {
+
+                    e.preventDefault();
+
+                    e.stopPropagation();
+
+
+
+                    globalActions.classList.toggle(
+                        "active"
+                    );
+
+
+
+                    if(
+                        globalActions.classList.contains(
+                            "active"
+                        )
+                    ){
+
+                        gsap.fromTo(
+
+                            globalDropdown,
+
+                            {
+                                opacity:0,
+                                y:-12,
+                                scale:.96
+                            },
+
+                            {
+                                opacity:1,
+                                y:0,
+                                scale:1,
+                                duration:.22,
+                                ease:"power2.out"
+                            }
+
+                        );
+
+                    }
+
+                }
+            );
+
+
+
+            /* =========================================
+            CLOSE OUTSIDE
+            ========================================= */
+
+            document.addEventListener(
+                "click",
+                (e) => {
+
+                    if(
+                        !globalActions.contains(
+                            e.target
+                        )
+                    ){
+
+                        globalActions.classList.remove(
+                            "active"
+                        );
+
+                    }
+
+                }
+            );
+
+
+
+            /* =========================================
+            INSIDE CLICK
+            ========================================= */
+
+            globalDropdown.addEventListener(
+                "click",
+                (e) => {
+
+                    e.stopPropagation();
+
+                }
+            );
+
+        }
+    );
+
+</script>
+
+{{-- MON DATA TABLE FIN --}}
+
+    {{-- HISTORIQUE PAGE DEBUT --}}
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+
+                /*
+                =========================================================
+                ELEMENTS
+                =========================================================
+                */
+
+                const btn =
+                    document.getElementById(
+                        "futureHistoryBtn"
+                    );
+
+                const dropdown =
+                    document.getElementById(
+                        "futureHistoryDropdown"
+                    );
+
+                const closeBtn =
+                    document.getElementById(
+                        "futureHistoryClose"
+                    );
+
+                const body =
+                    document.getElementById(
+                        "futureHistoryBody"
+                    );
+
+                const pagination =
+                    document.getElementById(
+                        "futureHistoryPagination"
+                    );
+
+                if(
+                    !btn
+                    ||
+                    !dropdown
+                    ||
+                    !body
+                    ||
+                    !pagination
+                ) return;
+
+
+
+                /*
+                =========================================================
+                OPEN
+                =========================================================
+                */
+
+                const openDropdown = () => {
+
+                    dropdown.classList.add(
+                        "active"
+                    );
+
+                };
+
+
+
+                /*
+                =========================================================
+                CLOSE
+                =========================================================
+                */
+
+                const closeDropdown = () => {
+
+                    dropdown.classList.remove(
+                        "active"
+                    );
+
+                };
+
+
+
+                /*
+                =========================================================
+                RESET TO PAGE 1
+                =========================================================
+                */
+
+                const resetHistoryPagination = () => {
+
+                    const url =
+                        new URL(
+                            window.location.href
+                        );
+
+                    url.searchParams.delete(
+                        "history_page"
+                    );
+
+                    window.history.replaceState(
+                        {},
+                        "",
+                        url
+                    );
+
+                };
+
+
+
+                /*
+                =========================================================
+                TOGGLE
+                =========================================================
+                */
+
+                btn.addEventListener("click", (e) => {
+
+                    e.stopPropagation();
+
+                    /*
+                    =========================================================
+                    RESET PAGE
+                    =========================================================
+                    */
+
+                    resetHistoryPagination();
+
+                    dropdown.classList.contains("active")
+                        ? closeDropdown()
+                        : openDropdown();
+
+                });
+
+
+
+                /*
+                =========================================================
+                CLOSE BUTTON
+                =========================================================
+                */
+
+                closeBtn?.addEventListener("click", () => {
+
+                    closeDropdown();
+
+                });
+
+
+
+                /*
+                =========================================================
+                OUTSIDE CLICK
+                =========================================================
+                */
+
+                document.addEventListener("click", (e) => {
+
+                    if(
+
+                        !dropdown.contains(e.target)
+                        &&
+
+                        !btn.contains(e.target)
+
+                    ){
+
+                        closeDropdown();
+
+                    }
+
+                });
+
+
+
+                /*
+                =========================================================
+                ESCAPE
+                =========================================================
+                */
+
+                document.addEventListener("keydown", (e) => {
+
+                    if(e.key === "Escape"){
+
+                        closeDropdown();
+
+                    }
+
+                });
+
+
+
+                /*
+                =========================================================
+                AJAX PAGINATION
+                =========================================================
+                */
+
+                document.addEventListener("click", async (e) => {
+
+                    const paginationBtn =
+                        e.target.closest(
+                            ".futurePaginationBtn"
+                        );
+
+                    if(!paginationBtn) return;
+
+                    e.preventDefault();
+
+
+
+                    /*
+                    =========================================================
+                    PAGE
+                    =========================================================
+                    */
+
+                    const page =
+                        paginationBtn.dataset.page;
+
+                    if(!page) return;
+
+
+
+                    /*
+                    =========================================================
+                    LOADING
+                    =========================================================
+                    */
+
+                    body.style.opacity = ".45";
+
+                    pagination.style.pointerEvents =
+                        "none";
+
+
+
+                    try{
+
+                        /*
+                        =========================================================
+                        URL
+                        =========================================================
+                        */
+
+                        const url =
+                            new URL(
+                                window.location.href
+                            );
+
+
+
+                        /*
+                        =========================================================
+                        FORCE HISTORY PAGE
+                        =========================================================
+                        */
+
+                        url.searchParams.set(
+                            "history_page",
+                            page
+                        );
+
+
+
+                        /*
+                        =========================================================
+                        FETCH
+                        =========================================================
+                        */
+
+                        const response =
+                            await fetch(
+
+                                url.toString(),
+
+                                {
+
+                                    method:"GET",
+
+                                    headers:{
+
+                                        "X-Requested-With":
+                                        "XMLHttpRequest",
+
+                                        "Accept":
+                                        "application/json"
+
+                                    }
+
+                                }
+
+                            );
+
+
+
+                        /*
+                        =========================================================
+                        JSON
+                        =========================================================
+                        */
+
+                        const data =
+                            await response.json();
+
+
+
+                        /*
+                        =========================================================
+                        UPDATE BODY
+                        =========================================================
+                        */
+
+                        body.innerHTML =
+                            data.historiques;
+
+
+
+                        /*
+                        =========================================================
+                        UPDATE PAGINATION
+                        =========================================================
+                        */
+
+                        pagination.innerHTML = `
+
+                            ${
+                                data.current_page > 1
+
+                                ?
+
+                                `
+                                    <button
+                                        type="button"
+                                        class="futurePageBtn futurePaginationBtn"
+                                        data-page="${data.current_page - 1}"
+                                    >
+
+                                        <i class="fa fa-angle-left"></i>
+
+                                    </button>
+                                `
+
+                                :
+
+                                `
+                                    <button
+                                        type="button"
+                                        class="futurePageBtn disabled"
+                                    >
+
+                                        <i class="fa fa-angle-left"></i>
+
+                                    </button>
+                                `
+                            }
+
+                            <div class="futurePageInfo">
+
+                                Page
+                                ${data.current_page}
+                                sur
+                                ${data.last_page}
+
+                            </div>
+
+                            ${
+                                data.has_more_pages
+
+                                ?
+
+                                `
+                                    <button
+                                        type="button"
+                                        class="futurePageBtn futurePaginationBtn"
+                                        data-page="${data.current_page + 1}"
+                                    >
+
+                                        <i class="fa fa-angle-right"></i>
+
+                                    </button>
+                                `
+
+                                :
+
+                                `
+                                    <button
+                                        type="button"
+                                        class="futurePageBtn disabled"
+                                    >
+
+                                        <i class="fa fa-angle-right"></i>
+
+                                    </button>
+                                `
+                            }
+
+                        `;
+
+
+
+                        /*
+                        =========================================================
+                        KEEP OPEN
+                        =========================================================
+                        */
+
+                        openDropdown();
+
+
+
+                    }catch(error){
+
+                        console.error(
+                            "Erreur pagination historique :",
+                            error
+                        );
+
+                    }finally{
+
+                        /*
+                        =========================================================
+                        RESET
+                        =========================================================
+                        */
+
+                        body.style.opacity = "1";
+
+                        pagination.style.pointerEvents =
+                            "auto";
+
+                    }
+
+                });
+
+            });
+
+        </script>
+    {{-- HISTORIQUE PAGE FIN --}}
+
+        {{-- CONSOMMABLES FIN --}}
+<!-- GSAP -->
+{{-- <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script> --}}
+        <script>
+
+            $(document).ready(function(){
+
+                /* =========================================
+                MODAL OPEN ANIMATION
+                ========================================= */
+
+                $(document).on('show.bs.modal', '.futuristicModal', function () {
+
+                    let modal = $(this);
+
+                    gsap.set(modal.find(".modal-content"), {
+                        scale:0.92,
+                        opacity:0
+                    });
+
+                    gsap.set(modal.find(".futureField"), {
+                        opacity:0,
+                        y:20
+                    });
+
+                    gsap.set(modal.find(".headerIcon, .modal-icon"), {
+                        scale:0,
+                        rotation:-90
+                    });
+
+                });
+
+                $(document).on('shown.bs.modal', '.futuristicModal', function () {
+
+                    let modal = $(this);
+
+                    let tl = gsap.timeline();
+
+                    tl.to(modal.find(".modal-content"), {
+                        duration:.4,
+                        scale:1,
+                        opacity:1,
+                        ease:"power3.out"
+                    })
+
+                    .to(modal.find(".headerIcon, .modal-icon"), {
+                        duration:.4,
+                        scale:1,
+                        rotation:0,
+                        ease:"back.out(1.7)"
+                    }, "-=0.2")
+
+                    .to(modal.find(".futureField"), {
+                        duration:.4,
+                        opacity:1,
+                        y:0,
+                        stagger:.06,
+                        ease:"power2.out"
+                    }, "-=0.2");
+
+                });
+
+                /* =========================================
+                MODAL CLOSE
+                ========================================= */
+
+                $(document).on('hide.bs.modal', '.futuristicModal', function () {
+
+                    let modal = $(this);
+
+                    gsap.to(modal.find(".modal-content"), {
+                        duration:.25,
+                        scale:.95,
+                        opacity:0,
+                        ease:"power2.in"
+                    });
+
+                });
+
+                /* =========================================
+                STEPPER SYSTEM
+                ========================================= */
+
+                $(document).on('click', '.nextStep', function(){
+
+                    let modal = $(this).closest('.futuristicModal');
+
+                    let currentStep = parseInt(
+                        modal.attr('data-step')
+                    );
+
+                    let totalSteps = parseInt(
+                        modal.attr('data-max-step')
+                    );
+
+                    if(currentStep < totalSteps){
+
+                        currentStep++;
+
+                        modal.attr('data-step', currentStep);
+
+                        updateStepper(modal, currentStep);
+
+                    }
+
+                });
+
+                $(document).on('click', '.prevStep', function(){
+
+                    let modal = $(this).closest('.futuristicModal');
+
+                    let currentStep = parseInt(
+                        modal.attr('data-step')
+                    );
+
+                    if(currentStep > 1){
+
+                        currentStep--;
+
+                        modal.attr('data-step', currentStep);
+
+                        updateStepper(modal, currentStep);
+
+                    }
+
+                });
+
+                /* =========================================
+                UPDATE STEPPER
+                ========================================= */
+
+                function updateStepper(modal, currentStep){
+
+                    modal.find('.stepItem').removeClass('active');
+
+                    modal.find('.stepContent').removeClass('active');
+
+                    modal.find(`.stepItem[data-step="${currentStep}"]`)
+                        .addClass('active');
+
+                    modal.find(`.stepContent[data-content="${currentStep}"]`)
+                        .addClass('active');
+
+                    gsap.fromTo(
+
+                        modal.find(`.stepContent[data-content="${currentStep}"]`),
+
+                        {
+                            opacity:0,
+                            y:20
+                        },
+
+                        {
+                            opacity:1,
+                            y:0,
+                            duration:.4,
+                            ease:"power2.out"
+                        }
+
+                    );
+
+                    /* BUTTONS */
+
+                    if(currentStep <= 1){
+
+                        modal.find('.prevStep').hide();
+
+                    }else{
+
+                        modal.find('.prevStep').show();
+
+                    }
+
+                    if(currentStep >= parseInt(modal.attr('data-max-step'))){
+
+                        modal.find('.nextStep').hide();
+
+                        modal.find('.submitStep').show();
+
+                    }else{
+
+                        modal.find('.nextStep').show();
+
+                        modal.find('.submitStep').hide();
+
+                    }
+
+                }
+
+                /* =========================================
+                INIT ALL STEPPERS
+                ========================================= */
+
+                $('.futuristicModal[data-stepper="true"]').each(function(){
+
+                    updateStepper($(this), 1);
+
+                });
+
+            });
+
+        </script>
+        <script>
+
+            $(document).ready(function(){
+
+                $('.futuristicModal').each(function(){
+
+                    let modal = $(this);
+
+                    let currentStep = 1;
+
+                    let totalSteps =
+                        modal.find('.stepItem').length;
+
+                    function updateStepper(){
+
+                        // RESET
+                        modal.find('.stepItem')
+                            .removeClass('active');
+
+                        modal.find('.stepContent')
+                            .removeClass('active');
+
+                        // ACTIVE STEP
+                        modal.find(`.stepItem[data-step="${currentStep}"]`)
+                            .addClass('active');
+
+                        modal.find(`.stepContent[data-content="${currentStep}"]`)
+                            .addClass('active');
+
+                        // GSAP
+                        gsap.fromTo(
+
+                            modal.find(`.stepContent[data-content="${currentStep}"]`),
+
+                            {
+                                opacity:0,
+                                y:25
+                            },
+
+                            {
+                                opacity:1,
+                                y:0,
+                                duration:.45,
+                                ease:"power2.out"
+                            }
+
+                        );
+
+                        // BTN PREV
+                        if(currentStep > 1){
+
+                            modal.find('#prevStep').fadeIn(200);
+
+                        }else{
+
+                            modal.find('#prevStep').fadeOut(200);
+
+                        }
+
+                        // BTN NEXT / SUBMIT
+                        if(currentStep === totalSteps){
+
+                            modal.find('#nextStep').hide();
+
+                            modal.find('#submitStep').fadeIn(200);
+
+                        }else{
+
+                            modal.find('#nextStep').show();
+
+                            modal.find('#submitStep').hide();
+
+                        }
+
+                    }
+
+                    // NEXT
+                    modal.find('#nextStep').on('click', function(){
+
+                        if(currentStep < totalSteps){
+
+                            currentStep++;
+
+                            updateStepper();
+
+                        }
+
+                    });
+
+                    // PREV
+                    modal.find('#prevStep').on('click', function(){
+
+                        if(currentStep > 1){
+
+                            currentStep--;
+
+                            updateStepper();
+
+                        }
+
+                    });
+
+                    // RESET MODAL
+                    modal.on('shown.bs.modal', function(){
+
+                        currentStep = 1;
+
+                        updateStepper();
+
+                    });
+
+                });
+
+            });
+
+        </script>
+        <script>
+
+            $(document).ready(function(){
+
+                $('.futureSelect').select2({
+
+                    placeholder: "Sélectionner",
+
+                    allowClear: true,
+
+                    width:'100%',
+
+                    dropdownParent: $('.modal.show'),
+
+                });
+
+            });
+
+        </script>
+        <script>
+
+
+            function stepperModal(){
+
+                return{
+
+                    step:1,
+
+                    next(){
+
+                        if(this.step < 4){
+
+                            this.step++;
+
+                        }
+
+                    },
+
+                    prev(){
+
+                        if(this.step > 1){
+
+                            this.step--;
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+
+                // OPEN
+                $(document).on('show.bs.modal', '.modal', function () {
+
+                    let modal = $(this);
+
+                    // 🔥 RESET AVANT AFFICHAGE
+                    gsap.set(modal.find(".modal-content"), {
+                        scale: 0.92,
+                        opacity: 0
+                    });
+
+                    gsap.set(modal.find(".futureField"), {
+                        opacity: 0,
+                        y: 20
+                    });
+
+                    gsap.set(modal.find(".headerIcon, .modal-icon"), {
+                        scale: 0,
+                        rotation: -90
+                    });
+                });
+
+                // AFTER VISIBLE
+                $(document).on('shown.bs.modal', '.modal', function () {
+
+                    let modal = $(this);
+
+                    let tl = gsap.timeline();
+
+                    tl.to(modal.find(".modal-content"), {
+                        duration: 0.4,
+                        scale: 1,
+                        opacity: 1,
+                        ease: "power3.out"
+                    })
+
+                    .to(modal.find(".headerIcon, .modal-icon"), {
+                        duration: 0.4,
+                        scale: 1,
+                        rotation: 0,
+                        ease: "back.out(1.7)"
+                    }, "-=0.2")
+
+                    .to(modal.find(".futureField"), {
+                        duration: 0.4,
+                        opacity: 1,
+                        y: 0,
+                        stagger: 0.06,
+                        ease: "power2.out"
+                    }, "-=0.2");
+                });
+
+            });
+        </script>
+        <script>
+            $(document).on('hide.bs.modal', '.modal', function () {
+
+                let modal = $(this);
+
+                gsap.to(modal.find(".modal-content"), {
+                    duration: 0.25,
+                    scale: 0.95,
+                    opacity: 0,
+                    ease: "power2.in"
+                });
+
+            });
+        </script>
+    {{-- OUVERTURE ET FERMETURE DU MENU DEBUT  --}}
+        <script>
+            $(document).ready(function () {
+                // Initialiser bsCustomFileInput si nécessaire
+                if (typeof bsCustomFileInput !== 'undefined') {
+                    bsCustomFileInput.init();
+                }
+
+                // Cacher les éléments avec la classe 'mprofil' au chargement de la page
+                $('.mprofil').hide();
+
+                // Gérer le clic sur l'élément avec l'ID 'profil'
+                $('#profil').on('click', function () {
+                    $(".mprofil").fadeToggle();
+                });
+
+                // Gérer le clic sur les éléments avec les ID 'A' et 'T'
+                $('#A, #T').on('click', function () {
+                    var $menu = $(".sumenu");
+
+                    if ($menu.hasClass('show')) {
+                        $menu.removeClass('show'); // Supprimer la classe 'show'
+                    } else {
+                        $menu.addClass('show'); // Ajouter la classe 'show'
+                    }
+                });
+
+                // Initialiser AOS
+                if (typeof AOS !== 'undefined') {
+                    AOS.init();
+                }
+            });
+
+
+        </script>
+    {{-- OUVERTURE ET FERMETURE DU MENU DEBUT  --}}
+    {{-- TOOLTIP DEBUT --}}
+        <script>
+            $(document).ready(function(){
+                    $('[data-bs-toggle="tooltip"]').tooltip();
+                });
+
+        </script>
+    {{-- TOOLTIP FIN --}}
      @include('sweetalert::alert')
     @yield('footer')
 </body>

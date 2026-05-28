@@ -1,0 +1,1586 @@
+  /* =========================================================
+    FUTURISTIC FILE INPUT
+    ========================================================= */
+
+    .futureFile{
+
+        position:relative;
+
+        width:100%;
+
+    }
+
+    /* HIDE NATIVE INPUT */
+
+    .futureFile input[type="file"]{
+
+        position:absolute;
+
+        width:100%;
+
+        height:100%;
+
+        opacity:0;
+
+        cursor:pointer;
+
+        z-index:5;
+
+    }
+
+    /* CUSTOM BOX */
+
+    .futureFileBox{
+
+        min-height:140px;
+
+        border-radius:22px;
+
+        background:
+        rgba(255,255,255,.03);
+
+        border:
+        1px dashed rgba(255,255,255,.12);
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        justify-content:center;
+
+        text-align:center;
+
+        padding:25px;
+
+        transition:.35s;
+
+        position:relative;
+
+        overflow:hidden;
+
+    }
+
+    /* LIGHT EFFECT */
+
+    .futureFileBox::before{
+
+        content:"";
+
+        position:absolute;
+
+        width:220px;
+
+        height:220px;
+
+        background:
+        radial-gradient(
+            circle,
+            rgba(0,229,255,.12),
+            transparent 70%
+        );
+
+        top:-100px;
+
+        right:-100px;
+
+    }
+
+    /* HOVER */
+
+    .futureFile:hover .futureFileBox{
+
+        border-color:
+        var(--futureCyan);
+
+        transform:
+        translateY(-2px);
+
+        box-shadow:
+        0 0 25px rgba(0,229,255,.12);
+
+    }
+
+    /* ICON */
+
+    .futureFileIcon{
+
+        width:75px;
+
+        height:75px;
+
+        border-radius:22px;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        margin-bottom:18px;
+
+        font-size:28px;
+
+        color:white;
+
+        background:
+        linear-gradient(
+            135deg,
+            var(--futureCyan),
+            var(--futurePurple)
+        );
+
+        box-shadow:
+        0 0 25px rgba(0,229,255,.18);
+
+    }
+
+    /* TITLE */
+
+    .futureFileTitle{
+
+        font-size:16px;
+
+        font-weight:700;
+
+        color:white;
+
+        margin-bottom:6px;
+
+    }
+
+    /* SUBTITLE */
+
+    .futureFileSubTitle{
+
+        font-size:13px;
+
+        color:#8f8f8f;
+
+        margin:0;
+
+    }
+
+    /* FILE NAME */
+
+    .futureFileName{
+
+        margin-top:15px;
+
+        padding:10px 16px;
+
+        border-radius:12px;
+
+        background:
+        rgba(255,255,255,.04);
+
+        font-size:13px;
+
+        color:#dcdcdc;
+
+        display:none;
+
+        max-width:100%;
+
+        overflow:hidden;
+
+        text-overflow:ellipsis;
+
+        white-space:nowrap;
+
+    }
+        /* =========================================================
+    VARIABLES
+    ========================================================= */
+
+    :root{
+
+        --futureBg:#080708;
+
+        --futureCyan:#00e5ff;
+
+        --futurePurple:#7c4dff;
+
+        --futureBorder:rgba(255,255,255,.08);
+
+    }
+
+    /* =========================================================
+    BOOTSTRAP BACKDROP
+    ========================================================= */
+
+    .modal-backdrop.show{
+
+        background:
+        rgba(0,0,0,.75);
+
+        backdrop-filter:
+        blur(8px);
+
+    }
+
+    /* =========================================================
+    MODAL BASE
+    ========================================================= */
+
+    .futuristicModal{
+
+        color:white;
+
+    }
+
+    /* =========================================================
+    FLASH FIX
+    ========================================================= */
+
+    .futuristicModal .modal-content{
+
+        /* opacity:0; */
+
+        transform:
+        scale(.98);
+
+    }
+
+    /* =========================================================
+    DIALOG ANIMATION
+    ========================================================= */
+
+    .futuristicModal .modal-dialog{
+
+        animation:
+        futureModal .55s ease;
+
+    }
+
+    @keyframes futureModal{
+
+        from{
+
+            opacity:0;
+
+            transform:
+            translateY(60px)
+            scale(.92);
+
+        }
+
+        to{
+
+            opacity:1;
+
+            transform:
+            translateY(0)
+            scale(1);
+
+        }
+
+    }
+
+    /* =========================================================
+    CONTENT
+    ========================================================= */
+
+    .futuristicContent{
+
+        position:relative;
+
+        overflow:hidden;
+
+        border:none;
+
+        border-radius:26px;
+
+        background:
+        linear-gradient(
+            145deg,
+            rgba(15,15,15,.98),
+            rgba(20,20,20,.98)
+        );
+
+        border:
+        1px solid var(--futureBorder);
+
+        box-shadow:
+        0 0 60px rgba(0,229,255,.12);
+
+    }
+
+    /* =========================================================
+    LIGHT EFFECT
+    ========================================================= */
+
+    .modalLight{
+
+        position:absolute;
+
+        width:400px;
+
+        height:400px;
+
+        top:-150px;
+
+        right:-150px;
+
+        background:
+        radial-gradient(
+            circle,
+            rgba(0,229,255,.18),
+            transparent 70%
+        );
+
+        pointer-events:none;
+
+    }
+
+    /* =========================================================
+    HEADER
+    ========================================================= */
+
+    .futuristicHeader{
+
+        border:none;
+
+        padding:24px 28px;
+
+        background:
+        linear-gradient(
+            90deg,
+            rgba(0,229,255,.06),
+            transparent
+        );
+
+        display:flex;
+
+        justify-content:space-between;
+
+        align-items:center;
+
+    }
+
+    /* =========================================================
+    HEADER LEFT
+    ========================================================= */
+
+    .headerLeft{
+
+        display:flex;
+
+        align-items:center;
+
+        gap:16px;
+
+    }
+
+    /* =========================================================
+    HEADER ICON
+    ========================================================= */
+
+    .headerIcon{
+
+        width:65px;
+
+        height:65px;
+
+        border-radius:18px;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        font-size:24px;
+
+        color:white;
+
+        background:
+        linear-gradient(
+            135deg,
+            var(--futureCyan),
+            var(--futurePurple)
+        );
+
+        box-shadow:
+        0 0 25px rgba(0,229,255,.3);
+
+    }
+
+    /* =========================================================
+    TITLES
+    ========================================================= */
+
+    .futuristicTitle{
+
+        font-size:26px;
+
+        font-weight:900;
+
+        margin:0;
+
+    }
+
+    .futuristicSubTitle{
+
+        font-size:13px;
+
+        color:#9a9a9a;
+
+        margin:0;
+
+    }
+
+    /* =========================================================
+    CLOSE BUTTON
+    ========================================================= */
+
+    .futuristicClose{
+
+        width:42px;
+
+        height:42px;
+
+        border-radius:12px;
+
+        border:none;
+
+        background:
+        rgba(255,255,255,.06);
+
+        color:white;
+
+        transition:.3s;
+
+    }
+
+    .futuristicClose:hover{
+
+        background:
+        rgba(255,0,90,.15);
+
+        transform:
+        rotate(90deg);
+
+    }
+
+    /* =========================================================
+    BODY
+    ========================================================= */
+
+    .futuristicBody{
+
+        padding:26px 28px;
+
+    }
+
+    /* =========================================================
+    FIELD SYSTEM
+    ========================================================= */
+
+    .futureField{
+
+        display:flex;
+
+        flex-direction:column;
+
+        gap:10px;
+
+    }
+
+    .futureField label{
+
+        color:#dcdcdc;
+
+        font-size:13px;
+
+        font-weight:600;
+
+        display:flex;
+
+        align-items:center;
+
+        gap:8px;
+
+    }
+
+    /* =========================================================
+    INPUT WRAPPERS
+    ========================================================= */
+
+    .futureInput,
+    .futureTextarea{
+
+        position:relative;
+
+        width:100%;
+
+    }
+
+    /* =========================================================
+    INPUTS
+    ========================================================= */
+
+    .futureInput input,
+    .futureTextarea textarea,
+    .futureInput select{
+
+        width:100%;
+
+        border:none;
+
+        outline:none;
+
+        color:white;
+
+        border-radius:18px;
+
+        background:
+        rgba(255,255,255,.04);
+
+        border:
+        1px solid rgba(255,255,255,.06);
+
+        transition:.3s;
+
+    }
+
+    /* =========================================================
+    INPUT HEIGHT
+    ========================================================= */
+
+    .futureInput input,
+    .futureInput select{
+
+        height:56px;
+
+        padding-left:50px;
+
+        padding-right:18px;
+
+    }
+
+    /* =========================================================
+    TEXTAREA
+    ========================================================= */
+
+    .futureTextarea textarea{
+
+        padding:18px 18px 18px 50px;
+
+        min-height:120px;
+
+        resize:none;
+
+    }
+
+    /* =========================================================
+    FOCUS
+    ========================================================= */
+
+    .futureInput input:focus,
+    .futureTextarea textarea:focus,
+    .futureInput select:focus{
+
+        border-color:
+        var(--futureCyan);
+
+        box-shadow:
+        0 0 18px rgba(0,229,255,.18);
+
+        transform:
+        translateY(-2px);
+
+    }
+
+    /* =========================================================
+    ICONS
+    ========================================================= */
+
+    .inputIcon{
+
+        position:absolute;
+
+        left:18px;
+
+        top:50%;
+
+        transform:
+        translateY(-50%);
+
+        color:#8f8f8f;
+
+        pointer-events:none;
+
+    }
+
+    /* =========================================================
+    TEXTAREA ICON FIX
+    ========================================================= */
+
+    .textareaIcon{
+
+        top:18px;
+
+        transform:none;
+
+    }
+
+    /* =========================================================
+    FOOTER
+    ========================================================= */
+
+    .futuristicFooter{
+
+        border:none;
+
+        padding:20px 28px;
+
+        background:
+        rgba(255,255,255,.02);
+
+        display:flex;
+
+        justify-content:flex-end;
+
+        gap:12px;
+
+    }
+
+    /* =========================================================
+    BUTTONS
+    ========================================================= */
+
+    .futureBtn{
+
+        height:50px;
+
+        border:none;
+
+        color:white;
+
+        font-weight:700;
+
+        border-radius:14px;
+
+        padding:0 22px;
+
+        display:inline-flex;
+
+        align-items:center;
+
+        gap:10px;
+
+        transition:.3s;
+
+    }
+
+    /* =========================================================
+    SUCCESS BUTTON
+    ========================================================= */
+
+    .successBtn{
+
+        background:
+        linear-gradient(
+            135deg,
+            var(--futureCyan),
+            var(--futurePurple)
+        );
+
+        box-shadow:
+        0 0 18px rgba(0,229,255,.18);
+
+    }
+
+    /* =========================================================
+    DANGER BUTTON
+    ========================================================= */
+
+    .dangerBtn{
+
+        background:
+        linear-gradient(
+            135deg,
+            #ff004c,
+            #ff4f7b
+        );
+
+    }
+
+    /* =========================================================
+    DARK BUTTON
+    ========================================================= */
+
+    .darkBtn{
+
+        background:
+        rgba(255,255,255,.06);
+
+        border:
+        1px solid rgba(255,255,255,.08);
+
+    }
+
+    /* =========================================================
+    BUTTON HOVER
+    ========================================================= */
+
+    .futureBtn:hover{
+
+        transform:
+        translateY(-2px);
+
+    }
+
+    /* =========================================================
+    STEPPER
+    ========================================================= */
+
+    .futureStepper{
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        margin-bottom:40px;
+
+        flex-wrap:wrap;
+
+        gap:10px;
+
+    }
+
+    /* =========================================================
+    STEP ITEM
+    ========================================================= */
+
+    .stepItem{
+
+        width:70px;
+
+        text-align:center;
+
+        opacity:.5;
+
+        transition:.4s;
+
+    }
+
+    .stepItem span{
+
+        width:50px;
+
+        height:50px;
+
+        border-radius:50%;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        margin:auto;
+
+        background:
+        rgba(255,255,255,.05);
+
+        border:
+        1px solid rgba(255,255,255,.08);
+
+        font-weight:700;
+
+    }
+
+    .stepItem p{
+
+        margin-top:10px;
+
+        font-size:13px;
+
+    }
+
+    .stepItem.active{
+
+        opacity:1;
+
+    }
+
+    .stepItem.active span{
+
+        background:
+        linear-gradient(
+            135deg,
+            var(--futureCyan),
+            var(--futurePurple)
+        );
+
+    }
+
+    /* =========================================================
+    STEP LINE
+    ========================================================= */
+
+    .stepLine{
+
+        width:60px;
+
+        height:2px;
+
+        background:
+        rgba(255,255,255,.08);
+
+    }
+
+    /* =========================================================
+    STEP CONTENT
+    ========================================================= */
+
+    .stepContent{
+
+        display:none;
+
+    }
+
+    .stepContent.active{
+
+        display:block;
+
+    }
+
+    /* =========================================================
+    FINAL STEP
+    ========================================================= */
+
+    .futureFinal{
+
+        text-align:center;
+
+        padding:40px 20px;
+
+    }
+
+    .futureFinal i{
+
+        font-size:70px;
+
+        color:var(--futureCyan);
+
+        margin-bottom:20px;
+
+    }
+
+    /* =========================================================
+    SELECT2 SYSTEM
+    ========================================================= */
+
+    .select2-container{
+
+        width:100% !important;
+
+        z-index:999999;
+
+    }
+
+    /* =========================================================
+    SINGLE SELECT
+    ========================================================= */
+
+    .select2-container--default
+    .select2-selection--single{
+
+        height:56px !important;
+
+        border-radius:18px !important;
+
+        background:
+        rgba(255,255,255,.04) !important;
+
+        border:
+        1px solid rgba(255,255,255,.06) !important;
+
+        display:flex !important;
+
+        align-items:center !important;
+
+        transition:.3s;
+
+    }
+
+    /* =========================================================
+    SINGLE HOVER
+    ========================================================= */
+
+    .select2-container--default
+    .select2-selection--single:hover{
+
+        border-color:
+        rgba(0,229,255,.3) !important;
+
+    }
+
+    /* =========================================================
+    SINGLE FOCUS
+    ========================================================= */
+
+    .select2-container--default.select2-container--open
+    .select2-selection--single{
+
+        border-color:
+        var(--futureCyan) !important;
+
+        box-shadow:
+        0 0 18px rgba(0,229,255,.18);
+
+    }
+
+    /* =========================================================
+    SINGLE TEXT
+    ========================================================= */
+
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered{
+
+        color:white !important;
+
+        line-height:normal !important;
+
+        display:flex;
+
+        align-items:center;
+
+        height:100%;
+
+        padding-left:50px !important;
+
+        padding-right:20px !important;
+
+        font-size:14px;
+
+    }
+
+    /* =========================================================
+    PLACEHOLDER
+    ========================================================= */
+
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__placeholder{
+
+        color:#8f8f8f !important;
+
+    }
+
+    /* =========================================================
+    ARROW
+    ========================================================= */
+
+    .select2-selection__arrow{
+
+        height:56px !important;
+
+    }
+
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow{
+
+        right:15px !important;
+
+    }
+
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow b{
+
+        border-color:
+        #9f9f9f transparent transparent transparent !important;
+
+    }
+
+    /* =========================================================
+    CLEAR BUTTON
+    ========================================================= */
+
+    .select2-selection__clear{
+
+        margin-right:10px !important;
+
+        color:#ff4f7b !important;
+
+    }
+
+    /* =========================================================
+    DROPDOWN
+    ========================================================= */
+
+    .select2-dropdown{
+
+        background:#111 !important;
+
+        border:
+        1px solid rgba(255,255,255,.08) !important;
+
+        border-radius:18px !important;
+
+        overflow:hidden;
+
+        box-shadow:
+        0 0 30px rgba(0,229,255,.08);
+
+    }
+
+    /* =========================================================
+    SEARCH
+    ========================================================= */
+
+    .select2-search--dropdown{
+
+        padding:12px;
+
+    }
+
+    .select2-search--dropdown
+    .select2-search__field{
+
+        height:46px;
+
+        border-radius:14px;
+
+        background:
+        rgba(255,255,255,.04);
+
+        border:
+        1px solid rgba(255,255,255,.06);
+
+        color:white;
+
+        padding:0 15px;
+
+        outline:none;
+
+    }
+
+    /* =========================================================
+    OPTIONS
+    ========================================================= */
+
+    .select2-results__option{
+
+        padding:14px 18px !important;
+
+        color:#dcdcdc !important;
+
+        transition:.3s;
+
+    }
+
+    /* =========================================================
+    OPTION HOVER
+    ========================================================= */
+
+    .select2-results__option--highlighted{
+
+        background:
+        linear-gradient(
+            135deg,
+            rgba(0,229,255,.2),
+            rgba(124,77,255,.2)
+        ) !important;
+
+        color:white !important;
+
+    }
+
+    /* =========================================================
+    SELECTED OPTION
+    ========================================================= */
+
+    .select2-results__option[aria-selected=true]{
+
+        background:
+        rgba(255,255,255,.04) !important;
+
+    }
+
+    /* =========================================================
+    MULTIPLE SELECT
+    ========================================================= */
+
+    .select2-container--default
+    .select2-selection--multiple{
+
+        min-height:56px !important;
+
+        border-radius:18px !important;
+
+        background:
+        rgba(255,255,255,.04) !important;
+
+        border:
+        1px solid rgba(255,255,255,.06) !important;
+
+        padding:6px !important;
+
+    }
+
+    /* =========================================================
+    MULTIPLE TAG
+    ========================================================= */
+
+    .select2-selection__choice{
+
+        background:
+        linear-gradient(
+            135deg,
+            var(--futureCyan),
+            var(--futurePurple)
+        ) !important;
+
+        border:none !important;
+
+        color:white !important;
+
+        border-radius:12px !important;
+
+        padding:6px 12px !important;
+
+    }
+
+    /* =========================================================
+    REMOVE TAG
+    ========================================================= */
+
+    .select2-selection__choice__remove{
+
+        color:white !important;
+
+        margin-right:8px !important;
+
+    }
+
+    /* =========================================================
+    RESPONSIVE
+    ========================================================= */
+
+    @media(max-width:768px){
+
+        .futuristicHeader,
+        .futuristicBody,
+        .futuristicFooter{
+
+            padding:18px;
+
+        }
+
+        .headerIcon{
+
+            width:52px;
+
+            height:52px;
+
+            font-size:20px;
+
+        }
+
+        .futuristicTitle{
+
+            font-size:20px;
+
+        }
+
+        .futureBtn{
+
+            width:100%;
+
+            justify-content:center;
+
+        }
+
+    }
+ /* =========================================
+FUTURE BREADCRUMB
+========================================= */
+
+.futureBreadWrapper{
+
+    width:100%;
+
+    margin-bottom:25px;
+    padding: 20px;
+
+}
+
+
+
+/* =========================================
+CARD
+========================================= */
+
+.futureBreadCard{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    padding:25px;
+
+    border-radius:26px;
+
+    background:
+        var(--future-bg);
+
+    border:
+        1px solid var(--future-border);
+
+    backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        var(--future-shadow);
+
+}
+
+
+
+/* =========================================
+LEFT
+========================================= */
+
+.futureBreadLeft{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+
+
+/* =========================================
+ICON
+========================================= */
+
+.futureBreadIcon{
+
+    width:65px;
+
+    height:65px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--future-primary),
+            #009dff
+        );
+
+    color:#000;
+
+    font-size:24px;
+
+    box-shadow:
+        0 10px 30px rgba(0,229,255,.25);
+
+}
+
+
+
+/* =========================================
+CONTENT
+========================================= */
+
+.futureBreadContent h2{
+
+    margin:0;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    color:var(--future-text);
+
+}
+
+
+
+/* =========================================
+LINKS
+========================================= */
+
+.futureBreadLinks{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:8px;
+
+    flex-wrap:wrap;
+
+}
+
+
+
+.futureBreadLinks a{
+
+    text-decoration:none;
+
+    color:
+        rgba(255,255,255,.7);
+
+    transition:.25s;
+
+}
+
+
+
+.futureBreadLinks a:hover{
+
+    color:var(--future-primary);
+
+}
+
+
+
+.futureBreadLinks span{
+
+    color:
+        rgba(255,255,255,.35);
+
+}
+
+
+
+.futureBreadLinks strong{
+
+    color:var(--future-text);
+
+    font-weight:600;
+
+}
+
+
+
+/* =========================================
+RIGHT
+========================================= */
+
+.futureBreadRight{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+}
+
+
+
+/* =========================================
+RESPONSIVE
+========================================= */
+
+@media(max-width:768px){
+
+    .futureBreadCard{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+
+
+    .futureBreadLeft{
+
+        width:100%;
+
+    }
+
+
+
+    .futureBreadRight{
+
+        width:100%;
+
+    }
+
+
+
+    .futureBreadRight .futureBtn{
+
+        width:100%;
+
+    }
+
+
+
+    .futureBreadContent h2{
+
+        font-size:22px;
+
+    }
+
+
+
+    .futureBreadIcon{
+
+        width:55px;
+
+        height:55px;
+
+        font-size:20px;
+
+    }
+
+}
+@media(max-width:576px){
+
+    .futureBreadWrapper{
+
+        padding:10px;
+
+    }
+
+}
+/* SUPPRESSION DE LA SELECTION DEBUT */
+ .futureModalOverlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.65);
+    backdrop-filter:blur(10px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:99999;
+}
+
+.futureModalBox{
+    width:440px;
+    border-radius:18px;
+    padding:22px;
+    color:white;
+    position:relative;
+    overflow:hidden;
+    transform:scale(.92);
+    animation:modalIn .25s ease forwards;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+/* DANGER MODE */
+.futureModalBox.danger{
+    background:linear-gradient(145deg,#0b0f1a,#0f172a);
+    box-shadow:0 0 60px rgba(255,0,80,0.15);
+}
+
+.futureModalGlow{
+    position:absolute;
+    width:250px;
+    height:250px;
+    top:-80px;
+    right:-80px;
+    background:radial-gradient(circle,rgba(255,0,80,0.25),transparent 70%);
+    pointer-events:none;
+}
+
+.futureModalHeader{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.futureModalHeader h3{
+    margin:0;
+    font-weight:800;
+}
+
+.futureModalHeader small{
+    color:#aaa;
+}
+
+.futureModalClose{
+    background:rgba(255,255,255,0.06);
+    border:none;
+    color:white;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.futureModalClose:hover{
+    background:rgba(255,0,80,0.2);
+    transform:rotate(90deg);
+}
+
+.futureModalBody{
+    text-align:center;
+    padding:10px 0;
+}
+
+.futureWarningIcon{
+    width:70px;
+    height:70px;
+    margin:0 auto 10px;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,0,80,0.15);
+    color:#ff2d55;
+    font-size:26px;
+    box-shadow:0 0 25px rgba(255,0,80,0.2);
+}
+
+.futureModalFooter{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:20px;
+}
+
+.glowBtn{
+    box-shadow:0 0 20px rgba(255,0,80,0.25);
+    position:relative;
+    overflow:hidden;
+}
+
+@keyframes modalIn{
+    from{
+        opacity:0;
+        transform:scale(.85) translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+}
+/* SUPRESSION DE LA SELECTION FIN */

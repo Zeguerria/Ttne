@@ -11,9 +11,20 @@ class ParametreController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $data = [
+            'ParametreT' => Parametre::where('supprimer', 0)->count(),
+            'ParametreTC' => Parametre::where('supprimer', 1)->count(),
+            'typeparametres' => TypeParametre::where('supprimer', 0)->orderBy('libelle')->get(),
+            'parametres' => Parametre::where('supprimer', 0)->orderBy('libelle')->get()
+        ];
+
+        if ($request->ajax()) {
+            return response()->json($data);
+        }
+
+        return view('utilitaires.admins.gestions.parametrages.parametres.parametre')->with($data);
     }
 
     /**

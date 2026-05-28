@@ -15,8 +15,7 @@ class HistoriqueService
         string $action,
         array $ancienneValeur = null,
         array $nouvelleValeur = null
-    )
-    {
+    ) {
         if (!is_object($record)) {
             return;
         }
@@ -24,13 +23,26 @@ class HistoriqueService
         $user = Auth::user();
 
         Historique::create([
+
+            // utilisateur
             'user_id' => $user?->id,
+
+            // polymorphique
             'record_type' => get_class($record),
             'record_id' => $record->id ?? null,
+
+            // affichage
             'record_name' => self::getRecordName($record),
             'action' => $action,
+
+            // données
             'ancienne_valeur' => $ancienneValeur,
             'nouvelle_valeur' => $nouvelleValeur,
+
+            // snapshot complet du record
+            'record_snapshot' => $record?->toArray(),
+
+            // sécurité
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
         ]);
@@ -48,44 +60,72 @@ class HistoriqueService
         return $record->libelle
             ?? $record->nom
             ?? $record->title
+            ?? $record->name
             ?? 'N/A';
     }
 
     // =========================================================
-    // ACTIONS SIMPLIFIÉES (UTILISATION RAPIDE)
+    // ACTIONS SIMPLIFIÉES
     // =========================================================
 
+    /**
+     * Création
+     */
     public static function creer($record)
     {
         self::enregistrer($record, 'création');
     }
 
-    public static function modifier($record, array $old = null, array $new = null)
-    {
-        self::enregistrer($record, 'modification', $old, $new);
+    /**
+     * Modification
+     */
+    public static function modifier(
+        $record,
+        array $old = null,
+        array $new = null
+    ) {
+        self::enregistrer(
+            $record,
+            'modification',
+            $old,
+            $new
+        );
     }
 
+    /**
+     * Suppression simple
+     */
     public static function supprimer($record)
     {
         self::enregistrer($record, 'suppression');
     }
 
+    /**
+     * Mise en corbeille
+     */
     public static function miseEnCorbeille($record)
     {
         self::enregistrer($record, 'mise en corbeille');
     }
 
+    /**
+     * Restauration
+     */
     public static function restauration($record)
     {
         self::enregistrer($record, 'restauration');
     }
 
+    /**
+     * Suppression définitive
+     */
     public static function suppressionDefinitive($record)
     {
         self::enregistrer(
             $record,
             'suppression définitive',
-            $record?->toArray()
+            $record?->toArray(),
+            null
         );
     }
 
@@ -93,35 +133,64 @@ class HistoriqueService
     // ACTIONS MASSIVES
     // =========================================================
 
-    public static function actionMassive(string $table, string $action)
-    {
+    public static function actionMassive(
+        string $table,
+        string $action
+    ) {
         $user = Auth::user();
 
         Historique::create([
+
             'user_id' => $user?->id,
+
+            // ici on stocke juste le nom de table
             'record_type' => $table,
             'record_id' => null,
+
             'record_name' => null,
+
             'action' => $action,
+
             'ancienne_valeur' => null,
             'nouvelle_valeur' => null,
+
+            'record_snapshot' => null,
+
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
         ]);
     }
 
+    /**
+     * Suppression massive
+     */
     public static function toutSupprimer($table)
     {
-        self::actionMassive($table, 'suppression massive');
+        self::actionMassive(
+            $table,
+            'suppression massive'
+        );
     }
 
+    /**
+     * Mise en corbeille massive
+     */
     public static function toutMettreEnCorbeille($table)
     {
-        self::actionMassive($table, 'mise en corbeille massive');
+        self::actionMassive(
+            $table,
+            'mise en corbeille massive'
+        );
     }
 
+    /**
+     * Restauration massive
+     */
     public static function toutRestaurer($table)
     {
-        self::actionMassive($table, 'restauration massive');
+        self::actionMassive(
+            $table,
+            'restauration massive'
+        );
     }
 }

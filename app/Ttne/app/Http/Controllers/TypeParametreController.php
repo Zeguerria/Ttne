@@ -2,65 +2,277 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Historique;
 use App\Models\TypeParametre;
-use App\Http\Requests\StoreTypeParametreRequest;
-use App\Http\Requests\UpdateTypeParametreRequest;
+use App\Services\Core\TypeParametreService;
+use Exception;
+use Illuminate\Http\Request;
 
 class TypeParametreController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    /*
+    |--------------------------------------------------------------------------
+    | LISTE
+    |--------------------------------------------------------------------------
+    */
+
+    public function index(Request $request)
+{
+   $historiques = Historique::where(
+    'record_type',
+    TypeParametre::class
+)
+->latest()
+->paginate(
+    5,
+    ['*'],
+    'history_page'
+);
+
+    /*
+    =========================================================
+    AJAX
+    =========================================================
+    */
+
+    if($request->ajax()){
+
+        return response()->json([
+
+            'historiques' => view(
+                'dependances.templates.admins.gestions.parametrages.typeparametres._consoms.historique',
+                compact('historiques')
+            )->render(),
+
+            'current_page' => $historiques->currentPage(),
+
+            'last_page' => $historiques->lastPage(),
+
+            'has_more_pages' => $historiques->hasMorePages()
+
+        ]);
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    return view(
+        'dependances.templates.admins.gestions.parametrages.typeparametres.typeparametre',
+        [
+
+            'TypeParametreT' => TypeParametre::where(
+                'supprimer',
+                0
+            )->count(),
+
+            'TypeParametreTC' => TypeParametre::where(
+                'supprimer',
+                1
+            )->count(),
+
+            'typeparametres' => TypeParametre::where(
+                'supprimer',
+                0
+            )
+            ->orderBy('libelle')
+            ->get(),
+
+            'historiques' => $historiques
+
+        ]
+    );
+}
+    /*
+    |--------------------------------------------------------------------------
+    | STORE
+    |--------------------------------------------------------------------------
+    */
+
+    public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+
+            'code' => 'required|string|max:255',
+
+            'libelle' => 'required|string|max:255',
+
+            'description' => 'nullable|string',
+        ]);
+
+        try {
+
+            TypeParametreService::store($data);
+
+            toast(
+                'Type paramètre créé avec succès',
+                'success'
+            );
+
+        } catch (Exception $e) {
+
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+        }
+
+        return back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreTypeParametreRequest $request)
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE
+    |--------------------------------------------------------------------------
+    */
+
+    public function update(Request $request)
     {
-        //
+        $data = $request->validate([
+
+            'id' => 'required|exists:type_parametres,id',
+
+            'code' => 'required|string|max:255',
+
+            'libelle' => 'required|string|max:255',
+
+            'description' => 'nullable|string',
+        ]);
+
+        try {
+
+            TypeParametreService::update($data);
+
+            toast(
+                'Type paramètre modifié avec succès',
+                'success'
+            );
+
+        } catch (Exception $e) {
+
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+        }
+
+        return back();
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TypeParametre $typeParametre)
+    /*
+    |--------------------------------------------------------------------------
+    | METTRE EN CORBEILLE
+    |--------------------------------------------------------------------------
+    */
+
+    public function corbeille(Request $request)
     {
-        //
+        $data = $request->validate([
+
+            'id' => 'required|exists:type_parametres,id',
+        ]);
+
+        try {
+
+            TypeParametreService::mettreEnCorbeille(
+                $data
+            );
+
+            toast(
+                'Type paramètre supprimé',
+                'success'
+            );
+
+        } catch (Exception $e) {
+
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+        }
+
+        return back();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TypeParametre $typeParametre)
-    {
-        //
+    /*
+    |--------------------------------------------------------------------------
+    | TOUT METTRE EN CORBEILLE
+    |--------------------------------------------------------------------------
+    */
+
+    
+
+    /*
+|--------------------------------------------------------------------------
+| METTRE SELECTION EN CORBEILLE (BULK)
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleSelection(Request $request)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATION
+    |--------------------------------------------------------------------------
+    */
+
+    $data = $request->validate([
+        'ids' => 'required|array',
+        'ids.*' => 'exists:type_parametres,id',
+    ]);
+
+    try {
+
+        /*
+        |--------------------------------------------------------------------------
+        | APPEL SERVICE (LOGIQUE METIER)
+        |--------------------------------------------------------------------------
+        */
+
+        $count = TypeParametreService::mettreSelectionEnCorbeille(
+            $data['ids']
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | SUCCESS MESSAGE (AVEC COUNTER)
+        |--------------------------------------------------------------------------
+        */
+
+        toast(
+            $count . ' élément(s) mis en supprimer avec succès',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | ERREUR
+        |--------------------------------------------------------------------------
+        */
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateTypeParametreRequest $request, TypeParametre $typeParametre)
-    {
-        //
+    return back();
+}
+public function corbeilleAll(Request $request)
+{
+    try {
+
+        $count = TypeParametreService::mettreEnCorbeilleAll();
+
+        toast(
+            $count . ' élément(s) supprimé(s)',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast($e->getMessage(), 'error');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TypeParametre $typeParametre)
-    {
-        //
-    }
+    return back();
+}
 }
