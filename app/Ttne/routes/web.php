@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CorbeilleController;
 use App\Http\Controllers\ParametreController;
 use App\Http\Controllers\TypeParametreController;
 use App\Models\Historique;
@@ -59,10 +60,26 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
                 Route::post('AjouterParametre', [ParametreController::class, 'store'])->name('AjouterParametre');
                 Route::post('ModifierParametre', [ParametreController::class, 'update'])->name('ModifierParametre');
                 Route::post('CorbeilleParametre', [ParametreController::class, 'corbeille'])->name('CorbeilleParametre');
-                Route::post('SupprimerParametre', [ParametreController::class, 'destroy'])->name('SupprimerParametre');
-                Route::post('RecupParametre', [ParametreController::class, 'recupUnCorbeille'])->name('RecupParametre');
+
+
             // FONCTION FIN
         //PARAMETRE FIN
+
+
+
+// CORBEILLE DEBUT
+    // ROUTE DEBUT
+        Route::get('Admin/Corbeilles/Corbeille', [CorbeilleController::class, 'index'])->name('ADM-CRB-CBL');
+        Route::post('/select/supprimer/corbeille',[CorbeilleController::class, 'supprimerSelectionCorbeille'])->name('C-SEL-SUPP-CORBEILLE');
+        Route::post('/select/restaurer/corbeille',[CorbeilleController::class, 'restaurerSelectionCorbeille'])->name('C-SEL-REST-CORBEILLE');
+        Route::post('Restorer/Element/Corbeille',[CorbeilleController::class, 'restaurerCorbeille'])->name('RestorerCorbeille');
+        Route::post('/Supprimer/Element/Corbeille',[CorbeilleController::class, 'supprimerDefinitivement'])->name('SupprimerCorbeille');
+        Route::post('Admin/Corebeilles/Tout-Supprimer', [CorbeilleController::class, 'supprimerToutCorbeille'])->name('C-All-CBL-CBL');
+        Route::post('Admin/Corebeilles/restaurer/Tout-Restorer', [CorbeilleController::class, 'restaurerTout'])->name('C-All-Restore-Corbeille');
+
+
+    // ROUTE FIN
+// CORBEILLE FIN
 
 Route::middleware([
     'auth:sanctum',

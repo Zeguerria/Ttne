@@ -99,7 +99,7 @@ class CorbeilleService
     |--------------------------------------------------------------------------
     */
 
-    public static function restaurer(Corbeille $corbeille)
+    public static function restaurer(array $data)
     {
         DB::beginTransaction();
 
@@ -107,7 +107,17 @@ class CorbeilleService
 
             /*
             |--------------------------------------------------------------------------
-            | RECUPERATION RECORD
+            | RECUPERATION CORBEILLE
+            |--------------------------------------------------------------------------
+            */
+
+            $corbeille = Corbeille::findOrFail(
+                $data['id']
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DU MODELE D'ORIGINE
             |--------------------------------------------------------------------------
             */
 
@@ -118,6 +128,7 @@ class CorbeilleService
                 throw new Exception(
                     'Impossible de restaurer cet élément.'
                 );
+
             }
 
             /*
@@ -127,7 +138,9 @@ class CorbeilleService
             */
 
             $record->update([
+
                 'supprimer' => 0
+
             ]);
 
             /*
@@ -142,11 +155,13 @@ class CorbeilleService
 
             /*
             |--------------------------------------------------------------------------
-            | DELETE CORBEILLE
+            | SUPPRESSION DE LA CORBEILLE
             |--------------------------------------------------------------------------
             */
 
             $corbeille->delete();
+
+            DB::commit();
 
             return true;
 
@@ -158,6 +173,7 @@ class CorbeilleService
                 'Erreur lors de la restauration : '
                 . $e->getMessage()
             );
+
         }
     }
 
@@ -167,25 +183,92 @@ class CorbeilleService
     |--------------------------------------------------------------------------
     */
 
-    public static function supprimerDefinitivement(
-        Corbeille $corbeille
-    ) {
+    // public static function supprimerDefinitivement(
+    //     Corbeille $corbeille
+    // ) {
+    //     DB::beginTransaction();
+
+    //     try {
+
+    //         /*
+    //         |--------------------------------------------------------------------------
+    //         | RECUPERATION RECORD
+    //         |--------------------------------------------------------------------------
+    //         */
+
+    //         $record = $corbeille->getModelInstance();
+
+    //         /*
+    //         |--------------------------------------------------------------------------
+    //         | HISTORIQUE
+    //         |--------------------------------------------------------------------------
+    //         */
+
+    //         if ($record) {
+
+    //             HistoriqueService::suppressionDefinitive(
+    //                 $record
+    //             );
+
+    //             /*
+    //             |--------------------------------------------------------------------------
+    //             | DELETE REEL
+    //             |--------------------------------------------------------------------------
+    //             */
+
+    //             $record->delete();
+    //         }
+
+    //         /*
+    //         |--------------------------------------------------------------------------
+    //         | DELETE CORBEILLE
+    //         |--------------------------------------------------------------------------
+    //         */
+
+    //         $corbeille->delete();
+
+    //         DB::commit();
+
+    //         return true;
+
+    //     } catch (Exception $e) {
+
+    //         DB::rollBack();
+
+    //         throw new Exception(
+    //             'Erreur lors de la suppression définitive : '
+    //             . $e->getMessage()
+    //         );
+    //     }
+    // }
+    public static function supprimerDefinitivement(array $data)
+    {
         DB::beginTransaction();
 
         try {
 
             /*
-            |--------------------------------------------------------------------------
-            | RECUPERATION RECORD
-            |--------------------------------------------------------------------------
+            |------------------------------------------------------------------
+            | RECUPERATION CORBEILLE
+            |------------------------------------------------------------------
+            */
+
+            $corbeille = Corbeille::findOrFail(
+                $data['id']
+            );
+
+            /*
+            |------------------------------------------------------------------
+            | RECUPERATION DE L'ENREGISTREMENT D'ORIGINE
+            |------------------------------------------------------------------
             */
 
             $record = $corbeille->getModelInstance();
 
             /*
-            |--------------------------------------------------------------------------
-            | HISTORIQUE
-            |--------------------------------------------------------------------------
+            |------------------------------------------------------------------
+            | HISTORIQUE + SUPPRESSION REELLE
+            |------------------------------------------------------------------
             */
 
             if ($record) {
@@ -194,19 +277,13 @@ class CorbeilleService
                     $record
                 );
 
-                /*
-                |--------------------------------------------------------------------------
-                | DELETE REEL
-                |--------------------------------------------------------------------------
-                */
-
                 $record->delete();
             }
 
             /*
-            |--------------------------------------------------------------------------
-            | DELETE CORBEILLE
-            |--------------------------------------------------------------------------
+            |------------------------------------------------------------------
+            | SUPPRESSION DE L'ENTREE CORBEILLE
+            |------------------------------------------------------------------
             */
 
             $corbeille->delete();
@@ -226,6 +303,74 @@ class CorbeilleService
         }
     }
 
+public static function supprimerTout()
+{
+    DB::beginTransaction();
+
+    try {
+
+        /*
+        |--------------------------------------------------------------------------
+        | RECUPERATION CORBEILLE
+        |--------------------------------------------------------------------------
+        */
+
+        $corbeilles = Corbeille::all();
+
+        if ($corbeilles->isEmpty()) {
+
+            throw new Exception(
+                'Aucun élément à supprimer.'
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | COMPTEUR
+        |--------------------------------------------------------------------------
+        */
+
+        $count = 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | SUPPRESSION
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($corbeilles as $corbeille) {
+
+            $record = $corbeille->getModelInstance();
+
+            if ($record) {
+
+                HistoriqueService::suppressionDefinitive(
+                    $record
+                );
+
+                $record->delete();
+            }
+
+            $corbeille->delete();
+
+            $count++;
+        }
+
+        DB::commit();
+
+        return $count;
+
+    } catch (Exception $e) {
+
+        DB::rollBack();
+
+        throw new Exception(
+            'Erreur lors de la suppression massive : '
+            . $e->getMessage()
+        );
+    }
+}
+
     /*
     |--------------------------------------------------------------------------
     | RESTAURER TOUT
@@ -238,6 +383,12 @@ class CorbeilleService
 
         try {
 
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION CORBEILLE
+            |--------------------------------------------------------------------------
+            */
+
             $corbeilles = Corbeille::all();
 
             if ($corbeilles->isEmpty()) {
@@ -247,16 +398,45 @@ class CorbeilleService
                 );
             }
 
+            /*
+            |--------------------------------------------------------------------------
+            | COMPTEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $count = 0;
+
+            /*
+            |--------------------------------------------------------------------------
+            | RESTAURATION
+            |--------------------------------------------------------------------------
+            */
+
             foreach ($corbeilles as $corbeille) {
 
-                self::restaurer(
-                    $corbeille
+                $record = $corbeille->getModelInstance();
+
+                if (!$record) {
+
+                    continue;
+                }
+
+                $record->update([
+                    'supprimer' => 0
+                ]);
+
+                HistoriqueService::restauration(
+                    $record
                 );
+
+                $corbeille->delete();
+
+                $count++;
             }
 
             DB::commit();
 
-            return true;
+            return $count;
 
         } catch (Exception $e) {
 
@@ -275,42 +455,42 @@ class CorbeilleService
     |--------------------------------------------------------------------------
     */
 
-    public static function supprimerTout()
-    {
-        DB::beginTransaction();
+    // public static function supprimerTout()
+    // {
+    //     DB::beginTransaction();
 
-        try {
+    //     try {
 
-            $corbeilles = Corbeille::all();
+    //         $corbeilles = Corbeille::all();
 
-            if ($corbeilles->isEmpty()) {
+    //         if ($corbeilles->isEmpty()) {
 
-                throw new Exception(
-                    'Aucun élément à supprimer.'
-                );
-            }
+    //             throw new Exception(
+    //                 'Aucun élément à supprimer.'
+    //             );
+    //         }
 
-            foreach ($corbeilles as $corbeille) {
+    //         foreach ($corbeilles as $corbeille) {
 
-                self::supprimerDefinitivement(
-                    $corbeille
-                );
-            }
+    //             self::supprimerDefinitivement(
+    //                 $corbeille
+    //             );
+    //         }
 
-            DB::commit();
+    //         DB::commit();
 
-            return true;
+    //         return true;
 
-        } catch (Exception $e) {
+    //     } catch (Exception $e) {
 
-            DB::rollBack();
+    //         DB::rollBack();
 
-            throw new Exception(
-                'Erreur lors de la suppression massive : '
-                . $e->getMessage()
-            );
-        }
-    }
+    //         throw new Exception(
+    //             'Erreur lors de la suppression massive : '
+    //             . $e->getMessage()
+    //         );
+    //     }
+    // }
 
     /*
     |--------------------------------------------------------------------------
@@ -328,5 +508,223 @@ class CorbeilleService
         return class_basename($record)
             . ' #'
             . $record->id;
+    }
+
+    /*
+|--------------------------------------------------------------------------
+| SUPPRIMER UNE SELECTION DEFINITIVEMENT
+|--------------------------------------------------------------------------
+*/
+
+    // public static function supprimerSelection(array $ids)
+    // {
+    //     DB::beginTransaction();
+
+    //     try {
+
+    //         /*
+    //         |--------------------------------------------------------------------------
+    //         | RECUPERATION DES ELEMENTS DE LA CORBEILLE
+    //         |--------------------------------------------------------------------------
+    //         */
+
+    //         $corbeilles = Corbeille::whereIn('id', $ids)->get();
+
+    //         if ($corbeilles->isEmpty()) {
+
+    //             throw new Exception(
+    //                 'Aucun élément valide à supprimer.'
+    //             );
+    //         }
+
+    //         /*
+    //         |--------------------------------------------------------------------------
+    //         | COMPTEUR
+    //         |--------------------------------------------------------------------------
+    //         */
+
+    //         $count = 0;
+
+    //         /*
+    //         |--------------------------------------------------------------------------
+    //         | SUPPRESSION DEFINITIVE
+    //         |--------------------------------------------------------------------------
+    //         */
+
+    //         foreach ($corbeilles as $corbeille) {
+
+    //             self::supprimerDefinitivement(
+    //                 $corbeille
+    //             );
+
+    //             $count++;
+    //         }
+
+    //         DB::commit();
+
+    //         return $count;
+
+    //     } catch (Exception $e) {
+
+    //         DB::rollBack();
+
+    //         throw new Exception(
+    //             'Erreur lors de la suppression définitive de la sélection : '
+    //             . $e->getMessage()
+    //         );
+    //     }
+    // }
+    public static function supprimerSelection(array $ids)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |------------------------------------------------------------------
+            | RECUPERATION DES ELEMENTS DE LA CORBEILLE
+            |------------------------------------------------------------------
+            */
+
+            $corbeilles = Corbeille::whereIn(
+                'id',
+                $ids
+            )->get();
+
+            if ($corbeilles->isEmpty()) {
+
+                throw new Exception(
+                    'Aucun élément valide à supprimer.'
+                );
+            }
+
+            /*
+            |------------------------------------------------------------------
+            | COMPTEUR
+            |------------------------------------------------------------------
+            */
+
+            $count = 0;
+
+            /*
+            |------------------------------------------------------------------
+            | SUPPRESSION DEFINITIVE
+            |------------------------------------------------------------------
+            */
+
+            foreach ($corbeilles as $corbeille) {
+
+                self::supprimerDefinitivement(
+                    $corbeille
+                );
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la suppression définitive de la sélection : '
+                . $e->getMessage()
+            );
+        }
+    }
+    public static function restaurerSelection(array $ids)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |----------------------------------------------------------
+            | RECUPERATION CORBEILLE
+            |----------------------------------------------------------
+            */
+
+            $corbeilles = Corbeille::whereIn('id', $ids)->get();
+
+            if ($corbeilles->isEmpty()) {
+
+                throw new Exception(
+                    'Aucun élément valide à restaurer.'
+                );
+            }
+
+            /*
+            |----------------------------------------------------------
+            | COMPTEUR
+            |----------------------------------------------------------
+            */
+
+            $count = 0;
+
+            /*
+            |----------------------------------------------------------
+            | RESTAURATION
+            |----------------------------------------------------------
+            */
+
+            foreach ($corbeilles as $corbeille) {
+
+                /*
+                |------------------------------------------------------
+                | RECUPERATION MODELE ORIGINAL
+                |------------------------------------------------------
+                */
+
+                $record = $corbeille->getModelInstance();
+
+                if (!$record) {
+                    continue;
+                }
+
+                /*
+                |------------------------------------------------------
+                | RESTAURER L'ÉLÉMENT MÉTIER
+                |------------------------------------------------------
+                */
+
+                $record->update([
+                    'supprimer' => 0
+                ]);
+
+                /*
+                |------------------------------------------------------
+                | HISTORIQUE
+                |------------------------------------------------------
+                */
+
+                HistoriqueService::restauration($record);
+
+                /*
+                |------------------------------------------------------
+                | SUPPRESSION CORBEILLE
+                |------------------------------------------------------
+                */
+
+                $corbeille->delete();
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la restauration de la sélection : '
+                . $e->getMessage()
+            );
+        }
     }
 }

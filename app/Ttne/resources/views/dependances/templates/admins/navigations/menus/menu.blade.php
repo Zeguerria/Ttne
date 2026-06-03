@@ -225,14 +225,14 @@
                             </ul>
                         </li>
                         <li id="removable">
-                            <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-pages icon-wrap"></span> <span class="mini-click-non">Pages</span></a>
+                            <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-pages icon-wrap"></span> <span class="mini-click-non">Corbeilles</span></a>
                             <ul class="submenu-angle page-mini-nb-dp" aria-expanded="false">
-                                <li><a title="Login" href="login.html"><span class="mini-sub-pro">Login</span></a></li>
-                                <li><a title="Register" href="register.html"><span class="mini-sub-pro">Register</span></a></li>
+                                <li><a title="Login" href="{{route('ADM-CRB-CBL')}}"><span class="mini-sub-pro">Corbeille</span></a></li>
+                                {{-- <li><a title="Register" href="register.html"><span class="mini-sub-pro">Register</span></a></li>
                                 <li><a title="Lock" href="lock.html"><span class="mini-sub-pro">Lock</span></a></li>
                                 <li><a title="Password Recovery" href="password-recovery.html"><span class="mini-sub-pro">Password Recovery</span></a></li>
                                 <li><a title="404 Page" href="404.html"><span class="mini-sub-pro">404 Page</span></a></li>
-                                <li><a title="500 Page" href="500.html"><span class="mini-sub-pro">500 Page</span></a></li>
+                                <li><a title="500 Page" href="500.html"><span class="mini-sub-pro">500 Page</span></a></li> --}}
                             </ul>
                         </li>
                     </ul>
