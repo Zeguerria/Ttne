@@ -36,7 +36,7 @@
                             <div class="futureTableLeft">
 
                                 {{-- ADD --}}
-                                <button
+                                {{-- <button
                                     class="futureBtn primaryBtn"
                                     data-toggle="modal"
                                     data-target="#Ajouter"
@@ -52,7 +52,7 @@
 
                                     </span>
 
-                                </button>
+                                </button> --}}
 
 
 
@@ -301,443 +301,25 @@
                             </div>
 
                         </div>
-
-
-
                         {{-- =========================================
                         TABLE
                         ========================================= --}}
-                        <div class="futureTableResponsive">
-
-                            <table
-                                class="futureTable"
-                                data-table="future"
-                            >
-
-                                {{-- TABLE HEAD --}}
-                                <thead>
-
-                                    <tr>
-
-                                        {{-- CHECKBOX --}}
-                                        <th
-                                            width="50"
-                                            data-export="false"
-                                            data-sort="false"
-                                        >
-
-                                            <input
-                                                type="checkbox"
-                                                id="selectAll"
-                                                class="futureCheckbox"
-                                                data-select-all="future"
-                                            >
-
-                                        </th>
-
-
-
-                                        {{-- INDEX --}}
-                                        <th>
-
-                                            #
-
-                                        </th>
-
-
-
-                                        {{-- CODE --}}
-                                        <th>
-
-                                            CODE
-
-                                        </th>
-
-
-
-                                        {{-- LIBELLE --}}
-                                        <th>
-
-                                            LIBELLÉ
-
-                                        </th>
-
-
-
-                                        {{-- DESCRIPTION --}}
-                                        <th>
-
-                                            DESCRIPTION
-
-                                        </th>
-
-
-
-                                        {{-- ACTIONS --}}
-                                        <th
-                                            width="170"
-                                            data-export="false"
-                                            data-sort="false"
-                                        >
-
-                                            ACTIONS
-
-                                        </th>
-
-                                    </tr>
-
-                                </thead>
-
-
-
-                                {{-- TABLE BODY --}}
-                                <tbody id="futureTableBody">
-
-                                    @forelse($corbeilles as $key => $value)
-
-                                    <tr
-                                        class="futureRow"
-                                        data-row="{{ $value->id }}"
-                                    >
-
-                                        {{-- CHECKBOX --}}
-                                        <td>
-
-                                            <input
-                                                type="checkbox"
-                                                class="futureCheckbox rowCheckbox"
-                                                data-row="{{ $value->id }}"
-                                            >
-
-                                        </td>
-
-
-
-                                        {{-- INDEX --}}
-                                        <td>
-
-                                            {{ $key + 1 }}
-
-                                        </td>
-
-
-
-                                        {{-- CODE --}}
-                                        <td>
-
-                                            <span class="futureCode">
-
-                                                {{ $value->code }}
-
-                                            </span>
-
-                                        </td>
-
-
-
-                                        {{-- LIBELLE --}}
-                                        <td>
-
-                                            {{ $value->libelle }}
-
-                                        </td>
-
-
-
-                                        {{-- DESCRIPTION --}}
-                                        <td>
-
-                                            @if($value->description)
-
-                                                {{ $value->description }}
-
-                                            @else
-
-                                                <span class="futureEmptyText">
-
-                                                    Aucune observation
-
-                                                </span>
-
-                                            @endif
-
-                                        </td>
-
-
-
-                                        {{-- ACTIONS --}}
-                                        <td>
-
-                                            <div class="futureActions">
-
-                                                {{-- CONSULTER --}}
-                                                <button
-                                                    class="futureMiniBtn infoBtn"
-                                                    data-bs-toggle="tooltip"
-                                                    data-placement="bottom"
-                                                    data-toggle="modal"
-                                                    data-target="#consulter{{$value->id}}"
-                                                    title="Consulter"
-                                                    type="button"
-                                                >
-
-                                                    <i class="fa fa-eye"></i>
-
-                                                </button>
-
-
-
-                                                {{-- MODIFIER --}}
-                                                <button
-                                                    class="futureMiniBtn warningBtn"
-                                                    data-bs-toggle="tooltip"
-                                                    data-placement="bottom"
-                                                    data-toggle="modal"
-                                                    data-target="#restorer{{$value->id}}"
-                                                    title="Modifier"
-                                                    type="button"
-                                                >
-                                               <i class="fa fa-reply"></i>
-
-
-
-                                                </button>
-
-
-
-                                                {{-- DELETE --}}
-                                                <button
-                                                    class="futureMiniBtn dangerBtn"
-                                                    data-bs-toggle="tooltip"
-                                                    data-placement="bottom"
-                                                    data-toggle="modal"
-                                                    data-target="#corbeille{{$value->id}}"
-                                                    title="Supprimer"
-                                                    type="button"
-                                                >
-
-                                                    <i class="fa fa-trash"></i>
-
-                                                </button>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-                                    @empty
-
-                                    {{-- EMPTY --}}
-                                    <tr>
-
-                                        <td colspan="6">
-
-                                            <div class="futureEmpty">
-
-                                                <i class="fa fa-database mb-3"></i>
-
-                                                <h5>
-
-                                                    Aucune donnée trouvée
-
-                                                </h5>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-                                    @endforelse
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-
-
+                        <section class="normal-table">
+                            <div class="normal-table">
+                                @include('dependances.templates.admins.gestions.corbeilles._consoms.tablenormal')
+                            </div>
+                        </section>
                         {{-- =========================================
                         MOBILE CARDS
                         ========================================= --}}
-                        <div class="futureMobileCards">
-
-                            @foreach($corbeilles as $key => $value)
-
-                            <div
-                                class="futureMobileCard"
-                                data-row="{{ $value->id }}"
-                            >
-
-                                {{-- TOP --}}
-                                <div class="futureMobileTop">
-
-                                    <div>
-
-                                        <h5>
-
-                                            {{ $value->code }}
-
-                                        </h5>
-
-                                        <p>
-
-                                            {{ $value->libelle }}
-
-                                        </p>
-
-                                    </div>
-
-
-
-                                    <input
-                                        type="checkbox"
-                                        class="futureCheckbox futureMobileCheckbox"
-                                        data-row="{{ $value->id }}"
-                                    >
-
-                                </div>
-
-
-
-                                {{-- BODY --}}
-                                <div class="futureMobileBody">
-
-                                    <div class="futureMobileItem">
-
-                                        <span>
-
-                                            #
-
-                                        </span>
-
-                                        <strong>
-
-                                            {{ $key + 1 }}
-
-                                        </strong>
-
-                                    </div>
-
-
-
-                                    <div class="futureMobileItem">
-
-                                        <span>
-
-                                            Code
-
-                                        </span>
-
-                                        <strong>
-
-                                            {{ $value->code }}
-
-                                        </strong>
-
-                                    </div>
-
-
-
-                                    <div class="futureMobileItem">
-
-                                        <span>
-
-                                            Libellé
-
-                                        </span>
-
-                                        <strong>
-
-                                            {{ $value->libelle }}
-
-                                        </strong>
-
-                                    </div>
-
-
-
-                                    <div class="futureMobileItem">
-
-                                        <span>
-
-                                            Description
-
-                                        </span>
-
-                                        <strong>
-
-                                            {{ $value->description ?? 'Aucune description' }}
-
-                                        </strong>
-
-                                    </div>
-
-                                </div>
-
-
-
-                                {{-- MOBILE ACTIONS --}}
-                                <div class="futureMobileActions">
-
-                                    {{-- CONSULTER --}}
-                                    <button
-                                        class="futureMiniBtn infoBtn"
-                                        data-bs-toggle="tooltip"
-                                        data-placement="bottom"
-                                        data-toggle="modal"
-                                        data-target="#consulter{{$value->id}}"
-                                        title="Consulter"
-                                        type="button"
-                                    >
-
-                                        <i class="fa fa-eye"></i>
-
-                                    </button>
-
-
-
-                                    {{-- MODIFIER --}}
-                                    <button
-                                        class="futureMiniBtn warningBtn"
-                                        data-bs-toggle="tooltip"
-                                        data-placement="bottom"
-                                        data-toggle="modal"
-                                        data-target="#modifier{{$value->id}}"
-                                        title="Modifier"
-                                        type="button"
-                                    >
-
-                                        <i class="fa fa-edit"></i>
-
-                                    </button>
-
-
-
-                                    {{-- CORBEILLE --}}
-                                    <button
-                                        class="futureMiniBtn dangerBtn"
-                                        data-bs-toggle="tooltip"
-                                        data-placement="bottom"
-                                        data-toggle="modal"
-                                        data-target="#corbeille{{$value->id}}"
-                                        title="Supprimer"
-                                        type="button"
-                                    >
-
-                                        <i class="fa fa-trash"></i>
-
-                                    </button>
-
-                                </div>
-
+                        {{-- TABLEAU MOBILE DEBUT --}}
+                        <section class="mobile-table">
+                            <div class="mobile-table">
+                                @include('dependances.templates.admins.gestions.corbeilles._consoms.tablemobile')
                             </div>
+                        </section>
+                        {{-- TABLEAU MOBILE FIN --}}
 
-                            @endforeach
-
-                        </div>
 
 
 
@@ -836,9 +418,137 @@
                                     </div>
 
                                 </div>
-                                <script>
 
-                                    class BulkRestore {
+
+
+
+                                {{-- EXPORT SELECTED --}}
+                                <div class="futureExportSelectWrapper">
+
+                                    <select
+                                        class="futureSelect futureExportSelectedSelect"
+                                        id="bulkExportSelect"
+                                    >
+
+                                        <option value="">
+                                            Exporter la sélection...
+                                        </option>
+
+                                        <option value="excel">
+                                            Excel
+                                        </option>
+
+                                        <option value="pdf">
+                                            PDF
+                                        </option>
+
+                                        <option value="xml">
+                                            XML
+                                        </option>
+
+                                        <option value="csv">
+                                            CSV
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+
+
+                            {{-- PAGINATION --}}
+                            <div class="futurePaginationWrapper">
+
+                                {{-- LEFT --}}
+                                <div class="futurePaginationLeft">
+
+                                    <span>
+
+                                        Afficher
+
+                                    </span>
+
+
+
+                                    <select
+                                        id="rowsPerPage"
+                                        class="futureSelect"
+                                        data-per-page="future"
+                                    >
+
+                                        <option value="5">
+                                            5
+                                        </option>
+
+                                        <option value="10" selected>
+                                            10
+                                        </option>
+
+                                        <option value="20">
+                                            20
+                                        </option>
+
+                                        <option value="50">
+                                            50
+                                        </option>
+
+                                        <option value="100">
+                                            100
+                                        </option>
+
+                                        <option value="all">
+                                            Tout
+                                        </option>
+
+                                    </select>
+
+
+
+                                    <span>
+
+                                        éléments
+
+                                    </span>
+
+                                </div>
+
+
+
+                                {{-- RIGHT --}}
+                                <div
+                                    class="futurePagination"
+                                    id="pagination"
+                                    data-pagination="future"
+                                >
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{{-- FIN --}}
+
+
+@endsection
+@section('footer')
+    <div class="suprression-selection">
+        @include('dependances.templates.admins.gestions.corbeilles._consoms.supprimerselection')
+    </div>
+    <div class="restorer-selection">
+        @include('dependances.templates.admins.gestions.corbeilles._consoms.restorerselection')
+    </div>
+      <script>
+          class BulkRestore {
 
                                         constructor(config = {}) {
 
@@ -1019,6 +729,8 @@
 
                                     }
 
+
+
                                     document.addEventListener(
                                         "DOMContentLoaded",
                                         () => {
@@ -1036,133 +748,5 @@
                                         }
                                     );
 
-                                </script>
-
-
-
-                                {{-- EXPORT SELECTED --}}
-                                <div class="futureExportSelectWrapper">
-
-                                    <select
-                                        class="futureSelect futureExportSelectedSelect"
-                                        id="bulkExportSelect"
-                                    >
-
-                                        <option value="">
-                                            Exporter la sélection...
-                                        </option>
-
-                                        <option value="excel">
-                                            Excel
-                                        </option>
-
-                                        <option value="pdf">
-                                            PDF
-                                        </option>
-
-                                        <option value="xml">
-                                            XML
-                                        </option>
-
-                                        <option value="csv">
-                                            CSV
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-                            </div>
-
-
-
-                            {{-- PAGINATION --}}
-                            <div class="futurePaginationWrapper">
-
-                                {{-- LEFT --}}
-                                <div class="futurePaginationLeft">
-
-                                    <span>
-
-                                        Afficher
-
-                                    </span>
-
-
-
-                                    <select
-                                        id="rowsPerPage"
-                                        class="futureSelect"
-                                        data-per-page="future"
-                                    >
-
-                                        <option value="5">
-                                            5
-                                        </option>
-
-                                        <option value="10" selected>
-                                            10
-                                        </option>
-
-                                        <option value="20">
-                                            20
-                                        </option>
-
-                                        <option value="50">
-                                            50
-                                        </option>
-
-                                        <option value="100">
-                                            100
-                                        </option>
-
-                                        <option value="all">
-                                            Tout
-                                        </option>
-
-                                    </select>
-
-
-
-                                    <span>
-
-                                        éléments
-
-                                    </span>
-
-                                </div>
-
-
-
-                                {{-- RIGHT --}}
-                                <div
-                                    class="futurePagination"
-                                    id="pagination"
-                                    data-pagination="future"
-                                >
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-{{-- FIN --}}
-
-
-@endsection
-@section('footer')
-    <div class="suprression-selection">
-        @include('dependances.templates.admins.gestions.corbeilles._consoms.supprimerselection')
-    </div>
-    <div class="restorer-selection">
-        @include('dependances.templates.admins.gestions.corbeilles._consoms.restorerselection')
-    </div>
+      </script>
 @endsection

@@ -26,10 +26,7 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
                 Route::get('Admin/Corebeille/Type-Parametre', [TypeParametreController::class, 'indexCorbeille'])->name('ADM-TPC-tp');
                 //CHEMIN DES PAGE FIN
             //AUTRES FUNCTION DEBUT
-            Route::post(
-    '/select/corbeille/typeparametre',
-    [TypeParametreController::class, 'corbeilleSelection']
-);
+                Route::post('/select/corbeille/typeparametre',[TypeParametreController::class, 'corbeilleSelection']);
                 Route::post('/Admin/Parametrages/Type-Parametre/Statut', [TypeParametreController::class, 'StatutTp'])->name('StatutTp');
 
                 // Route::get('Admin/Corebeille/Type-Parametre/Tout-Destroy', [TypeParametreController::class, 'destroyTous'])->name('D-All-AD-TPP');
@@ -47,19 +44,19 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
         //PARAMETRE DEBUT
                 // CHEMIN DES PAGES DEBUT
                 Route::get('Admin/Parametrages/Parametre', [ParametreController::class, 'index'])->name('ADM-P-par');
-                Route::get('Admin/Corebeille/Parametre', [ParametreController::class, 'indexCorbeille'])->name('ADM-PC-par');
                 //CHEMIN DES PAGE FIN
             //AUTRES FUNCTION DEBUT
-                Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
+                // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
 
                 Route::get('Admin/Corebeille/Parametre/Tout-Destroy', [ParametreController::class, 'destroyTous'])->name('D-All-AD-PAR');
                 Route::get('Admin/Corebeille/Parametre/Tout-Soft', [ParametreController::class, 'corbeilleAll'])->name('C-All-P-PAR');
-                Route::get('Admin/Corebeille/Parametre/Tout-Refresh', [ParametreController::class, 'recupTousCorbeille'])->name('R-All-AD-PAR');
             //AUTRES FUNCTION FIN
             //FONCTIONS DEBUT
                 Route::post('AjouterParametre', [ParametreController::class, 'store'])->name('AjouterParametre');
                 Route::post('ModifierParametre', [ParametreController::class, 'update'])->name('ModifierParametre');
                 Route::post('CorbeilleParametre', [ParametreController::class, 'corbeille'])->name('CorbeilleParametre');
+                Route::post('/select/corbeille/parametre',[ParametreController::class, 'corbeilleSelection']);
+
 
 
             // FONCTION FIN

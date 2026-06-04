@@ -17,69 +17,69 @@ class TypeParametreController extends Controller
     */
 
     public function index(Request $request)
-{
-   $historiques = Historique::where(
-    'record_type',
-    TypeParametre::class
-)
-->latest()
-->paginate(
-    5,
-    ['*'],
-    'history_page'
-);
+    {
+        $historiques = Historique::where(
+            'record_type',
+            TypeParametre::class
+        )
+        ->latest()
+        ->paginate(
+            5,
+            ['*'],
+            'history_page'
+        );
 
-    /*
-    =========================================================
-    AJAX
-    =========================================================
-    */
+        /*
+        =========================================================
+        AJAX
+        =========================================================
+        */
 
-    if($request->ajax()){
+        if($request->ajax()){
 
-        return response()->json([
+            return response()->json([
 
-            'historiques' => view(
-                'dependances.templates.admins.gestions.parametrages.typeparametres._consoms.historique',
-                compact('historiques')
-            )->render(),
+                'historiques' => view(
+                    'dependances.templates.admins.gestions.parametrages.typeparametres._consoms.historique',
+                    compact('historiques')
+                )->render(),
 
-            'current_page' => $historiques->currentPage(),
+                'current_page' => $historiques->currentPage(),
 
-            'last_page' => $historiques->lastPage(),
+                'last_page' => $historiques->lastPage(),
 
-            'has_more_pages' => $historiques->hasMorePages()
+                'has_more_pages' => $historiques->hasMorePages()
 
-        ]);
+            ]);
 
+        }
+
+        return view(
+            'dependances.templates.admins.gestions.parametrages.typeparametres.typeparametre',
+            [
+
+                'TypeParametreT' => TypeParametre::where(
+                    'supprimer',
+                    0
+                )->count(),
+
+                'TypeParametreTC' => TypeParametre::where(
+                    'supprimer',
+                    1
+                )->count(),
+
+                'typeparametres' => TypeParametre::where(
+                    'supprimer',
+                    0
+                )
+                ->orderBy('libelle')
+                ->get(),
+
+                'historiques' => $historiques
+
+            ]
+        );
     }
-
-    return view(
-        'dependances.templates.admins.gestions.parametrages.typeparametres.typeparametre',
-        [
-
-            'TypeParametreT' => TypeParametre::where(
-                'supprimer',
-                0
-            )->count(),
-
-            'TypeParametreTC' => TypeParametre::where(
-                'supprimer',
-                1
-            )->count(),
-
-            'typeparametres' => TypeParametre::where(
-                'supprimer',
-                0
-            )
-            ->orderBy('libelle')
-            ->get(),
-
-            'historiques' => $historiques
-
-        ]
-    );
-}
     /*
     |--------------------------------------------------------------------------
     | STORE
@@ -197,7 +197,7 @@ class TypeParametreController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    
+
 
     /*
 |--------------------------------------------------------------------------
