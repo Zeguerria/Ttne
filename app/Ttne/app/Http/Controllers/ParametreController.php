@@ -54,6 +54,7 @@ class ParametreController extends Controller
             'type_parametre_id' => 'required|exists:type_parametres,id',
             'libelle' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'slug' => 'nullable|string',
         ]);
         try {
             ParametreService::store($data);
