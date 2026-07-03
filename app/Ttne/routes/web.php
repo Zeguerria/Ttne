@@ -15,7 +15,7 @@ Route::get('/', function () {
 //         'action' => 'Test',
 //     ]);
 
-//     return "OK";
+//     return "OK";h
 // });
 // LES REDIRECTIONS DEBUT
 Route::get('/dashboard', 'App\Http\Controllers\RouteController@lesdirections')->name('redirects');
