@@ -61,6 +61,41 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
 
             // FONCTION FIN
         //PARAMETRE FIN
+        //PROFIL DEBUT
+                // CHEMIN DES PAGES DEBUT
+                Route::get('Admin/Access/Profil', [ProfilController::class, 'index'])->name('ADM-PRO-pro');
+                //CHEMIN DES PAGE FIN
+            //AUTRES FUNCTION DEBUT
+                // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
+
+                Route::get('Admin/Corebeille/Profil/Tout-Destroy', [ProfilController::class, 'destroyTous'])->name('D-All-AD-PRO');
+                Route::get('Admin/Corebeille/Profil/Tout-Soft', [ProfilController::class, 'corbeilleAll'])->name('C-All-PRO-PRO');
+            //AUTRES FUNCTION FIN
+            //FONCTIONS DEBUT
+                Route::post('AjouterProfil', [ProfilController::class, 'store'])->name('AjouterProfil');
+                Route::post('ModifierProfil', [ProfilController::class, 'update'])->name('ModifierProfil');
+                Route::post('CorbeilleProfil', [ProfilController::class, 'corbeille'])->name('CorbeilleProfil');
+                Route::post('/select/corbeille/profil',[ProfilController::class, 'corbeilleSelection']);
+            // FONCTION FIN
+        //PROFIL FIN
+        //HABILITATION DEBUT
+                // CHEMIN DES PAGES DEBUT
+                Route::get('Admin/Access/Habilitation', [HabilitationController::class, 'index'])->name('ADM-HBL-hbl');
+                //CHEMIN DES PAGE FIN
+            //AUTRES FUNCTION DEBUT
+                // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
+
+                Route::get('Admin/Corebeille/Habilitation/Tout-Destroy', [HabilitationController::class, 'destroyTous'])->name('D-All-AD-PRO');
+                Route::get('Admin/Corebeille/Habilitation/Tout-Soft', [HabilitationController::class, 'corbeilleAll'])->name('C-All-PRO-PRO');
+            //AUTRES FUNCTION FIN
+            //FONCTIONS DEBUT
+                Route::post('AjouterHabilitation', [ProfilCHabilitationControllerontroller::class, 'store'])->name('AjouterHabilitation');
+                Route::post('ModifierHabilitation', [HabilitationController::class, 'update'])->name('ModifierHabilitation');
+                Route::post('CorbeilleHabilitation', [HabilitationController::class, 'corbeille'])->name('CorbeilleHabilitation');
+                Route::post('/select/corbeille/habilitation',[HabilitationController::class, 'corbeilleSelection']);
+            // FONCTION FIN
+        //HABILITATION FIN
+
 
 
 
