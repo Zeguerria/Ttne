@@ -3,6 +3,8 @@
 use App\Http\Controllers\CorbeilleController;
 use App\Http\Controllers\ParametreController;
 use App\Http\Controllers\TypeParametreController;
+use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\HabilitationControllerController;
 use App\Models\Historique;
 use Illuminate\Support\Facades\Route;
 

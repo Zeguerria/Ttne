@@ -70,6 +70,8 @@ class Corbeille extends Model
             'type_parametres' => \App\Models\TypeParametre::class,
             'parametres' => \App\Models\Parametre::class,
             'users' => \App\Models\User::class,
+            'users' => \App\Models\Profil::class,
+            'users' => \App\Models\Habilitation::class,
 
             // ajouter les autres tables ici
             // 'users' => User::class,
@@ -78,5 +80,5 @@ class Corbeille extends Model
 
         return $models[$this->table_name] ?? null;
     }
-   
+
 }
