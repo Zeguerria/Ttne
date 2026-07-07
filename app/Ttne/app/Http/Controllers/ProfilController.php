@@ -54,12 +54,12 @@ class ProfilController extends Controller
             'dependances.templates.admins.gestions.access.profils.profil',
             [
 
-                'profilT' => Profil::where(
+                'ProfilT' => Profil::where(
                     'supprimer',
                     0
                 )->count(),
 
-                'profilTC' => Profil::where(
+                'ProfilTC' => Profil::where(
                     'supprimer',
                     1
                 )->count(),
