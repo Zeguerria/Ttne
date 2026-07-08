@@ -60,7 +60,7 @@ class HabilitationController extends Controller
                     0
                 )->count(),
 
-                'habilitationTC' => Habilitation::where(
+                'HabilitationTC' => Habilitation::where(
                     'supprimer',
                     1
                 )->count(),

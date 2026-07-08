@@ -181,7 +181,7 @@
 
                                             <span class="futureStatValue">
 
-                                                {{ $ProfilT ?? 0 }}
+                                                {{ $HabilitationT ?? 0 }}
 
                                             </span>
 
@@ -210,7 +210,7 @@
 
                                             <span class="futureStatValue">
 
-                                                {{ $ProfilTC ?? 0 }}
+                                                {{ $HabilitationTC ?? 0 }}
 
                                             </span>
 
