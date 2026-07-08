@@ -1,6 +1,6 @@
 @extends('dependances.templates.admins.navigations.menus.menu')
 @section('titre')
-    Profils
+    Habilitation
 @endsection
 @section('header')
 

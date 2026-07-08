@@ -112,7 +112,7 @@ class HabilitationController extends Controller
     {
         $data = $request->validate([
 
-            'id' => 'required|exists:profils,id',
+            'id' => 'required|exists:habilitations,id',
 
             'code' => 'required|string|max:255',
 
@@ -144,7 +144,7 @@ class HabilitationController extends Controller
     {
         $data = $request->validate([
 
-            'id' => 'required|exists:habilitatins,id',
+            'id' => 'required|exists:habilitations,id',
         ]);
 
         try {

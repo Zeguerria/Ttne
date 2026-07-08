@@ -50,7 +50,7 @@
 
                             {{-- FORM --}}
                             <form method="POST"
-                                action="{{ route('AjouterTypeParametre') }}"
+                                action="{{ route('AjouterHabilitation') }}"
                                 enctype="multipart/form-data">
 
                                 @csrf
@@ -377,7 +377,7 @@
                                     </div>
 
                                     {{-- FORM --}}
-                                    <form method="POST" action="{{route('ModifierTypeParametre')}}" enctype="multipart/form-data">
+                                    <form method="POST" action="{{route('ModifierHabilitation')}}" enctype="multipart/form-data">
                                         <input type="hidden" name="id" value="{{$value->id}}">
                                         @csrf
 
@@ -520,7 +520,7 @@
                                     </div>
 
                                     {{-- FORM --}}
-                                    <form method="POST" action="{{route('CorbeilleTypeParametre')}}" enctype="multipart/form-data">
+                                    <form method="POST" action="{{route('CorbeilleHabilitation')}}" enctype="multipart/form-data">
                                         <input type="hidden" name="id" value="{{$value->id}}">
                                         @csrf
 

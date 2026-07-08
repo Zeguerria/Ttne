@@ -4,7 +4,7 @@ use App\Http\Controllers\CorbeilleController;
 use App\Http\Controllers\ParametreController;
 use App\Http\Controllers\TypeParametreController;
 use App\Http\Controllers\ProfilController;
-use App\Http\Controllers\HabilitationControllerController;
+use App\Http\Controllers\HabilitationController;
 use App\Models\Historique;
 use Illuminate\Support\Facades\Route;
 
@@ -88,13 +88,13 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
                 // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
 
                 Route::get('Admin/Corebeille/Habilitation/Tout-Destroy', [HabilitationController::class, 'destroyTous'])->name('D-All-AD-PRO');
-                Route::get('Admin/Corebeille/Habilitation/Tout-Soft', [HabilitationController::class, 'corbeilleAll'])->name('C-All-PRO-PRO');
+                Route::post('Admin/Corebeille/Habilitation/Tout-Soft', [HabilitationController::class, 'corbeilleAll'])->name('C-All-HAB-H');
             //AUTRES FUNCTION FIN
             //FONCTIONS DEBUT
-                Route::post('AjouterHabilitation', [ProfilCHabilitationControllerontroller::class, 'store'])->name('AjouterHabilitation');
+                Route::post('AjouterHabilitation', [HabilitationController::class, 'store'])->name('AjouterHabilitation');
                 Route::post('ModifierHabilitation', [HabilitationController::class, 'update'])->name('ModifierHabilitation');
                 Route::post('CorbeilleHabilitation', [HabilitationController::class, 'corbeille'])->name('CorbeilleHabilitation');
-                Route::post('/select/corbeille/habilitation',[HabilitationController::class, 'corbeilleSelection']);
+                Route::post('/select/corbeille/habilitations',[HabilitationController::class, 'corbeilleSelection']);
             // FONCTION FIN
         //HABILITATION FIN
 
