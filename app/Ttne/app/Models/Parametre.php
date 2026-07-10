@@ -53,4 +53,18 @@ class Parametre extends Model
         return $this->belongsTo(TypeParametre::class, 'type_parametre_id');
     }
 
+    public function piecesType()
+    {
+        return $this->hasMany(Piece::class, 'type_piece_id');
+    }
+
+    public function piecesStatut()
+    {
+        return $this->hasMany(Piece::class, 'statut_piece_id');
+    }
+    public function utilisateursStatut()
+{
+    return $this->hasMany(User::class, 'statut_compte_id');
+}
+
 }

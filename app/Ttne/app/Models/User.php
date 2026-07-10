@@ -27,10 +27,21 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
+     protected $fillable = [
+        'nom',
+        'prenom',
+        'slug',
+        'photo',
+        'telephone',
         'email',
         'password',
+        'date_naissance',
+        'profil_id',
+        'statut_compte_id',
+        'derniere_connexion',
+        'derniere_ip',
+        'supprimer',
+        'current_team_id',
     ];
 
     /**
@@ -65,5 +76,40 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+     /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    */
+
+    public function getNameAttribute()
+    {
+        return "{$this->prenom} {$this->nom}";
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relations
+    |--------------------------------------------------------------------------
+    */
+
+    public function profil()
+    {
+        return $this->belongsTo(Profil::class);
+    }
+
+
+    public function statutCompte()
+    {
+        return $this->belongsTo(Parametre::class, 'statut_compte_id');
+    }
+
+
+    public function pieces()
+    {
+        return $this->hasMany(Piece::class);
     }
 }

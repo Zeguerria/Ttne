@@ -109,10 +109,10 @@
 								</a>
                             <ul class="submenu-angle" aria-expanded="true">
                                 <li><a title="Dashboard v.1" href="{{route('ADM-TP-type')}}"><span class="mini-sub-pro">Type de Paramétre</span></a></li>
-                                <li><a title="Dashboard v.2" href="index-1.html"><span class="mini-sub-pro">Dashboard v.2</span></a></li>
-                                <li><a title="Dashboard v.3" href="index-2.html"><span class="mini-sub-pro">Dashboard v.3</span></a></li>
-                                <li><a title="Analytics" href="analytics.html"><span class="mini-sub-pro">Analytics</span></a></li>
-                                <li><a title="Widgets" href="widgets.html"><span class="mini-sub-pro">Widgets</span></a></li>
+                                <li><a title="Dashboard v.2" href="{{route('ADM-P-par')}}"><span class="mini-sub-pro">Parametre</span></a></li>
+                                {{-- <li><a title="Dashboard v.3" href="index-2.html"><span class="mini-sub-pro">Dashboard v.3</span></a></li> --}}
+                                {{-- <li><a title="Analytics" href="analytics.html"><span class="mini-sub-pro">Analytics</span></a></li> --}}
+                                {{-- <li><a title="Widgets" href="widgets.html"><span class="mini-sub-pro">Widgets</span></a></li> --}}
                             </ul>
                         </li>
                         <li>
@@ -123,8 +123,8 @@
                             <ul class="submenu-angle" aria-expanded="false">
                                 <li><a title="All Professors" href="{{route('ADM-PRO-pro')}}"><span class="mini-sub-pro">Profil</span></a></li>
                                 <li><a title="Add Professor" href="{{route('ADM-HBL-hbl')}}"><span class="mini-sub-pro">Habilitation</span></a></li>
-                                <li><a title="Edit Professor" href="edit-professor.html"><span class="mini-sub-pro">Edit Professor</span></a></li>
-                                <li><a title="Professor Profile" href="professor-profile.html"><span class="mini-sub-pro">Professor Profile</span></a></li>
+                                {{-- <li><a title="Edit Professor" href="edit-professor.html"><span class="mini-sub-pro">Edit Professor</span></a></li> --}}
+                                {{-- <li><a title="Professor Profile" href="professor-profile.html"><span class="mini-sub-pro">Professor Profile</span></a></li> --}}
                             </ul>
                         </li>
                         <li>

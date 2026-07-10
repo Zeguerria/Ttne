@@ -362,6 +362,11 @@
                                             LIBELLÉ
 
                                         </th>
+                                         <th>
+
+                                            TYPE DE PARAMETRE
+
+                                        </th>
 
 
 
@@ -396,10 +401,7 @@
 
                                     @forelse($parametres as $key => $value)
 
-                                    <tr
-                                        class="futureRow"
-                                        data-row="{{ $value->id }}"
-                                    >
+                                    <tr class="futureRow" data-row="{{ $value->id }}">
 
                                         {{-- CHECKBOX --}}
                                         <td>
@@ -442,25 +444,43 @@
                                             {{ $value->libelle }}
 
                                         </td>
+                                        {{-- TYPE DE PARAMETRE --}}
+                                        <td>
+
+                                            @if($value->typeParametre)
+
+                                                {{ $value->typeParametre->libelle }}
+
+                                            @else
+
+                                                <span class="futureEmptyText">
+
+                                                    Aucun type
+
+                                                </span>
+
+                                            @endif
+
+                                        </td>
 
 
 
                                         {{-- DESCRIPTION --}}
                                         <td>
 
-                                            @if($value->description)
+                                           @if($value->description)
 
-                                                {{ $value->description }}
+                                            <span title="{{ $value->description }}">
+                                                {{ \Illuminate\Support\Str::limit($value->description, 40, '...') }}
+                                            </span>
 
-                                            @else
+                                        @else
 
-                                                <span class="futureEmptyText">
+                                            <span class="futureEmptyText">
+                                                Aucune observation
+                                            </span>
 
-                                                    Aucune observation
-
-                                                </span>
-
-                                            @endif
+                                        @endif
 
                                         </td>
 
@@ -587,6 +607,23 @@
                                             {{ $value->libelle }}
 
                                         </p>
+                                        <p>
+
+                                           @if($value->typeParametre)
+
+                                                {{ $value->typeParametre->libelle }}
+
+                                            @else
+
+                                                <span class="futureEmptyText">
+
+                                                    Aucun type
+
+                                                </span>
+
+                                            @endif
+
+                                        </p>
 
                                     </div>
 
@@ -656,6 +693,33 @@
                                         </strong>
 
                                     </div>
+                                    <div class="futureMobileItem">
+
+                                        <span>
+
+                                            TYPE PARAMETRE
+
+                                        </span>
+
+                                        <strong>
+
+                                            @if($value->typeParametre)
+
+                                                {{ $value->typeParametre->libelle }}
+
+                                            @else
+
+                                                <span class="futureEmptyText">
+
+                                                    Aucun type
+
+                                                </span>
+
+                                            @endif
+
+                                        </strong>
+
+                                    </div>
 
 
 
@@ -669,7 +733,9 @@
 
                                         <strong>
 
-                                            {{ $value->description ?? 'Aucune description' }}
+                                            <span title="{{ $value->description }}">
+                                                {{ \Illuminate\Support\Str::limit($value->description, 20, '...') }}
+                                            </span>
 
                                         </strong>
 

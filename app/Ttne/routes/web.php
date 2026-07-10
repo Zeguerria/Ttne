@@ -51,7 +51,7 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
                 // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
 
                 Route::get('Admin/Corebeille/Parametre/Tout-Destroy', [ParametreController::class, 'destroyTous'])->name('D-All-AD-PAR');
-                Route::get('Admin/Corebeille/Parametre/Tout-Soft', [ParametreController::class, 'corbeilleAll'])->name('C-All-PARAM-P');
+                Route::post('Admin/Corebeille/Parametre/Tout-Soft', [ParametreController::class, 'corbeilleAll'])->name('C-All-PARAM-P');
             //AUTRES FUNCTION FIN
             //FONCTIONS DEBUT
                 Route::post('AjouterParametre', [ParametreController::class, 'store'])->name('AjouterParametre');

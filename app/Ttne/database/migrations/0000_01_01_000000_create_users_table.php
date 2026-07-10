@@ -12,17 +12,56 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
-            $table->timestamps();
-        });
 
+    $table->id();
+
+    // Informations personnelles
+    $table->string('nom');
+    $table->string('prenom');
+    $table->string('slug')->unique();
+
+    // Profil
+    $table->foreignId('profil_id')
+        ->constrained('profils')
+        ->cascadeOnUpdate()
+        ->restrictOnDelete();
+
+    // Statut du compte
+    $table->foreignId('statut_compte_id')
+        ->constrained('parametres')
+        ->cascadeOnUpdate()
+        ->restrictOnDelete();
+
+    // Contact
+    $table->string('telephone')->unique();
+    $table->string('email')->unique();
+    $table->timestamp('email_verified_at')->nullable();
+
+    // Authentification
+    $table->string('password');
+
+    // Informations complémentaires
+    $table->date('date_naissance')->nullable();
+
+    // Photo de profil
+    $table->string('photo', 2048)->nullable();
+
+    // Dernière connexion
+    $table->timestamp('derniere_connexion')->nullable();
+
+    // Dernière adresse IP
+    $table->string('derniere_ip')->nullable();
+
+    // Corbeille logique
+    $table->boolean('supprimer')->default(false);
+
+    // Jetstream
+    $table->rememberToken();
+    $table->foreignId('current_team_id')->nullable();
+
+    $table->timestamps();
+
+});
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');

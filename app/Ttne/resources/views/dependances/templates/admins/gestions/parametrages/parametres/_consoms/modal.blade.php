@@ -313,6 +313,48 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-12 mb-4">
+
+                                                            <div class="futureField">
+
+                                                                <label>
+                                                                    <i class="fa fa-layer-group"></i>
+                                                                    Type de paramètre
+                                                                </label>
+
+                                                                <div class="futureInput">
+
+                                                                    <i class="fa fa-toolbox inputIcon"></i>
+
+                                                                    <select class="futureSelect" name="type_parametre_id" disabled>
+
+                                                                        @foreach($typeparametres as $type)
+
+                                                                            @if($value->type_parametre_id == $type->id)
+
+                                                                                <option value="{{ $type->id }}" selected>
+                                                                                    {{ $type->libelle }}
+                                                                                </option>
+
+                                                                            @else
+
+                                                                                <option value="{{ $type->id }}">
+                                                                                    {{ $type->libelle }}
+                                                                                </option>
+
+                                                                            @endif
+
+                                                                        @endforeach
+
+                                                                    </select>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
                                                     <div class="row mt-4">
                                                         {{-- DESCRIPTION --}}
                                                         <div class="col-12 col-md-12 mb-4 ">
@@ -419,7 +461,7 @@
                                     </div>
 
                                     {{-- FORM --}}
-                                    <form method="POST" action="{{route('ModifierTypeParametre')}}" enctype="multipart/form-data">
+                                    <form method="POST" action="{{route('ModifierParametre')}}" enctype="multipart/form-data">
                                         <input type="hidden" name="id" value="{{$value->id}}">
                                         @csrf
 
@@ -454,6 +496,48 @@
                                                                     <input type="text" name="libelle" value="{{$value->libelle}}"  id="consulter{{$value->id}}" placeholder="Entrer le libellé" required>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                     <div class="row">
+                                                        <div class="col-12 col-md-12 mb-4">
+
+                                                            <div class="futureField">
+
+                                                                <label>
+                                                                    <i class="fa fa-layer-group"></i>
+                                                                    Type de paramètre
+                                                                </label>
+
+                                                                <div class="futureInput">
+
+                                                                    <i class="fa fa-toolbox inputIcon"></i>
+
+                                                                    <select class="futureSelect" name="type_parametre_id" >
+
+                                                                        @foreach($typeparametres as $type)
+
+                                                                            @if($value->type_parametre_id == $type->id)
+
+                                                                                <option value="{{ $type->id }}" selected>
+                                                                                    {{ $type->libelle }}
+                                                                                </option>
+
+                                                                            @else
+
+                                                                                <option value="{{ $type->id }}">
+                                                                                    {{ $type->libelle }}
+                                                                                </option>
+
+                                                                            @endif
+
+                                                                        @endforeach
+
+                                                                    </select>
+
+                                                                </div>
+
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="row mt-4">
@@ -562,7 +646,7 @@
                                     </div>
 
                                     {{-- FORM --}}
-                                    <form method="POST" action="{{route('CorbeilleTypeParametre')}}" enctype="multipart/form-data">
+                                    <form method="POST" action="{{route('CorbeilleParametre')}}" enctype="multipart/form-data">
                                         <input type="hidden" name="id" value="{{$value->id}}">
                                         @csrf
 
@@ -597,6 +681,48 @@
                                                                     <input type="text" name="libelle" value="{{$value->libelle}}" readonly id="consulter{{$value->id}}" placeholder="Entrer le libellé" required>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-12 mb-4">
+
+                                                            <div class="futureField">
+
+                                                                <label>
+                                                                    <i class="fa fa-layer-group"></i>
+                                                                    Type de paramètre
+                                                                </label>
+
+                                                                <div class="futureInput">
+
+                                                                    <i class="fa fa-toolbox inputIcon"></i>
+
+                                                                    <select class="futureSelect" name="type_parametre_id" disabled>
+
+                                                                        @foreach($typeparametres as $type)
+
+                                                                            @if($value->type_parametre_id == $type->id)
+
+                                                                                <option value="{{ $type->id }}" selected>
+                                                                                    {{ $type->libelle }}
+                                                                                </option>
+
+                                                                            @else
+
+                                                                                <option value="{{ $type->id }}">
+                                                                                    {{ $type->libelle }}
+                                                                                </option>
+
+                                                                            @endif
+
+                                                                        @endforeach
+
+                                                                    </select>
+
+                                                                </div>
+
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="row mt-4">

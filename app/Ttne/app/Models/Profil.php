@@ -43,4 +43,8 @@ class Profil extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function users()
+{
+    return $this->hasMany(User::class);
+}
 }
