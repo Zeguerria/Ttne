@@ -17,8 +17,9 @@ class TypeParametreSeeder extends Seeder
          //
          DB::table('type_parametres')->insert([
             ['id'=>1, 'code'=> "AUCUN", 'libelle'=>"AUCUN", 'description'=>"AUCUN",'created_at'=>"2025-09-03 20:02:36",'updated_at'=>"2025-09-03 20:02:36"],
+            ['id'=>2, 'code'=> "STATUT-UTILISATEUR", 'libelle'=>"Satut utilisateur", 'description'=>"Les statut utilisateur",'created_at'=>"2025-09-03 20:02:36",'updated_at'=>"2025-09-03 20:02:36"],
             //TYPE DE PIECE D'IDENTITE DEBUT
-                ['id'=>2, 'code'=> "TYPE DE PIECE", 'libelle'=>"Type de piece ", 'description'=>"l'ensemble des types de piàce",'created_at'=>"2025-09-03 20:02:36",'updated_at'=>"2025-09-03 20:02:36"],
+                ['id'=>3, 'code'=> "TYPE DE PIECE", 'libelle'=>"Type de piece ", 'description'=>"l'ensemble des types de piàce",'created_at'=>"2025-09-03 20:02:36",'updated_at'=>"2025-09-03 20:02:36"],
             //TYPE DE PIECE D'IDENTITE FIN
             // ['id'=>3, 'code'=> "P-QUALITE", 'libelle'=>"Qualité ", 'description'=>"Les qualités du produit",'created_at'=>"2025-09-03 20:02:36",'updated_at'=>"2025-09-03 20:02:36"],
             // ['id'=>4, 'code'=> "E-PAIEMENT", 'libelle'=>"Paiement", 'description'=>"Les états de paiement",'created_at'=>"2025-09-03 20:02:36",'updated_at'=>"2025-09-03 20:02:36"],

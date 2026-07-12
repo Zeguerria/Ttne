@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
          $this->call(TypeParametreSeeder::class);
         $this->call(ParametreSeeder::class);
+        $this->call(ProfilSeeder::class);
 
         User::factory()->create([
             'name' => 'Test User',
