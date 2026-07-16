@@ -4,6 +4,7 @@ namespace App\Actions\Fortify;
 
 use App\Models\User;
 use App\Models\Piece;
+use App\Notifications\NouvelleInscriptionNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -18,9 +19,9 @@ class CreateNewUser implements CreatesNewUsers
 
     public function create(array $input): User
     {
-        // dd($input);
 
         Validator::make($input, [
+
 
             // USER
 
@@ -29,6 +30,7 @@ class CreateNewUser implements CreatesNewUsers
                 'string',
                 'max:255'
             ],
+
 
             'prenom' => [
                 'required',
@@ -77,20 +79,20 @@ class CreateNewUser implements CreatesNewUsers
 
 
             'fichier' => [
-                    'required',
-                    'file',
-                    'mimes:jpg,jpeg,png,pdf,jfif',
-                    'max:5120'
-                ],
+                'required',
+                'file',
+                'mimes:jpg,jpeg,png,pdf,jfif',
+                'max:5120'
+            ],
 
 
 
-            // PHOTO PROFIL
+            // PHOTO
 
             'photo' => [
                 'nullable',
                 'image',
-                'mimes:jpg,jpeg,png,,jfif',
+                'mimes:jpg,jpeg,png,jfif',
                 'max:2048'
             ],
 
@@ -100,6 +102,7 @@ class CreateNewUser implements CreatesNewUsers
 
             'password' => $this->passwordRules(),
 
+
             'password_confirmation' => [
                 'required'
             ],
@@ -108,9 +111,9 @@ class CreateNewUser implements CreatesNewUsers
 
             // CONDITIONS
 
-           'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature()
-    ? ['accepted','required']
-    : '',
+            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature()
+                ? ['accepted','required']
+                : '',
 
 
         ])->validate();
@@ -120,11 +123,13 @@ class CreateNewUser implements CreatesNewUsers
         return DB::transaction(function () use ($input) {
 
 
+
             /*
             |--------------------------------------------------------------------------
-            | Génération du slug
+            | GENERATION SLUG
             |--------------------------------------------------------------------------
             */
+
 
             $slug = Str::slug(
                 $input['prenom'].' '.$input['name']
@@ -147,9 +152,10 @@ class CreateNewUser implements CreatesNewUsers
 
             /*
             |--------------------------------------------------------------------------
-            | Photo utilisateur
+            | PHOTO PROFIL
             |--------------------------------------------------------------------------
             */
+
 
             $photo = null;
 
@@ -166,11 +172,13 @@ class CreateNewUser implements CreatesNewUsers
 
 
 
+
             /*
             |--------------------------------------------------------------------------
-            | Création utilisateur
+            | CREATION USER
             |--------------------------------------------------------------------------
             */
+
 
             $user = User::create([
 
@@ -184,12 +192,14 @@ class CreateNewUser implements CreatesNewUsers
                 'slug' => $slug,
 
 
-                // Profil SIMPLE USER
+
+                // SIMPLE USER
                 'profil_id' => 1,
 
 
-                // Compte en attente
+                // EN ATTENTE
                 'statut_compte_id' => 2,
+
 
 
                 'telephone' => $input['telephone'],
@@ -203,16 +213,20 @@ class CreateNewUser implements CreatesNewUsers
                 ),
 
 
+
                 'date_naissance' =>
                     $input['date_naissance'] ?? null,
 
 
-                // Notre gestion perso
+
+                // Gestion personnelle photo
                 'photo' => $photo,
 
 
-                // Jetstream
+
+                // Jetstream conservé
                 'profile_photo_path' => null,
+
 
 
                 'derniere_ip' => request()->ip(),
@@ -226,11 +240,15 @@ class CreateNewUser implements CreatesNewUsers
 
 
 
+
+
+
             /*
             |--------------------------------------------------------------------------
-            | Upload pièce
+            | UPLOAD PIECE IDENTITE
             |--------------------------------------------------------------------------
             */
+
 
             $fichier = $input['fichier']
                 ->store(
@@ -241,11 +259,14 @@ class CreateNewUser implements CreatesNewUsers
 
 
 
+
+
             /*
             |--------------------------------------------------------------------------
-            | Création pièce utilisateur
+            | CREATION PIECE
             |--------------------------------------------------------------------------
             */
+
 
             Piece::create([
 
@@ -278,6 +299,44 @@ class CreateNewUser implements CreatesNewUsers
 
 
             ]);
+
+
+
+
+
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | NOTIFICATION DES VALIDATEURS
+            |--------------------------------------------------------------------------
+            */
+
+
+            $validateurs = User::whereHas('profil', function($query){
+
+                $query->where('est_validateur', true);
+
+            })->get();
+
+
+
+
+            foreach($validateurs as $validateur){
+
+
+                $validateur->notify(
+
+                    new NouvelleInscriptionNotification($user)
+
+                );
+
+
+            }
+
+
+
 
 
 

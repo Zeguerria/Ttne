@@ -27,9 +27,9 @@ class Profil extends Model
         'code',
         'libelle',
         'description',
+        'est_validateur',
+        'is_active',
         'supprimer',
-        'created_at',
-        'updated_at'
     ];
 
      public function getDisplayName(): string

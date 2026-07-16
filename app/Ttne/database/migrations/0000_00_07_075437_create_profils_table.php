@@ -11,14 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('profils', function (Blueprint $table) {
+       Schema::create('profils', function (Blueprint $table) {
+
             $table->id();
-            $table->string('code', 100)->unique(); // chaque type doit être unique
+
+            // Informations
+            $table->string('code', 100)->unique();
             $table->string('libelle', 300);
             $table->text('description')->nullable();
+
+            // Validation des comptes
+            $table->boolean('est_validateur')
+                ->default(false)
+                ->comment('Peut valider ou rejeter les demandes d\'inscription');
+
+            // État
             $table->boolean('is_active')->default(true);
-            $table->boolean('supprimer')->default(0);
+
+            // Corbeille logique
+            $table->boolean('supprimer')->default(false);
+
             $table->timestamps();
+
         });
     }
 
