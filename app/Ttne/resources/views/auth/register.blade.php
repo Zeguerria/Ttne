@@ -1168,7 +1168,8 @@ select option{
 
             </div>
 
-            <form class="form-area">
+            <form class="form-area" method="POST" action="{{route('register')}}" enctype="multipart/form-data">
+                @csrf
 
                 {{-- STEP 1 --}}
                 <div x-show="step === 1" x-transition>
@@ -1181,8 +1182,7 @@ select option{
                                 Nom
                             </label>
 
-                            <input type="text"
-                                   placeholder="Votre nom">
+                            <input type="text" name="nom" placeholder="Votre nom">
                         </div>
 
                         <div class="input-group">
@@ -1190,19 +1190,14 @@ select option{
                                 <i class="fa-solid fa-user"></i>
                                 Prénom
                             </label>
-
-                            <input type="text"
-                                   placeholder="Votre prénom">
+                            <input type="text"name="prenom" placeholder="Votre prénom">
                         </div>
-
                         <div class="input-group">
                             <label>
                                 <i class="fa-solid fa-phone"></i>
                                 Contact
                             </label>
-
-                            <input type="text"
-                                   placeholder="+241">
+                            <input type="text" name="telephone" placeholder="+241">
                         </div>
 
                         <div class="input-group">
@@ -1211,8 +1206,7 @@ select option{
                                 Email
                             </label>
 
-                            <input type="email"
-                                   placeholder="email@gmail.com">
+                            <input type="email" name="email" placeholder="email@gmail.com">
                         </div>
 
                     </div>
@@ -1233,9 +1227,7 @@ select option{
 
                             <input type="password"
                                    x-model="password"
-                                   @input="passwordChecker()"
-                                   placeholder="********">
-
+                                   @input="passwordChecker()" placeholder="********" name="password">
                         </div>
 
                         <div class="password-meter">
@@ -1258,7 +1250,7 @@ select option{
 
                             <input type="password"
                                    x-model="confirmPassword"
-                                   placeholder="********">
+                                   placeholder="********" name="confirmPassword">
 
                         </div>
 
@@ -1281,17 +1273,29 @@ select option{
                     <div class="form-grid grid-1">
 
                         <div class="input-group">
+                            {{-- @php
+
+$typePieces = \App\Models\Parametre::where(
+    'type_parametre_id',
+    3
+)->get();
+
+@endphp --}}
 
                             <label>
                                 <i class="fa-solid fa-id-card"></i>
                                 Type de pièce
                             </label>
 
-                            <select>
+                            <select name="type_piece_id">
                                 <option>Choisir</option>
-                                <option>CNI</option>
-                                <option>Passeport</option>
-                                <option>Permis</option>
+                              @foreach($typePieces as $item)
+
+                                <option value="{{ $item->id }}">
+                                    {{ $item->libelle }}
+                                </option>
+
+                                @endforeach
                             </select>
 
                         </div>
@@ -1303,7 +1307,7 @@ select option{
                                 Numéro document
                             </label>
 
-                            <input type="text">
+                            <input type="text" name="numero">
 
                         </div>
 
@@ -1314,7 +1318,7 @@ select option{
                                 Upload document
                             </label>
 
-                            <input type="file" class="filepond">
+                            <input type="file" name="fichier" class="filepond">
 
                         </div>
 
@@ -1325,7 +1329,7 @@ select option{
                                 Photo de profil
                             </label>
 
-                            <input type="file" class="filepond">
+                            <input type="file" name="photo" class="filepond">
 
                         </div>
 

@@ -13,7 +13,7 @@ class Piece extends Model
       protected $fillable = [
         'user_id',
         'type_piece_id',
-        'statut_piece_id',
+        // 'statut_piece_id',
         'numero',
         'fichier',
         'mime_type',

@@ -5,9 +5,11 @@ use App\Http\Controllers\ParametreController;
 use App\Http\Controllers\TypeParametreController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\HabilitationController;
+use App\Http\Controllers\PieceController;
 use App\Models\Historique;
 use Illuminate\Support\Facades\Route;
 
+             
 Route::get('/', function () {
     return view('welcome');
 });

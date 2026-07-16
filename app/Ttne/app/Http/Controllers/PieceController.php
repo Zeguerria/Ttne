@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Piece;
 use App\Http\Requests\StorePieceRequest;
 use App\Http\Requests\UpdatePieceRequest;
+use App\Models\Parametre;
 
 class PieceController extends Controller
 {
-    /**
+
+
+   /**
      * Display a listing of the resource.
      */
     public function index()

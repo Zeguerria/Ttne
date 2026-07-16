@@ -26,7 +26,7 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
 
             // USER
-            'nom' => [
+            'name' => [
                 'required',
                 'string',
                 'max:255'
@@ -106,7 +106,7 @@ class CreateNewUser implements CreatesNewUsers
             */
 
             $slug = Str::slug(
-                $input['prenom'].' '.$input['nom']
+                $input['prenom'].' '.$input['name']
             );
 
 
@@ -153,7 +153,7 @@ class CreateNewUser implements CreatesNewUsers
             $user = User::create([
 
 
-                'nom' => $input['nom'],
+                'name' => $input['name'],
 
                 'prenom' => $input['prenom'],
 
@@ -240,9 +240,6 @@ class CreateNewUser implements CreatesNewUsers
                 // Aucune expiration pour le moment
                 'date_expiration' => null,
 
-
-                // ATTENTE
-                'statut_piece_id' => 2,
 
 
                 'commentaire' => null,

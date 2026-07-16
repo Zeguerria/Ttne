@@ -16,7 +16,7 @@ return new class extends Migration
     $table->id();
 
     // Informations personnelles
-    $table->string('nom');
+    $table->string('name');
     $table->string('prenom');
     $table->string('slug')->unique();
 
@@ -45,6 +45,7 @@ return new class extends Migration
 
     // Photo de profil
     $table->string('photo', 2048)->nullable();
+    $table->string('profile_photo_path', 2048)->nullable();
 
     // Dernière connexion
     $table->timestamp('derniere_connexion')->nullable();
