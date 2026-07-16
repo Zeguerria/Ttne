@@ -34,6 +34,7 @@ class User extends Authenticatable
         'photo',
         'telephone',
         'email',
+        'profile_photo_path',
         'password',
         'date_naissance',
         'profil_id',
@@ -84,10 +85,14 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
-    public function getNameAttribute()
-    {
-        return "{$this->prenom} {$this->name}";
-    }
+    // public function getNameAttribute()
+    // {
+    //     return "{$this->prenom} {$this->name}";
+    // }
+    public function getNomCompletAttribute()
+{
+    return "{$this->prenom} {$this->name}";
+}
 
 
     /*
@@ -102,11 +107,13 @@ class User extends Authenticatable
     }
 
 
-    public function statutCompte()
+   public function statutCompte()
     {
-        return $this->belongsTo(Parametre::class, 'statut_compte_id');
+        return $this->belongsTo(
+            Parametre::class,
+            'statut_compte_id'
+        );
     }
-
 
     public function pieces()
     {

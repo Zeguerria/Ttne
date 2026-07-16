@@ -1182,7 +1182,7 @@ select option{
                                 Nom
                             </label>
 
-                            <input type="text" name="nom" placeholder="Votre nom">
+                            <input type="text" name="name" placeholder="Votre nom">
                         </div>
 
                         <div class="input-group">
@@ -1250,7 +1250,7 @@ select option{
 
                             <input type="password"
                                    x-model="confirmPassword"
-                                   placeholder="********" name="confirmPassword">
+                                   placeholder="********" name="password_confirmation">
 
                         </div>
 
@@ -1273,14 +1273,7 @@ select option{
                     <div class="form-grid grid-1">
 
                         <div class="input-group">
-                            {{-- @php
 
-$typePieces = \App\Models\Parametre::where(
-    'type_parametre_id',
-    3
-)->get();
-
-@endphp --}}
 
                             <label>
                                 <i class="fa-solid fa-id-card"></i>
@@ -1288,7 +1281,7 @@ $typePieces = \App\Models\Parametre::where(
                             </label>
 
                             <select name="type_piece_id">
-                                <option>Choisir</option>
+                                <option value="">Choisir</option>
                               @foreach($typePieces as $item)
 
                                 <option value="{{ $item->id }}">
@@ -1318,7 +1311,7 @@ $typePieces = \App\Models\Parametre::where(
                                 Upload document
                             </label>
 
-                            <input type="file" name="fichier" class="filepond">
+                            <input type="file" name="fichier" class="filepond" accept=".jpg,.jpeg,.png,.pdf,.jfif">
 
                         </div>
 
@@ -1329,7 +1322,7 @@ $typePieces = \App\Models\Parametre::where(
                                 Photo de profil
                             </label>
 
-                            <input type="file" name="photo" class="filepond">
+                            <input type="file" name="photo" class="filepond" accept=".jpg,.jpeg,.png,.jfif">
 
                         </div>
 
@@ -1349,7 +1342,7 @@ $typePieces = \App\Models\Parametre::where(
                         <div class="check-group">
 
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox"  name="terms" value="1">
 
                                 <span>
                                     J'accepte les conditions générales
@@ -1357,7 +1350,7 @@ $typePieces = \App\Models\Parametre::where(
                             </label>
 
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox"  name="privacy" value="1">
 
                                 <span>
                                     J'accepte la politique de confidentialité
@@ -1444,7 +1437,15 @@ $typePieces = \App\Models\Parametre::where(
         duration:1000
     });
 
-    FilePond.parse(document.body);
+    // FilePond.parse(document.body);
+    FilePond.setOptions({
+    storeAsFile: true,
+    allowMultiple: false,
+    credits: false
+});
+
+
+FilePond.parse(document.body);
 
     tsParticles.load("tsparticles", {
 

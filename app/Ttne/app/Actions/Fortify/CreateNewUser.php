@@ -7,7 +7,6 @@ use App\Models\Piece;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
@@ -17,15 +16,14 @@ class CreateNewUser implements CreatesNewUsers
     use PasswordValidationRules;
 
 
-    /**
-     * Create a new user
-     */
     public function create(array $input): User
     {
+        // dd($input);
 
         Validator::make($input, [
 
             // USER
+
             'name' => [
                 'required',
                 'string',
@@ -38,12 +36,14 @@ class CreateNewUser implements CreatesNewUsers
                 'max:255'
             ],
 
+
             'telephone' => [
                 'required',
                 'string',
                 'max:30',
                 'unique:users'
             ],
+
 
             'email' => [
                 'required',
@@ -54,6 +54,13 @@ class CreateNewUser implements CreatesNewUsers
             ],
 
 
+            'date_naissance' => [
+                'nullable',
+                'date'
+            ],
+
+
+
             // PIECE
 
             'type_piece_id' => [
@@ -61,35 +68,49 @@ class CreateNewUser implements CreatesNewUsers
                 'exists:parametres,id'
             ],
 
+
             'numero' => [
                 'nullable',
                 'string',
                 'max:255'
             ],
 
+
             'fichier' => [
-                'required',
-                'file'
-            ],
+                    'required',
+                    'file',
+                    'mimes:jpg,jpeg,png,pdf,jfif',
+                    'max:5120'
+                ],
 
 
-            // PHOTO
+
+            // PHOTO PROFIL
 
             'photo' => [
                 'nullable',
                 'image',
+                'mimes:jpg,jpeg,png,,jfif',
                 'max:2048'
             ],
+
 
 
             // PASSWORD
 
             'password' => $this->passwordRules(),
 
+            'password_confirmation' => [
+                'required'
+            ],
 
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature()
-                ? ['accepted','required']
-                : '',
+
+
+            // CONDITIONS
+
+           'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature()
+    ? ['accepted','required']
+    : '',
 
 
         ])->validate();
@@ -119,13 +140,14 @@ class CreateNewUser implements CreatesNewUsers
                 $slug = $baseSlug.'-'.$i;
 
                 $i++;
+
             }
 
 
 
             /*
             |--------------------------------------------------------------------------
-            | Upload photo utilisateur
+            | Photo utilisateur
             |--------------------------------------------------------------------------
             */
 
@@ -155,16 +177,18 @@ class CreateNewUser implements CreatesNewUsers
 
                 'name' => $input['name'],
 
+
                 'prenom' => $input['prenom'],
+
 
                 'slug' => $slug,
 
 
-                // SIMPLE USER
+                // Profil SIMPLE USER
                 'profil_id' => 1,
 
 
-                // ATTENTE
+                // Compte en attente
                 'statut_compte_id' => 2,
 
 
@@ -179,7 +203,16 @@ class CreateNewUser implements CreatesNewUsers
                 ),
 
 
+                'date_naissance' =>
+                    $input['date_naissance'] ?? null,
+
+
+                // Notre gestion perso
                 'photo' => $photo,
+
+
+                // Jetstream
+                'profile_photo_path' => null,
 
 
                 'derniere_ip' => request()->ip(),
@@ -193,10 +226,9 @@ class CreateNewUser implements CreatesNewUsers
 
 
 
-
             /*
             |--------------------------------------------------------------------------
-            | Upload pièce identité
+            | Upload pièce
             |--------------------------------------------------------------------------
             */
 
@@ -208,9 +240,10 @@ class CreateNewUser implements CreatesNewUsers
 
 
 
+
             /*
             |--------------------------------------------------------------------------
-            | Création de la pièce
+            | Création pièce utilisateur
             |--------------------------------------------------------------------------
             */
 
@@ -236,13 +269,12 @@ class CreateNewUser implements CreatesNewUsers
                     $input['fichier']->getMimeType(),
 
 
-
-                // Aucune expiration pour le moment
-                'date_expiration' => null,
-
+                'date_expiration' =>
+                    null,
 
 
-                'commentaire' => null,
+                'commentaire' =>
+                    null,
 
 
             ]);
