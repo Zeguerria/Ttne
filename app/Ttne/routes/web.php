@@ -9,7 +9,7 @@ use App\Http\Controllers\PieceController;
 use App\Models\Historique;
 use Illuminate\Support\Facades\Route;
 
-             
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -71,6 +71,10 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
                 //CHEMIN DES PAGE FIN
             //AUTRES FUNCTION DEBUT
                 // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
+                Route::patch(
+    'profils/switch-validateur',
+    [ProfilController::class, 'switchValidateur']
+)->name('profils.switchValidateur');
 
                 Route::get('Admin/Corebeille/Profil/Tout-Destroy', [ProfilController::class, 'destroyTous'])->name('D-All-AD-PRO');
                 Route::post('Admin/Corebeille/Profil/Tout-Soft', [ProfilController::class, 'corbeilleAll'])->name('C-All-PRO-PRO');

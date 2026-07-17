@@ -362,6 +362,11 @@
                                             LIBELLÉ
 
                                         </th>
+                                        <th>
+
+                                            DROIT
+
+                                        </th>
 
 
 
@@ -440,6 +445,34 @@
                                         <td>
 
                                             {{ $value->libelle }}
+
+                                        </td>
+                                       <td class="">
+
+                                            <form action="{{ route('profils.switchValidateur') }}"
+                                                method="POST"
+                                                class="d-inline">
+
+                                                @csrf
+                                                @method('PATCH')
+
+                                                <input
+                                                    type="hidden"
+                                                    name="id"
+                                                    value="{{ $value->id }}">
+
+                                                <div class="form-check form-switch d-flex justify-content-center">
+
+                                                    <input
+                                                        class="form-check-input"
+                                                        type="checkbox"
+                                                        role="switch"
+                                                        {{ $value->est_validateur ? 'checked' : '' }}
+                                                        onchange="this.form.submit()">
+
+                                                </div>
+
+                                            </form>
 
                                         </td>
 
@@ -588,6 +621,34 @@
 
                                         </p>
 
+                                         <p>
+
+                                            <form action="{{ route('profils.switchValidateur') }}"
+                                                method="POST"
+                                                class="d-inline">
+
+                                                @csrf
+                                                @method('PATCH')
+
+                                                <input
+                                                    type="hidden"
+                                                    name="id"
+                                                    value="{{ $value->id }}">
+
+                                                <div class="form-check form-switch d-flex justify-content-center">
+
+                                                    <input
+                                                        class="form-check-input"
+                                                        type="checkbox"
+                                                        role="switch"
+                                                        {{ $value->est_validateur ? 'checked' : '' }}
+                                                        onchange="this.form.submit()">
+
+                                                </div>
+
+                                            </form>
+                                        </p>
+
                                     </div>
 
 
@@ -652,6 +713,44 @@
                                         <strong>
 
                                             {{ $value->libelle }}
+
+                                        </strong>
+
+                                    </div>
+                                    <div class="futureMobileItem">
+
+                                        <span>
+
+                                            DROITS
+
+                                        </span>
+
+                                        <strong>
+
+                                            <form action="{{ route('profils.switchValidateur') }}"
+                                                method="POST"
+                                                class="d-inline">
+
+                                                @csrf
+                                                @method('PATCH')
+
+                                                <input
+                                                    type="hidden"
+                                                    name="id"
+                                                    value="{{ $value->id }}">
+
+                                                <div class="form-check form-switch d-flex justify-content-center">
+
+                                                    <input
+                                                        class="form-check-input"
+                                                        type="checkbox"
+                                                        role="switch"
+                                                        {{ $value->est_validateur ? 'checked' : '' }}
+                                                        onchange="this.form.submit()">
+
+                                                </div>
+
+                                            </form>
 
                                         </strong>
 

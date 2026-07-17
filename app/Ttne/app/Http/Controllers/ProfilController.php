@@ -139,6 +139,34 @@ class ProfilController extends Controller
 
         return back();
     }
+    public function switchValidateur(Request $request)
+{
+    $data = $request->validate([
+
+        'id' => 'required|exists:profils,id',
+
+    ]);
+
+    try {
+
+        ProfilService::switchValidateur($data['id']);
+
+        toast(
+            'Statut de validateur modifié avec succès.',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+
+    }
+
+    return back();
+}
     public function corbeille(Request $request)
     {
         $data = $request->validate([
