@@ -68,7 +68,7 @@ class UserController extends Controller
                     'supprimer',
                     0
                 )
-                ->orderBy('libelle')
+                ->orderBy('name')
                 ->get(),
 
                 'historiques' => $historiques

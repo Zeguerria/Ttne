@@ -9,7 +9,7 @@
 @section('corps')
     <section class="">
         <div class="modals">
-            @include('dependances.templates.admins.gestions.access.profils._consoms.modal')
+            @include('dependances.templates.admins.gestions.access.users.personnels._consoms.modal')
         </div>
     </section>
     <section class="">
@@ -21,7 +21,7 @@
         <div>
             <div>
 
-                <div class="futureTableWrapper" data-bulk-delete-url="{{ url('select/corbeille/users') }}">
+                <div class="futureTableWrapper" data-bulk-delete-url="{{ url('select/corbeille/personnels') }}">
 
                     <div class="futureTableCard">
 
@@ -433,7 +433,7 @@
 
                                             <span class="futureCode">
 
-                                                {{ $value->code }}
+                                                {{ $value->slug }}
 
                                             </span>
 
