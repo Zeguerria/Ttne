@@ -4113,321 +4113,312 @@ ${cell.innerText.trim()}
         {{-- CONSOMMABLES FIN --}}
 <!-- GSAP -->
 {{-- <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script> --}}
-        <script>
 
-            $(document).ready(function(){
 
-                /* =========================================
-                MODAL OPEN ANIMATION
-                ========================================= */
+<script>
+    $(document).ready(function () {
 
-                $(document).on('show.bs.modal', '.futuristicModal', function () {
+        /* =========================================
+           MODAL OPEN ANIMATION
+        ========================================= */
 
-                    let modal = $(this);
+        $(document).on('show.bs.modal', '.futuristicModal', function () {
 
-                    gsap.set(modal.find(".modal-content"), {
-                        scale:0.92,
-                        opacity:0
-                    });
+            const modal = $(this);
 
-                    gsap.set(modal.find(".futureField"), {
-                        opacity:0,
-                        y:20
-                    });
+            gsap.set(modal.find(".modal-content"), {
+                scale: 0.92,
+                opacity: 0
+            });
 
-                    gsap.set(modal.find(".headerIcon, .modal-icon"), {
-                        scale:0,
-                        rotation:-90
-                    });
+            gsap.set(modal.find(".futureField"), {
+                opacity: 0,
+                y: 20
+            });
 
-                });
+            gsap.set(modal.find(".headerIcon, .modal-icon"), {
+                scale: 0,
+                rotation: -90
+            });
 
-                $(document).on('shown.bs.modal', '.futuristicModal', function () {
+        });
 
-                    let modal = $(this);
 
-                    let tl = gsap.timeline();
+        /* =========================================
+           MODAL SHOWN
+        ========================================= */
 
-                    tl.to(modal.find(".modal-content"), {
-                        duration:.4,
-                        scale:1,
-                        opacity:1,
-                        ease:"power3.out"
-                    })
+        $(document).on('shown.bs.modal', '.futuristicModal', function () {
 
-                    .to(modal.find(".headerIcon, .modal-icon"), {
-                        duration:.4,
-                        scale:1,
-                        rotation:0,
-                        ease:"back.out(1.7)"
-                    }, "-=0.2")
+            const modal = $(this);
 
-                    .to(modal.find(".futureField"), {
-                        duration:.4,
-                        opacity:1,
-                        y:0,
-                        stagger:.06,
-                        ease:"power2.out"
-                    }, "-=0.2");
+            /* -----------------------------------------
+               RESET DU STEPPER À L'OUVERTURE
+            ----------------------------------------- */
 
-                });
+            if (modal.attr('data-stepper') === 'true') {
 
-                /* =========================================
-                MODAL CLOSE
-                ========================================= */
+                modal.attr('data-step', 1);
 
-                $(document).on('hide.bs.modal', '.futuristicModal', function () {
+                updateStepper(modal, 1);
+            }
 
-                    let modal = $(this);
 
-                    gsap.to(modal.find(".modal-content"), {
-                        duration:.25,
-                        scale:.95,
-                        opacity:0,
-                        ease:"power2.in"
-                    });
+            /* -----------------------------------------
+               ANIMATION DU MODAL
+            ----------------------------------------- */
 
-                });
+            const tl = gsap.timeline();
 
-                /* =========================================
-                STEPPER SYSTEM
-                ========================================= */
+            tl.to(modal.find(".modal-content"), {
+                duration: 0.4,
+                scale: 1,
+                opacity: 1,
+                ease: "power3.out"
+            })
 
-                $(document).on('click', '.nextStep', function(){
+            .to(modal.find(".headerIcon, .modal-icon"), {
+                duration: 0.4,
+                scale: 1,
+                rotation: 0,
+                ease: "back.out(1.7)"
+            }, "-=0.2")
 
-                    let modal = $(this).closest('.futuristicModal');
+            .to(modal.find(".futureField"), {
+                duration: 0.4,
+                opacity: 1,
+                y: 0,
+                stagger: 0.06,
+                ease: "power2.out"
+            }, "-=0.2");
 
-                    let currentStep = parseInt(
-                        modal.attr('data-step')
-                    );
+        });
 
-                    let totalSteps = parseInt(
-                        modal.attr('data-max-step')
-                    );
 
-                    if(currentStep < totalSteps){
+        /* =========================================
+           MODAL CLOSE
+        ========================================= */
 
-                        currentStep++;
+        $(document).on('hide.bs.modal', '.futuristicModal', function () {
 
-                        modal.attr('data-step', currentStep);
+            const modal = $(this);
 
-                        updateStepper(modal, currentStep);
+            gsap.to(modal.find(".modal-content"), {
+                duration: 0.25,
+                scale: 0.95,
+                opacity: 0,
+                ease: "power2.in"
+            });
 
-                    }
+        });
 
-                });
 
-                $(document).on('click', '.prevStep', function(){
+        /* =========================================
+           NEXT STEP
+        ========================================= */
 
-                    let modal = $(this).closest('.futuristicModal');
+        $(document).on('click', '.nextStep', function () {
 
-                    let currentStep = parseInt(
-                        modal.attr('data-step')
-                    );
+            const modal = $(this).closest('.futuristicModal');
 
-                    if(currentStep > 1){
+            let currentStep =
+                parseInt(modal.attr('data-step')) || 1;
 
-                        currentStep--;
+            const totalSteps =
+                parseInt(modal.attr('data-max-step'))
+                || modal.find('.stepItem').length;
 
-                        modal.attr('data-step', currentStep);
 
-                        updateStepper(modal, currentStep);
+            if (currentStep < totalSteps) {
 
-                    }
+                currentStep++;
 
-                });
+                updateStepper(modal, currentStep);
+            }
 
-                /* =========================================
-                UPDATE STEPPER
-                ========================================= */
+        });
 
-                function updateStepper(modal, currentStep){
 
-                    modal.find('.stepItem').removeClass('active');
+        /* =========================================
+           PREVIOUS STEP
+        ========================================= */
 
-                    modal.find('.stepContent').removeClass('active');
+        $(document).on('click', '.prevStep', function () {
 
-                    modal.find(`.stepItem[data-step="${currentStep}"]`)
-                        .addClass('active');
+            const modal = $(this).closest('.futuristicModal');
 
-                    modal.find(`.stepContent[data-content="${currentStep}"]`)
-                        .addClass('active');
+            let currentStep =
+                parseInt(modal.attr('data-step')) || 1;
 
-                    gsap.fromTo(
 
-                        modal.find(`.stepContent[data-content="${currentStep}"]`),
+            if (currentStep > 1) {
 
-                        {
-                            opacity:0,
-                            y:20
-                        },
+                currentStep--;
 
-                        {
-                            opacity:1,
-                            y:0,
-                            duration:.4,
-                            ease:"power2.out"
-                        }
+                updateStepper(modal, currentStep);
+            }
 
-                    );
+        });
 
-                    /* BUTTONS */
 
-                    if(currentStep <= 1){
+        /* =========================================
+           UPDATE STEPPER
+        ========================================= */
 
-                        modal.find('.prevStep').hide();
+        function updateStepper(modal, currentStep) {
 
-                    }else{
+            const totalSteps =
+                parseInt(modal.attr('data-max-step'))
+                || modal.find('.stepItem').length;
 
-                        modal.find('.prevStep').show();
 
-                    }
+            /* -----------------------------------------
+               SÉCURITÉ
+            ----------------------------------------- */
 
-                    if(currentStep >= parseInt(modal.attr('data-max-step'))){
+            if (currentStep < 1) {
+                currentStep = 1;
+            }
 
-                        modal.find('.nextStep').hide();
+            if (currentStep > totalSteps) {
+                currentStep = totalSteps;
+            }
 
-                        modal.find('.submitStep').show();
 
-                    }else{
+            /* -----------------------------------------
+               RESET
+            ----------------------------------------- */
 
-                        modal.find('.nextStep').show();
+            modal.find('.stepItem')
+                .removeClass('active');
 
-                        modal.find('.submitStep').hide();
+            modal.find('.stepContent')
+                .removeClass('active');
 
-                    }
 
+            /* -----------------------------------------
+               ACTIVE STEP
+            ----------------------------------------- */
+
+            const activeItem = modal.find(
+                `.stepItem[data-step="${currentStep}"]`
+            );
+
+            const activeContent = modal.find(
+                `.stepContent[data-content="${currentStep}"]`
+            );
+
+
+            activeItem.addClass('active');
+
+            activeContent.addClass('active');
+
+
+            /* -----------------------------------------
+               CONTENT ANIMATION
+            ----------------------------------------- */
+
+            gsap.fromTo(
+                activeContent,
+                {
+                    opacity: 0,
+                    y: 20
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.4,
+                    ease: "power2.out"
                 }
+            );
 
-                /* =========================================
-                INIT ALL STEPPERS
-                ========================================= */
 
-                $('.futuristicModal[data-stepper="true"]').each(function(){
+            /* -----------------------------------------
+               PREVIOUS BUTTON
+            ----------------------------------------- */
 
-                    updateStepper($(this), 1);
+            if (currentStep <= 1) {
 
-                });
+                modal.find('.prevStep').hide();
 
-            });
+            } else {
 
-        </script>
-        <script>
+                modal.find('.prevStep').show();
+            }
 
-            $(document).ready(function(){
 
-                $('.futuristicModal').each(function(){
+            /* -----------------------------------------
+               NEXT / SUBMIT BUTTONS
+            ----------------------------------------- */
 
-                    let modal = $(this);
+            if (currentStep >= totalSteps) {
 
-                    let currentStep = 1;
+                modal.find('.nextStep').hide();
 
-                    let totalSteps =
-                        modal.find('.stepItem').length;
+                modal.find('.submitStep').show();
 
-                    function updateStepper(){
+            } else {
 
-                        // RESET
-                        modal.find('.stepItem')
-                            .removeClass('active');
+                modal.find('.nextStep').show();
 
-                        modal.find('.stepContent')
-                            .removeClass('active');
+                modal.find('.submitStep').hide();
+            }
 
-                        // ACTIVE STEP
-                        modal.find(`.stepItem[data-step="${currentStep}"]`)
-                            .addClass('active');
 
-                        modal.find(`.stepContent[data-content="${currentStep}"]`)
-                            .addClass('active');
+            /* -----------------------------------------
+               SAVE CURRENT STEP
+            ----------------------------------------- */
 
-                        // GSAP
-                        gsap.fromTo(
+            modal.attr('data-step', currentStep);
 
-                            modal.find(`.stepContent[data-content="${currentStep}"]`),
+        }
 
-                            {
-                                opacity:0,
-                                y:25
-                            },
 
-                            {
-                                opacity:1,
-                                y:0,
-                                duration:.45,
-                                ease:"power2.out"
-                            }
+        /* =========================================
+           INITIALISATION DES STEPPERS
+        ========================================= */
 
-                        );
+        $('.futuristicModal[data-stepper="true"]').each(function () {
 
-                        // BTN PREV
-                        if(currentStep > 1){
+            const modal = $(this);
 
-                            modal.find('#prevStep').fadeIn(200);
+            /* -----------------------------------------
+               CALCUL DU NOMBRE D'ÉTAPES
+            ----------------------------------------- */
 
-                        }else{
+            const totalSteps =
+                modal.find('.stepItem').length;
 
-                            modal.find('#prevStep').fadeOut(200);
 
-                        }
+            /* -----------------------------------------
+               ENREGISTRE LE NOMBRE D'ÉTAPES
+            ----------------------------------------- */
 
-                        // BTN NEXT / SUBMIT
-                        if(currentStep === totalSteps){
+            modal.attr(
+                'data-max-step',
+                totalSteps
+            );
 
-                            modal.find('#nextStep').hide();
 
-                            modal.find('#submitStep').fadeIn(200);
+            /* -----------------------------------------
+               INITIALISATION À L'ÉTAPE 1
+            ----------------------------------------- */
 
-                        }else{
+            modal.attr(
+                'data-step',
+                1
+            );
 
-                            modal.find('#nextStep').show();
+            updateStepper(modal, 1);
 
-                            modal.find('#submitStep').hide();
+        });
 
-                        }
+    });
+</script>
 
-                    }
 
-                    // NEXT
-                    modal.find('#nextStep').on('click', function(){
 
-                        if(currentStep < totalSteps){
 
-                            currentStep++;
-
-                            updateStepper();
-
-                        }
-
-                    });
-
-                    // PREV
-                    modal.find('#prevStep').on('click', function(){
-
-                        if(currentStep > 1){
-
-                            currentStep--;
-
-                            updateStepper();
-
-                        }
-
-                    });
-
-                    // RESET MODAL
-                    modal.on('shown.bs.modal', function(){
-
-                        currentStep = 1;
-
-                        updateStepper();
-
-                    });
-
-                });
-
-            });
-
-        </script>
         <script>
 
             $(document).ready(function(){

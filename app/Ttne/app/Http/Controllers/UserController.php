@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Historique;
 use App\Models\Parametre;
+use App\Models\Profil;
 use App\Models\User;
 use App\Services\Core\UserService;
 use Exception;
@@ -69,6 +70,12 @@ class UserController extends Controller
                     0
                 )
                 ->orderBy('name')
+                ->get(),
+                'profils' => Profil::where(
+                    'supprimer',
+                    0
+                )
+                ->orderBy('libelle')
                 ->get(),
 
                 'historiques' => $historiques
