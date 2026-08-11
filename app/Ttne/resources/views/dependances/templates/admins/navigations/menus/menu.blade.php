@@ -4115,7 +4115,7 @@ ${cell.innerText.trim()}
 {{-- <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script> --}}
 
 
-<script>
+{{-- <script>
     $(document).ready(function () {
 
         /* =========================================
@@ -4414,7 +4414,678 @@ ${cell.innerText.trim()}
         });
 
     });
+</script> --}}
+
+<script>
+    $(document).ready(function () {
+
+
+        /* =========================================================
+           MODAL OPEN ANIMATION
+        ========================================================= */
+
+        $(document).on('show.bs.modal', '.futuristicModal', function () {
+
+            const modal = $(this);
+
+            gsap.set(modal.find(".modal-content"), {
+                scale: 0.92,
+                opacity: 0
+            });
+
+            gsap.set(modal.find(".futureField"), {
+                opacity: 0,
+                y: 20
+            });
+
+            gsap.set(modal.find(".headerIcon, .modal-icon"), {
+                scale: 0,
+                rotation: -90
+            });
+
+        });
+
+
+        /* =========================================================
+           MODAL SHOWN
+        ========================================================= */
+
+        $(document).on('shown.bs.modal', '.futuristicModal', function () {
+
+            const modal = $(this);
+
+            /* -----------------------------------------------------
+               RESET DU STEPPER À L'OUVERTURE
+            ----------------------------------------------------- */
+
+            if (modal.attr('data-stepper') === 'true') {
+
+                modal.attr('data-step', 1);
+
+                updateStepper(modal, 1);
+
+            }
+
+
+            /* -----------------------------------------------------
+               ANIMATION DU MODAL
+            ----------------------------------------------------- */
+
+            const tl = gsap.timeline();
+
+            tl.to(modal.find(".modal-content"), {
+                duration: 0.4,
+                scale: 1,
+                opacity: 1,
+                ease: "power3.out"
+            })
+
+            .to(modal.find(".headerIcon, .modal-icon"), {
+                duration: 0.4,
+                scale: 1,
+                rotation: 0,
+                ease: "back.out(1.7)"
+            }, "-=0.2")
+
+            .to(modal.find(".futureField"), {
+                duration: 0.4,
+                opacity: 1,
+                y: 0,
+                stagger: 0.06,
+                ease: "power2.out"
+            }, "-=0.2");
+
+        });
+
+
+        /* =========================================================
+           MODAL CLOSE
+        ========================================================= */
+
+        $(document).on('hide.bs.modal', '.futuristicModal', function () {
+
+            const modal = $(this);
+
+            gsap.to(modal.find(".modal-content"), {
+                duration: 0.25,
+                scale: 0.95,
+                opacity: 0,
+                ease: "power2.in"
+            });
+
+        });
+
+
+        /* =========================================================
+           NEXT STEP
+        ========================================================= */
+
+        $(document).on('click', '.nextStep', function () {
+
+            const modal = $(this).closest('.futuristicModal');
+
+            let currentStep =
+                parseInt(modal.attr('data-step')) || 1;
+
+            const totalSteps =
+                modal.find('.stepItem').length;
+
+
+            if (currentStep < totalSteps) {
+
+                currentStep++;
+
+                updateStepper(
+                    modal,
+                    currentStep
+                );
+
+            }
+
+        });
+
+
+        /* =========================================================
+           PREVIOUS STEP
+        ========================================================= */
+
+        $(document).on('click', '.prevStep', function () {
+
+            const modal = $(this).closest('.futuristicModal');
+
+            let currentStep =
+                parseInt(modal.attr('data-step')) || 1;
+
+
+            if (currentStep > 1) {
+
+                currentStep--;
+
+                updateStepper(
+                    modal,
+                    currentStep
+                );
+
+            }
+
+        });
+
+
+        /* =========================================================
+           UPDATE STEPPER
+        ========================================================= */
+
+        function updateStepper(modal, currentStep) {
+
+            /*
+             * Le nombre d'étapes est toujours calculé
+             * automatiquement à partir des .stepItem.
+             */
+
+            const totalSteps =
+                modal.find('.stepItem').length;
+
+
+            /* -----------------------------------------------------
+               SÉCURITÉ
+            ----------------------------------------------------- */
+
+            if (currentStep < 1) {
+
+                currentStep = 1;
+
+            }
+
+
+            if (currentStep > totalSteps) {
+
+                currentStep = totalSteps;
+
+            }
+
+
+            /* -----------------------------------------------------
+               RESET DES ÉTAPES
+            ----------------------------------------------------- */
+
+            modal.find('.stepItem')
+                .removeClass('active');
+
+            modal.find('.stepContent')
+                .removeClass('active');
+
+
+            /* -----------------------------------------------------
+               ÉTAPE ACTIVE
+            ----------------------------------------------------- */
+
+            const activeItem =
+                modal.find(
+                    `.stepItem[data-step="${currentStep}"]`
+                );
+
+
+            const activeContent =
+                modal.find(
+                    `.stepContent[data-content="${currentStep}"]`
+                );
+
+
+            activeItem.addClass('active');
+
+            activeContent.addClass('active');
+
+
+            /* -----------------------------------------------------
+               ANIMATION DU CONTENU
+            ----------------------------------------------------- */
+
+            gsap.fromTo(
+                activeContent,
+                {
+                    opacity: 0,
+                    y: 20
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.4,
+                    ease: "power2.out"
+                }
+            );
+
+
+            /* -----------------------------------------------------
+               BOUTON RETOUR
+            ----------------------------------------------------- */
+
+            if (currentStep <= 1) {
+
+                modal.find('.prevStep').hide();
+
+            } else {
+
+                modal.find('.prevStep').show();
+
+            }
+
+
+            /* -----------------------------------------------------
+               BOUTONS CONTINUER / VALIDER
+            ----------------------------------------------------- */
+
+            if (currentStep >= totalSteps) {
+
+                modal.find('.nextStep').hide();
+
+                modal.find('.submitStep').show();
+
+            } else {
+
+                modal.find('.nextStep').show();
+
+                modal.find('.submitStep').hide();
+
+            }
+
+
+            /* -----------------------------------------------------
+               SAUVEGARDE DE L'ÉTAPE COURANTE
+            ----------------------------------------------------- */
+
+            modal.attr(
+                'data-step',
+                currentStep
+            );
+
+
+            /* -----------------------------------------------------
+               MISE À JOUR DU RÉCAPITULATIF
+            ----------------------------------------------------- */
+
+            updateStepperReview(modal);
+
+        }
+
+
+        /* =========================================================
+           STEPPER REVIEW
+
+           MOTEUR GÉNÉRIQUE DE RÉCAPITULATIF
+        ========================================================= */
+
+        function updateStepperReview(modal) {
+
+            /*
+             * On récupère le formulaire de CE modal.
+             */
+
+            const form =
+                modal.find('form').first();
+
+
+            if (!form.length) {
+
+                return;
+
+            }
+
+
+            /*
+             * Recherche tous les champs possédant :
+             *
+             * data-review="..."
+             *
+             * Le moteur ne connaît aucun nom de champ.
+             */
+
+            form.find('[data-review]').each(function () {
+
+                const field =
+                    $(this);
+
+
+                const reviewKey =
+                    field.attr('data-review');
+
+
+                if (!reviewKey) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Recherche le bloc correspondant :
+                 *
+                 * data-review-value="..."
+                 */
+
+                const reviewElement =
+                    modal.find(
+                        `[data-review-value="${reviewKey}"]`
+                    );
+
+
+                if (!reviewElement.length) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Récupération de la valeur.
+                 */
+
+                const value =
+                    getStepperFieldValue(field);
+
+
+                /*
+                 * Affichage.
+                 */
+
+                reviewElement.text(
+                    value !== null &&
+                    value !== undefined &&
+                    value !== ''
+                        ? value
+                        : '—'
+                );
+
+            });
+
+        }
+
+
+        /* =========================================================
+           GET STEPPER FIELD VALUE
+
+           Gestion automatique de :
+
+           - text
+           - email
+           - number
+           - date
+           - password
+           - textarea
+           - select
+           - checkbox
+           - radio
+           - file
+        ========================================================= */
+
+        function getStepperFieldValue(field) {
+
+            const tag =
+                field.prop('tagName').toLowerCase();
+
+
+            const type =
+                (field.attr('type') || '').toLowerCase();
+
+
+            /* =====================================================
+               SELECT
+            ===================================================== */
+
+            if (tag === 'select') {
+
+                const selected =
+                    field.find('option:selected');
+
+
+                if (!selected.length) {
+
+                    return '';
+
+                }
+
+
+                /*
+                 * On affiche le texte de l'option
+                 * sélectionnée et non son ID.
+                 */
+
+                return selected
+                    .text()
+                    .trim();
+
+            }
+
+
+            /* =====================================================
+               FILE
+            ===================================================== */
+
+            if (type === 'file') {
+
+                const files =
+                    field[0].files;
+
+
+                if (!files || !files.length) {
+
+                    return '';
+
+                }
+
+
+                /*
+                 * Affichage du nom des fichiers.
+                 */
+
+                return Array.from(files)
+                    .map(function (file) {
+
+                        return file.name;
+
+                    })
+                    .join(', ');
+
+            }
+
+
+            /* =====================================================
+               CHECKBOX
+            ===================================================== */
+
+            if (type === 'checkbox') {
+
+                if (!field.is(':checked')) {
+
+                    return '';
+
+                }
+
+
+                /*
+                 * Permet de personnaliser le texte affiché.
+                 *
+                 * Exemple :
+                 *
+                 * data-review-label="Activé"
+                 */
+
+                return field.attr(
+                    'data-review-label'
+                )
+                || field.val()
+                || 'Oui';
+
+            }
+
+
+            /* =====================================================
+               RADIO
+            ===================================================== */
+
+            if (type === 'radio') {
+
+                const name =
+                    field.attr('name');
+
+
+                if (!name) {
+
+                    return field.is(':checked')
+                        ? field.val()
+                        : '';
+
+                }
+
+
+                return getStepperRadioValue(
+                    field,
+                    name
+                );
+
+            }
+
+
+            /* =====================================================
+               TEXTAREA
+            ===================================================== */
+
+            if (tag === 'textarea') {
+
+                return field
+                    .val()
+                    .trim();
+
+            }
+
+
+            /* =====================================================
+               INPUT CLASSIQUE
+            ===================================================== */
+
+            const value =
+                field.val();
+
+
+            return value !== undefined
+                ? String(value).trim()
+                : '';
+
+        }
+
+
+        /* =========================================================
+           RADIO VALUE
+        ========================================================= */
+
+        function getStepperRadioValue(field, name) {
+
+            const form =
+                field.closest('form');
+
+
+            const checked =
+                form.find(
+                    `input[type="radio"][name="${name}"]:checked`
+                );
+
+
+            if (!checked.length) {
+
+                return '';
+
+            }
+
+
+            /*
+             * Possibilité d'utiliser un texte personnalisé.
+             */
+
+            return checked.attr(
+                'data-review-label'
+            )
+            || checked.val()
+            || '';
+
+        }
+
+
+        /* =========================================================
+           LIVE REVIEW UPDATE
+
+           Dès que l'utilisateur modifie un champ,
+           le récapitulatif est actualisé.
+        ========================================================= */
+
+        $(document).on(
+            'input change',
+            '.futuristicModal [data-review]',
+            function () {
+
+                const modal =
+                    $(this).closest(
+                        '.futuristicModal'
+                    );
+
+
+                updateStepperReview(
+                    modal
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           INITIALISATION DES STEPPERS
+        ========================================================= */
+
+        $('.futuristicModal[data-stepper="true"]').each(function () {
+
+            const modal =
+                $(this);
+
+
+            /* -----------------------------------------------------
+               CALCUL AUTOMATIQUE DU NOMBRE D'ÉTAPES
+            ----------------------------------------------------- */
+
+            const totalSteps =
+                modal.find('.stepItem').length;
+
+
+            /* -----------------------------------------------------
+               ENREGISTREMENT DU NOMBRE D'ÉTAPES
+            ----------------------------------------------------- */
+
+            modal.attr(
+                'data-max-step',
+                totalSteps
+            );
+
+
+            /* -----------------------------------------------------
+               INITIALISATION À L'ÉTAPE 1
+            ----------------------------------------------------- */
+
+            modal.attr(
+                'data-step',
+                1
+            );
+
+
+            updateStepper(
+                modal,
+                1
+            );
+
+        });
+
+
+    });
 </script>
+
+
+
 
 
 

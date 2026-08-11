@@ -150,7 +150,7 @@
                                                                     name="name"
                                                                     class="form-control"
                                                                     placeholder="Entrer le nom"
-                                                                    required>
+                                                                    required data-review="name">
 
                                                             </div>
 
@@ -680,7 +680,7 @@
 
                                                             <div class="futureInput">
 
-                                                                <span class="review-name">
+                                                                <span class="review-name" data-review-value="name">
                                                                     —
                                                                 </span>
 
