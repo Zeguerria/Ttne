@@ -4416,7 +4416,8 @@ ${cell.innerText.trim()}
     });
 </script> --}}
 
-<script>
+
+{{-- <script>
     $(document).ready(function () {
 
 
@@ -4517,23 +4518,126 @@ ${cell.innerText.trim()}
 
 
         /* =========================================================
+           AFFICHER / MASQUER LES MOTS DE PASSE
+
+           Fonctionne pour tous les steppers.
+           Le champ ciblé est recherché dans le même
+           .futureInput que le bouton.
+        ========================================================= */
+
+        $(document).on('click', '.passwordToggle', function () {
+
+            const button = $(this);
+
+            const input =
+                button
+                    .closest('.futureInput')
+                    .find('input')
+                    .first();
+
+
+            if (!input.length) {
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------------------
+               CHANGEMENT DU TYPE
+            ----------------------------------------------------- */
+
+            const isPassword =
+                input.attr('type') === 'password';
+
+
+            input.attr(
+                'type',
+                isPassword
+                    ? 'text'
+                    : 'password'
+            );
+
+
+            /* -----------------------------------------------------
+               CHANGEMENT DE L'ICÔNE
+            ----------------------------------------------------- */
+
+            const icon =
+                button.find('i');
+
+
+            if (isPassword) {
+
+                icon
+                    .removeClass('fa-eye')
+                    .addClass('fa-eye-slash');
+
+                button.attr(
+                    'aria-label',
+                    'Masquer le mot de passe'
+                );
+
+            } else {
+
+                icon
+                    .removeClass('fa-eye-slash')
+                    .addClass('fa-eye');
+
+                button.attr(
+                    'aria-label',
+                    'Afficher le mot de passe'
+                );
+
+            }
+
+        });
+
+
+        /* =========================================================
            NEXT STEP
         ========================================================= */
 
         $(document).on('click', '.nextStep', function () {
 
-            const modal = $(this).closest('.futuristicModal');
+            const modal =
+                $(this).closest('.futuristicModal');
+
 
             let currentStep =
-                parseInt(modal.attr('data-step')) || 1;
+                parseInt(
+                    modal.attr('data-step')
+                ) || 1;
+
 
             const totalSteps =
                 modal.find('.stepItem').length;
 
 
+            /* -----------------------------------------------------
+               VALIDATION DE L'ÉTAPE COURANTE
+
+               Si la validation échoue, on reste sur l'étape.
+            ----------------------------------------------------- */
+
+            if (!validateCurrentStep(
+                modal,
+                currentStep
+            )) {
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------------------
+               PASSAGE À L'ÉTAPE SUIVANTE
+            ----------------------------------------------------- */
+
             if (currentStep < totalSteps) {
 
                 currentStep++;
+
 
                 updateStepper(
                     modal,
@@ -4551,15 +4655,20 @@ ${cell.innerText.trim()}
 
         $(document).on('click', '.prevStep', function () {
 
-            const modal = $(this).closest('.futuristicModal');
+            const modal =
+                $(this).closest('.futuristicModal');
+
 
             let currentStep =
-                parseInt(modal.attr('data-step')) || 1;
+                parseInt(
+                    modal.attr('data-step')
+                ) || 1;
 
 
             if (currentStep > 1) {
 
                 currentStep--;
+
 
                 updateStepper(
                     modal,
@@ -4572,10 +4681,398 @@ ${cell.innerText.trim()}
 
 
         /* =========================================================
+           VALIDATION DE L'ÉTAPE COURANTE
+
+           Fonction générique.
+
+           Pour l'instant, elle gère notamment :
+
+           - mot de passe
+           - confirmation du mot de passe
+        ========================================================= */
+
+        function validateCurrentStep(
+            modal,
+            currentStep
+        ) {
+
+
+            /* -----------------------------------------------------
+               RÉCUPÉRATION DU CONTENU DE L'ÉTAPE
+            ----------------------------------------------------- */
+
+            const currentContent =
+                modal.find(
+                    `.stepContent[data-content="${currentStep}"]`
+                );
+
+
+            if (!currentContent.length) {
+
+                return true;
+
+            }
+
+
+            /* =====================================================
+               VALIDATION MOT DE PASSE
+
+               On détecte l'étape grâce aux champs name.
+
+               Aucun ID n'est utilisé.
+            ===================================================== */
+
+            const password =
+                currentContent.find(
+                    '[name="password"]'
+                );
+
+
+            const passwordConfirmation =
+                currentContent.find(
+                    '[name="password_confirmation"]'
+                );
+
+
+            /*
+             * Si cette étape ne contient pas ces champs,
+             * aucune validation spécifique n'est nécessaire.
+             */
+
+            if (
+                !password.length ||
+                !passwordConfirmation.length
+            ) {
+
+                return true;
+
+            }
+
+
+            /* -----------------------------------------------------
+               RÉCUPÉRATION DES VALEURS
+            ----------------------------------------------------- */
+
+            const passwordValue =
+                password.val() || '';
+
+
+            const confirmationValue =
+                passwordConfirmation.val() || '';
+
+
+            /* -----------------------------------------------------
+               NETTOYAGE DES ÉTATS PRÉCÉDENTS
+            ----------------------------------------------------- */
+
+            clearPasswordValidation(
+                currentContent
+            );
+
+
+            /* =====================================================
+               MOT DE PASSE VIDE
+            ===================================================== */
+
+            if (!passwordValue.trim()) {
+
+                showPasswordError(
+                    password,
+                    'Veuillez saisir un mot de passe.'
+                );
+
+                password.trigger('focus');
+
+                return false;
+
+            }
+
+
+            /* =====================================================
+               CONFIRMATION VIDE
+            ===================================================== */
+
+            if (!confirmationValue.trim()) {
+
+                showPasswordError(
+                    passwordConfirmation,
+                    'Veuillez confirmer votre mot de passe.'
+                );
+
+                passwordConfirmation.trigger('focus');
+
+                return false;
+
+            }
+
+
+            /* =====================================================
+               COMPARAISON
+            ===================================================== */
+
+            if (
+                passwordValue !==
+                confirmationValue
+            ) {
+
+                showPasswordError(
+                    passwordConfirmation,
+                    'Les mots de passe ne correspondent pas.'
+                );
+
+                passwordConfirmation.trigger('focus');
+
+                return false;
+
+            }
+
+
+            /* =====================================================
+               MOTS DE PASSE VALIDES
+            ===================================================== */
+
+            markPasswordValid(
+                password
+            );
+
+            markPasswordValid(
+                passwordConfirmation
+            );
+
+
+            return true;
+
+        }
+
+
+        /* =========================================================
+           AFFICHER UNE ERREUR DE MOT DE PASSE
+        ========================================================= */
+
+        function showPasswordError(
+            field,
+            message
+        ) {
+
+            const futureInput =
+                field.closest('.futureInput');
+
+
+            futureInput.addClass(
+                'passwordMismatch'
+            );
+
+
+            futureInput
+                .removeClass('passwordValid');
+
+
+            /*
+             * On cherche d'abord une erreur déjà présente.
+             */
+
+            let error =
+                field
+                    .closest('.futureField')
+                    .find('.passwordError')
+                    .first();
+
+
+            /*
+             * Si aucune erreur n'existe,
+             * on la crée automatiquement.
+             */
+
+            if (!error.length) {
+
+                error = $(
+                    '<div class="passwordError"></div>'
+                );
+
+
+                field
+                    .closest('.futureField')
+                    .append(error);
+
+            }
+
+
+            error.html(
+                '<i class="fa fa-circle-exclamation"></i> ' +
+                message
+            );
+
+
+            error.show();
+
+        }
+
+
+        /* =========================================================
+           NETTOYER LA VALIDATION
+        ========================================================= */
+
+        function clearPasswordValidation(
+            container
+        ) {
+
+            container
+                .find('.futureInput')
+                .removeClass(
+                    'passwordMismatch passwordValid'
+                );
+
+
+            container
+                .find('.passwordError')
+                .hide();
+
+        }
+
+
+        /* =========================================================
+           MARQUER UN CHAMP COMME VALIDE
+        ========================================================= */
+
+        function markPasswordValid(
+            field
+        ) {
+
+            const futureInput =
+                field.closest('.futureInput');
+
+
+            futureInput
+                .removeClass('passwordMismatch')
+                .addClass('passwordValid');
+
+
+            const error =
+                field
+                    .closest('.futureField')
+                    .find('.passwordError')
+                    .first();
+
+
+            if (error.length) {
+
+                error.hide();
+
+            }
+
+        }
+
+
+        /* =========================================================
+           VALIDATION EN DIRECT DU MOT DE PASSE
+
+           Dès que l'utilisateur écrit dans la confirmation,
+           on vérifie automatiquement si les deux correspondent.
+        ========================================================= */
+
+        $(document).on(
+            'input',
+            '.futuristicModal [name="password"], .futuristicModal [name="password_confirmation"]',
+            function () {
+
+                const field =
+                    $(this);
+
+
+                const currentContent =
+                    field.closest('.stepContent');
+
+
+                const password =
+                    currentContent.find(
+                        '[name="password"]'
+                    );
+
+
+                const passwordConfirmation =
+                    currentContent.find(
+                        '[name="password_confirmation"]'
+                    );
+
+
+                if (
+                    !password.length ||
+                    !passwordConfirmation.length
+                ) {
+
+                    return;
+
+                }
+
+
+                const passwordValue =
+                    password.val() || '';
+
+
+                const confirmationValue =
+                    passwordConfirmation.val() || '';
+
+
+                /*
+                 * On ne montre pas d'erreur tant que
+                 * la confirmation n'a pas été commencée.
+                 */
+
+                if (!confirmationValue.length) {
+
+                    clearPasswordValidation(
+                        currentContent
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                 * Les mots de passe correspondent.
+                 */
+
+                if (
+                    passwordValue.length &&
+                    passwordValue ===
+                    confirmationValue
+                ) {
+
+                    markPasswordValid(
+                        password
+                    );
+
+                    markPasswordValid(
+                        passwordConfirmation
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                 * Les mots de passe sont différents.
+                 */
+
+                showPasswordError(
+                    passwordConfirmation,
+                    'Les mots de passe ne correspondent pas.'
+                );
+
+            }
+        );
+
+
+        /* =========================================================
            UPDATE STEPPER
         ========================================================= */
 
-        function updateStepper(modal, currentStep) {
+        function updateStepper(
+            modal,
+            currentStep
+        ) {
 
             /*
              * Le nombre d'étapes est toujours calculé
@@ -4703,7 +5200,9 @@ ${cell.innerText.trim()}
                MISE À JOUR DU RÉCAPITULATIF
             ----------------------------------------------------- */
 
-            updateStepperReview(modal);
+            updateStepperReview(
+                modal
+            );
 
         }
 
@@ -4714,7 +5213,9 @@ ${cell.innerText.trim()}
            MOTEUR GÉNÉRIQUE DE RÉCAPITULATIF
         ========================================================= */
 
-        function updateStepperReview(modal) {
+        function updateStepperReview(
+            modal
+        ) {
 
             /*
              * On récupère le formulaire de CE modal.
@@ -4735,67 +5236,71 @@ ${cell.innerText.trim()}
              * Recherche tous les champs possédant :
              *
              * data-review="..."
-             *
-             * Le moteur ne connaît aucun nom de champ.
              */
 
-            form.find('[data-review]').each(function () {
+            form.find('[data-review]').each(
+                function () {
 
-                const field =
-                    $(this);
-
-
-                const reviewKey =
-                    field.attr('data-review');
+                    const field =
+                        $(this);
 
 
-                if (!reviewKey) {
+                    const reviewKey =
+                        field.attr(
+                            'data-review'
+                        );
 
-                    return;
 
-                }
+                    if (!reviewKey) {
+
+                        return;
+
+                    }
 
 
-                /*
-                 * Recherche le bloc correspondant :
-                 *
-                 * data-review-value="..."
-                 */
+                    /*
+                     * Recherche le bloc correspondant :
+                     *
+                     * data-review-value="..."
+                     */
 
-                const reviewElement =
-                    modal.find(
-                        `[data-review-value="${reviewKey}"]`
+                    const reviewElement =
+                        modal.find(
+                            `[data-review-value="${reviewKey}"]`
+                        );
+
+
+                    if (!reviewElement.length) {
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Récupération de la valeur.
+                     */
+
+                    const value =
+                        getStepperFieldValue(
+                            field
+                        );
+
+
+                    /*
+                     * Affichage.
+                     */
+
+                    reviewElement.text(
+                        value !== null &&
+                        value !== undefined &&
+                        value !== ''
+                            ? value
+                            : '—'
                     );
 
-
-                if (!reviewElement.length) {
-
-                    return;
-
                 }
-
-
-                /*
-                 * Récupération de la valeur.
-                 */
-
-                const value =
-                    getStepperFieldValue(field);
-
-
-                /*
-                 * Affichage.
-                 */
-
-                reviewElement.text(
-                    value !== null &&
-                    value !== undefined &&
-                    value !== ''
-                        ? value
-                        : '—'
-                );
-
-            });
+            );
 
         }
 
@@ -4817,14 +5322,21 @@ ${cell.innerText.trim()}
            - file
         ========================================================= */
 
-        function getStepperFieldValue(field) {
+        function getStepperFieldValue(
+            field
+        ) {
 
             const tag =
-                field.prop('tagName').toLowerCase();
+                field
+                    .prop('tagName')
+                    .toLowerCase();
 
 
             const type =
-                (field.attr('type') || '').toLowerCase();
+                (
+                    field.attr('type') ||
+                    ''
+                ).toLowerCase();
 
 
             /* =====================================================
@@ -4834,7 +5346,9 @@ ${cell.innerText.trim()}
             if (tag === 'select') {
 
                 const selected =
-                    field.find('option:selected');
+                    field.find(
+                        'option:selected'
+                    );
 
 
                 if (!selected.length) {
@@ -4866,7 +5380,10 @@ ${cell.innerText.trim()}
                     field[0].files;
 
 
-                if (!files || !files.length) {
+                if (
+                    !files ||
+                    !files.length
+                ) {
 
                     return '';
 
@@ -4877,12 +5394,15 @@ ${cell.innerText.trim()}
                  * Affichage du nom des fichiers.
                  */
 
-                return Array.from(files)
-                    .map(function (file) {
+                return Array
+                    .from(files)
+                    .map(
+                        function (file) {
 
-                        return file.name;
+                            return file.name;
 
-                    })
+                        }
+                    )
                     .join(', ');
 
             }
@@ -4903,10 +5423,6 @@ ${cell.innerText.trim()}
 
                 /*
                  * Permet de personnaliser le texte affiché.
-                 *
-                 * Exemple :
-                 *
-                 * data-review-label="Activé"
                  */
 
                 return field.attr(
@@ -4977,7 +5493,10 @@ ${cell.innerText.trim()}
            RADIO VALUE
         ========================================================= */
 
-        function getStepperRadioValue(field, name) {
+        function getStepperRadioValue(
+            field,
+            name
+        ) {
 
             const form =
                 field.closest('form');
@@ -5039,46 +5558,2962 @@ ${cell.innerText.trim()}
            INITIALISATION DES STEPPERS
         ========================================================= */
 
-        $('.futuristicModal[data-stepper="true"]').each(function () {
+        $('.futuristicModal[data-stepper="true"]')
+            .each(
+                function () {
 
-            const modal =
-                $(this);
+                    const modal =
+                        $(this);
+
+
+                    /* -------------------------------------------------
+                       CALCUL AUTOMATIQUE DU NOMBRE D'ÉTAPES
+                    ------------------------------------------------- */
+
+                    const totalSteps =
+                        modal
+                            .find('.stepItem')
+                            .length;
+
+
+                    /* -------------------------------------------------
+                       ENREGISTREMENT DU NOMBRE D'ÉTAPES
+                    ------------------------------------------------- */
+
+                    modal.attr(
+                        'data-max-step',
+                        totalSteps
+                    );
+
+
+                    /* -------------------------------------------------
+                       INITIALISATION À L'ÉTAPE 1
+                    ------------------------------------------------- */
+
+                    modal.attr(
+                        'data-step',
+                        1
+                    );
+
+
+                    updateStepper(
+                        modal,
+                        1
+                    );
+
+                }
+            );
+
+
+    });
+</script> --}}
+{{-- <script>
+    $(document).ready(function () {
+
+
+        /* =========================================================
+           MODAL OPEN ANIMATION
+        ========================================================= */
+
+        $(document).on('show.bs.modal', '.futuristicModal', function () {
+
+            const modal = $(this);
+
+            gsap.set(modal.find(".modal-content"), {
+                scale: 0.92,
+                opacity: 0
+            });
+
+            gsap.set(modal.find(".futureField"), {
+                opacity: 0,
+                y: 20
+            });
+
+            gsap.set(modal.find(".headerIcon, .modal-icon"), {
+                scale: 0,
+                rotation: -90
+            });
+
+        });
+
+
+        /* =========================================================
+           MODAL SHOWN
+        ========================================================= */
+
+        $(document).on('shown.bs.modal', '.futuristicModal', function () {
+
+            const modal = $(this);
+
+            /* -----------------------------------------------------
+               RESET DU STEPPER À L'OUVERTURE
+               
+               Uniquement pour les modals possédant un stepper.
+            ----------------------------------------------------- */
+
+            if (modal.attr('data-stepper') === 'true') {
+
+                modal.attr('data-step', 1);
+
+                updateStepper(modal, 1);
+
+            }
 
 
             /* -----------------------------------------------------
-               CALCUL AUTOMATIQUE DU NOMBRE D'ÉTAPES
+               ANIMATION DU MODAL
             ----------------------------------------------------- */
+
+            const tl = gsap.timeline();
+
+            tl.to(modal.find(".modal-content"), {
+                duration: 0.4,
+                scale: 1,
+                opacity: 1,
+                ease: "power3.out"
+            })
+
+            .to(modal.find(".headerIcon, .modal-icon"), {
+                duration: 0.4,
+                scale: 1,
+                rotation: 0,
+                ease: "back.out(1.7)"
+            }, "-=0.2")
+
+            .to(modal.find(".futureField"), {
+                duration: 0.4,
+                opacity: 1,
+                y: 0,
+                stagger: 0.06,
+                ease: "power2.out"
+            }, "-=0.2");
+
+        });
+
+
+        /* =========================================================
+           MODAL CLOSE
+           
+           Animation de fermeture.
+        ========================================================= */
+
+        $(document).on('hide.bs.modal', '.futuristicModal', function () {
+
+            const modal = $(this);
+
+            gsap.to(modal.find(".modal-content"), {
+                duration: 0.25,
+                scale: 0.95,
+                opacity: 0,
+                ease: "power2.in"
+            });
+
+        });
+
+
+        /* =========================================================
+           MODAL HIDDEN
+           
+           RESET COMPLET DU MODAL
+           
+           Valable pour TOUS les .futuristicModal :
+           
+           - avec stepper
+           - sans stepper
+        ========================================================= */
+
+        $(document).on('hidden.bs.modal', '.futuristicModal', function () {
+
+            const modal = $(this);
+
+
+            /* =====================================================
+               RESET DU FORMULAIRE
+               
+               Valable pour tous les modals possédant
+               un formulaire.
+            ===================================================== */
+
+            const form =
+                modal.find('form').first();
+
+
+            if (form.length) {
+
+                form[0].reset();
+
+            }
+
+
+            /* =====================================================
+               RESET DES ÉTATS VISUELS DES MOTS DE PASSE
+            ===================================================== */
+
+            modal
+                .find('.futureInput')
+                .removeClass(
+                    'passwordMismatch passwordValid'
+                );
+
+
+            modal
+                .find('.passwordError')
+                .hide();
+
+
+            /* =====================================================
+               RESET DES CHAMPS PASSWORD
+               
+               Si un mot de passe était affiché,
+               on le remet en mode masqué.
+            ===================================================== */
+
+            modal
+                .find('.passwordToggle')
+                .each(function () {
+
+                    const button =
+                        $(this);
+
+
+                    const input =
+                        button
+                            .closest('.futureInput')
+                            .find('input')
+                            .first();
+
+
+                    if (input.length) {
+
+                        input.attr(
+                            'type',
+                            'password'
+                        );
+
+                    }
+
+
+                    const icon =
+                        button.find('i');
+
+
+                    icon
+                        .removeClass('fa-eye-slash')
+                        .addClass('fa-eye');
+
+
+                    button.attr(
+                        'aria-label',
+                        'Afficher le mot de passe'
+                    );
+
+                });
+
+
+            /* =====================================================
+               RESET DU STEPPER
+               
+               UNIQUEMENT pour les modals qui possèdent
+               un stepper.
+            ===================================================== */
+
+            if (
+                modal.attr('data-stepper') === 'true'
+            ) {
+
+                modal.attr(
+                    'data-step',
+                    1
+                );
+
+
+                updateStepper(
+                    modal,
+                    1
+                );
+
+            }
+
+        });
+
+
+        /* =========================================================
+           AFFICHER / MASQUER LES MOTS DE PASSE
+
+           Fonctionne pour tous les modals.
+
+           Le champ ciblé est recherché dans le même
+           .futureInput que le bouton.
+        ========================================================= */
+
+        $(document).on('click', '.passwordToggle', function () {
+
+            const button = $(this);
+
+
+            const input =
+                button
+                    .closest('.futureInput')
+                    .find('input')
+                    .first();
+
+
+            if (!input.length) {
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------------------
+               CHANGEMENT DU TYPE
+            ----------------------------------------------------- */
+
+            const isPassword =
+                input.attr('type') === 'password';
+
+
+            input.attr(
+                'type',
+                isPassword
+                    ? 'text'
+                    : 'password'
+            );
+
+
+            /* -----------------------------------------------------
+               CHANGEMENT DE L'ICÔNE
+            ----------------------------------------------------- */
+
+            const icon =
+                button.find('i');
+
+
+            if (isPassword) {
+
+                icon
+                    .removeClass('fa-eye')
+                    .addClass('fa-eye-slash');
+
+
+                button.attr(
+                    'aria-label',
+                    'Masquer le mot de passe'
+                );
+
+            } else {
+
+                icon
+                    .removeClass('fa-eye-slash')
+                    .addClass('fa-eye');
+
+
+                button.attr(
+                    'aria-label',
+                    'Afficher le mot de passe'
+                );
+
+            }
+
+        });
+
+
+        /* =========================================================
+           NEXT STEP
+        ========================================================= */
+
+        $(document).on('click', '.nextStep', function () {
+
+            const modal =
+                $(this).closest('.futuristicModal');
+
+
+            let currentStep =
+                parseInt(
+                    modal.attr('data-step')
+                ) || 1;
+
 
             const totalSteps =
                 modal.find('.stepItem').length;
 
 
             /* -----------------------------------------------------
-               ENREGISTREMENT DU NOMBRE D'ÉTAPES
+               VALIDATION DE L'ÉTAPE COURANTE
+
+               Si la validation échoue, on reste sur l'étape.
             ----------------------------------------------------- */
 
-            modal.attr(
-                'data-max-step',
-                totalSteps
+            if (!validateCurrentStep(
+                modal,
+                currentStep
+            )) {
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------------------
+               PASSAGE À L'ÉTAPE SUIVANTE
+            ----------------------------------------------------- */
+
+            if (currentStep < totalSteps) {
+
+                currentStep++;
+
+
+                updateStepper(
+                    modal,
+                    currentStep
+                );
+
+            }
+
+        });
+
+
+        /* =========================================================
+           PREVIOUS STEP
+        ========================================================= */
+
+        $(document).on('click', '.prevStep', function () {
+
+            const modal =
+                $(this).closest('.futuristicModal');
+
+
+            let currentStep =
+                parseInt(
+                    modal.attr('data-step')
+                ) || 1;
+
+
+            if (currentStep > 1) {
+
+                currentStep--;
+
+
+                updateStepper(
+                    modal,
+                    currentStep
+                );
+
+            }
+
+        });
+
+
+        /* =========================================================
+           VALIDATION DE L'ÉTAPE COURANTE
+
+           Fonction générique.
+
+           Pour l'instant, elle gère notamment :
+
+           - mot de passe
+           - confirmation du mot de passe
+        ========================================================= */
+
+        function validateCurrentStep(
+            modal,
+            currentStep
+        ) {
+
+
+            /* -----------------------------------------------------
+               RÉCUPÉRATION DU CONTENU DE L'ÉTAPE
+            ----------------------------------------------------- */
+
+            const currentContent =
+                modal.find(
+                    `.stepContent[data-content="${currentStep}"]`
+                );
+
+
+            if (!currentContent.length) {
+
+                return true;
+
+            }
+
+
+            /* =====================================================
+               VALIDATION MOT DE PASSE
+
+               On détecte l'étape grâce aux champs name.
+
+               Aucun ID n'est utilisé.
+            ===================================================== */
+
+            const password =
+                currentContent.find(
+                    '[name="password"]'
+                );
+
+
+            const passwordConfirmation =
+                currentContent.find(
+                    '[name="password_confirmation"]'
+                );
+
+
+            /*
+             * Si cette étape ne contient pas ces champs,
+             * aucune validation spécifique n'est nécessaire.
+             */
+
+            if (
+                !password.length ||
+                !passwordConfirmation.length
+            ) {
+
+                return true;
+
+            }
+
+
+            /* -----------------------------------------------------
+               RÉCUPÉRATION DES VALEURS
+            ----------------------------------------------------- */
+
+            const passwordValue =
+                password.val() || '';
+
+
+            const confirmationValue =
+                passwordConfirmation.val() || '';
+
+
+            /* -----------------------------------------------------
+               NETTOYAGE DES ÉTATS PRÉCÉDENTS
+            ----------------------------------------------------- */
+
+            clearPasswordValidation(
+                currentContent
+            );
+
+
+            /* =====================================================
+               MOT DE PASSE VIDE
+            ===================================================== */
+
+            if (!passwordValue.trim()) {
+
+                showPasswordError(
+                    password,
+                    'Veuillez saisir un mot de passe.'
+                );
+
+
+                password.trigger('focus');
+
+
+                return false;
+
+            }
+
+
+            /* =====================================================
+               CONFIRMATION VIDE
+            ===================================================== */
+
+            if (!confirmationValue.trim()) {
+
+                showPasswordError(
+                    passwordConfirmation,
+                    'Veuillez confirmer votre mot de passe.'
+                );
+
+
+                passwordConfirmation.trigger('focus');
+
+
+                return false;
+
+            }
+
+
+            /* =====================================================
+               COMPARAISON
+            ===================================================== */
+
+            if (
+                passwordValue !==
+                confirmationValue
+            ) {
+
+                showPasswordError(
+                    passwordConfirmation,
+                    'Les mots de passe ne correspondent pas.'
+                );
+
+
+                passwordConfirmation.trigger('focus');
+
+
+                return false;
+
+            }
+
+
+            /* =====================================================
+               MOTS DE PASSE VALIDES
+            ===================================================== */
+
+            markPasswordValid(
+                password
+            );
+
+
+            markPasswordValid(
+                passwordConfirmation
+            );
+
+
+            return true;
+
+        }
+
+
+        /* =========================================================
+           AFFICHER UNE ERREUR DE MOT DE PASSE
+        ========================================================= */
+
+        function showPasswordError(
+            field,
+            message
+        ) {
+
+            const futureInput =
+                field.closest('.futureInput');
+
+
+            futureInput.addClass(
+                'passwordMismatch'
+            );
+
+
+            futureInput
+                .removeClass('passwordValid');
+
+
+            /*
+             * On cherche d'abord une erreur déjà présente.
+             */
+
+            let error =
+                field
+                    .closest('.futureField')
+                    .find('.passwordError')
+                    .first();
+
+
+            /*
+             * Si aucune erreur n'existe,
+             * on la crée automatiquement.
+             */
+
+            if (!error.length) {
+
+                error = $(
+                    '<div class="passwordError"></div>'
+                );
+
+
+                field
+                    .closest('.futureField')
+                    .append(error);
+
+            }
+
+
+            error.html(
+                '<i class="fa fa-circle-exclamation"></i> ' +
+                message
+            );
+
+
+            error.show();
+
+        }
+
+
+        /* =========================================================
+           NETTOYER LA VALIDATION
+        ========================================================= */
+
+        function clearPasswordValidation(
+            container
+        ) {
+
+            container
+                .find('.futureInput')
+                .removeClass(
+                    'passwordMismatch passwordValid'
+                );
+
+
+            container
+                .find('.passwordError')
+                .hide();
+
+        }
+
+
+        /* =========================================================
+           MARQUER UN CHAMP COMME VALIDE
+        ========================================================= */
+
+        function markPasswordValid(
+            field
+        ) {
+
+            const futureInput =
+                field.closest('.futureInput');
+
+
+            futureInput
+                .removeClass('passwordMismatch')
+                .addClass('passwordValid');
+
+
+            const error =
+                field
+                    .closest('.futureField')
+                    .find('.passwordError')
+                    .first();
+
+
+            if (error.length) {
+
+                error.hide();
+
+            }
+
+        }
+
+
+        /* =========================================================
+           VALIDATION EN DIRECT DU MOT DE PASSE
+
+           Dès que l'utilisateur écrit dans le mot de passe
+           ou sa confirmation, on vérifie automatiquement
+           si les deux correspondent.
+        ========================================================= */
+
+        $(document).on(
+            'input',
+            '.futuristicModal [name="password"], .futuristicModal [name="password_confirmation"]',
+            function () {
+
+                const field =
+                    $(this);
+
+
+                const currentContent =
+                    field.closest('.stepContent');
+
+
+                const password =
+                    currentContent.find(
+                        '[name="password"]'
+                    );
+
+
+                const passwordConfirmation =
+                    currentContent.find(
+                        '[name="password_confirmation"]'
+                    );
+
+
+                if (
+                    !password.length ||
+                    !passwordConfirmation.length
+                ) {
+
+                    return;
+
+                }
+
+
+                const passwordValue =
+                    password.val() || '';
+
+
+                const confirmationValue =
+                    passwordConfirmation.val() || '';
+
+
+                /*
+                 * On ne montre pas d'erreur tant que
+                 * la confirmation n'a pas été commencée.
+                 */
+
+                if (!confirmationValue.length) {
+
+                    clearPasswordValidation(
+                        currentContent
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                 * Les mots de passe correspondent.
+                 */
+
+                if (
+                    passwordValue.length &&
+                    passwordValue ===
+                    confirmationValue
+                ) {
+
+                    markPasswordValid(
+                        password
+                    );
+
+
+                    markPasswordValid(
+                        passwordConfirmation
+                    );
+
+
+                    return;
+
+                }
+
+
+                /*
+                 * Les mots de passe sont différents.
+                 */
+
+                showPasswordError(
+                    passwordConfirmation,
+                    'Les mots de passe ne correspondent pas.'
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           UPDATE STEPPER
+        ========================================================= */
+
+        function updateStepper(
+            modal,
+            currentStep
+        ) {
+
+            /*
+             * Le nombre d'étapes est toujours calculé
+             * automatiquement à partir des .stepItem.
+             */
+
+            const totalSteps =
+                modal.find('.stepItem').length;
+
+
+            /* -----------------------------------------------------
+               SÉCURITÉ
+            ----------------------------------------------------- */
+
+            if (currentStep < 1) {
+
+                currentStep = 1;
+
+            }
+
+
+            if (currentStep > totalSteps) {
+
+                currentStep = totalSteps;
+
+            }
+
+
+            /* -----------------------------------------------------
+               RESET DES ÉTAPES
+            ----------------------------------------------------- */
+
+            modal.find('.stepItem')
+                .removeClass('active');
+
+
+            modal.find('.stepContent')
+                .removeClass('active');
+
+
+            /* -----------------------------------------------------
+               ÉTAPE ACTIVE
+            ----------------------------------------------------- */
+
+            const activeItem =
+                modal.find(
+                    `.stepItem[data-step="${currentStep}"]`
+                );
+
+
+            const activeContent =
+                modal.find(
+                    `.stepContent[data-content="${currentStep}"]`
+                );
+
+
+            activeItem.addClass('active');
+
+
+            activeContent.addClass('active');
+
+
+            /* -----------------------------------------------------
+               ANIMATION DU CONTENU
+            ----------------------------------------------------- */
+
+            gsap.fromTo(
+                activeContent,
+                {
+                    opacity: 0,
+                    y: 20
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.4,
+                    ease: "power2.out"
+                }
             );
 
 
             /* -----------------------------------------------------
-               INITIALISATION À L'ÉTAPE 1
+               BOUTON RETOUR
+            ----------------------------------------------------- */
+
+            if (currentStep <= 1) {
+
+                modal.find('.prevStep').hide();
+
+            } else {
+
+                modal.find('.prevStep').show();
+
+            }
+
+
+            /* -----------------------------------------------------
+               BOUTONS CONTINUER / VALIDER
+            ----------------------------------------------------- */
+
+            if (currentStep >= totalSteps) {
+
+                modal.find('.nextStep').hide();
+
+
+                modal.find('.submitStep').show();
+
+            } else {
+
+                modal.find('.nextStep').show();
+
+
+                modal.find('.submitStep').hide();
+
+            }
+
+
+            /* -----------------------------------------------------
+               SAUVEGARDE DE L'ÉTAPE COURANTE
             ----------------------------------------------------- */
 
             modal.attr(
                 'data-step',
-                1
+                currentStep
             );
 
 
-            updateStepper(
-                modal,
-                1
+            /* -----------------------------------------------------
+               MISE À JOUR DU RÉCAPITULATIF
+            ----------------------------------------------------- */
+
+            updateStepperReview(
+                modal
             );
 
-        });
+        }
+
+
+        /* =========================================================
+           STEPPER REVIEW
+
+           MOTEUR GÉNÉRIQUE DE RÉCAPITULATIF
+        ========================================================= */
+
+        function updateStepperReview(
+            modal
+        ) {
+
+            /*
+             * On récupère le formulaire de CE modal.
+             */
+
+            const form =
+                modal.find('form').first();
+
+
+            if (!form.length) {
+
+                return;
+
+            }
+
+
+            /*
+             * Recherche tous les champs possédant :
+             *
+             * data-review="..."
+             */
+
+            form.find('[data-review]').each(
+                function () {
+
+                    const field =
+                        $(this);
+
+
+                    const reviewKey =
+                        field.attr(
+                            'data-review'
+                        );
+
+
+                    if (!reviewKey) {
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Recherche le bloc correspondant :
+                     *
+                     * data-review-value="..."
+                     */
+
+                    const reviewElement =
+                        modal.find(
+                            `[data-review-value="${reviewKey}"]`
+                        );
+
+
+                    if (!reviewElement.length) {
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Récupération de la valeur.
+                     */
+
+                    const value =
+                        getStepperFieldValue(
+                            field
+                        );
+
+
+                    /*
+                     * Affichage.
+                     */
+
+                    reviewElement.text(
+                        value !== null &&
+                        value !== undefined &&
+                        value !== ''
+                            ? value
+                            : '—'
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           GET STEPPER FIELD VALUE
+
+           Gestion automatique de :
+
+           - text
+           - email
+           - number
+           - date
+           - password
+           - textarea
+           - select
+           - checkbox
+           - radio
+           - file
+        ========================================================= */
+
+        function getStepperFieldValue(
+            field
+        ) {
+
+            const tag =
+                field
+                    .prop('tagName')
+                    .toLowerCase();
+
+
+            const type =
+                (
+                    field.attr('type') ||
+                    ''
+                ).toLowerCase();
+
+
+            /* =====================================================
+               SELECT
+            ===================================================== */
+
+            if (tag === 'select') {
+
+                const selected =
+                    field.find(
+                        'option:selected'
+                    );
+
+
+                if (!selected.length) {
+
+                    return '';
+
+                }
+
+
+                /*
+                 * On affiche le texte de l'option
+                 * sélectionnée et non son ID.
+                 */
+
+                return selected
+                    .text()
+                    .trim();
+
+            }
+
+
+            /* =====================================================
+               FILE
+            ===================================================== */
+
+            if (type === 'file') {
+
+                const files =
+                    field[0].files;
+
+
+                if (
+                    !files ||
+                    !files.length
+                ) {
+
+                    return '';
+
+                }
+
+
+                /*
+                 * Affichage du nom des fichiers.
+                 */
+
+                return Array
+                    .from(files)
+                    .map(
+                        function (file) {
+
+                            return file.name;
+
+                        }
+                    )
+                    .join(', ');
+
+            }
+
+
+            /* =====================================================
+               CHECKBOX
+            ===================================================== */
+
+            if (type === 'checkbox') {
+
+                if (!field.is(':checked')) {
+
+                    return '';
+
+                }
+
+
+                /*
+                 * Permet de personnaliser le texte affiché.
+                 */
+
+                return field.attr(
+                    'data-review-label'
+                )
+                || field.val()
+                || 'Oui';
+
+            }
+
+
+            /* =====================================================
+               RADIO
+            ===================================================== */
+
+            if (type === 'radio') {
+
+                const name =
+                    field.attr('name');
+
+
+                if (!name) {
+
+                    return field.is(':checked')
+                        ? field.val()
+                        : '';
+
+                }
+
+
+                return getStepperRadioValue(
+                    field,
+                    name
+                );
+
+            }
+
+
+            /* =====================================================
+               TEXTAREA
+            ===================================================== */
+
+            if (tag === 'textarea') {
+
+                return field
+                    .val()
+                    .trim();
+
+            }
+
+
+            /* =====================================================
+               INPUT CLASSIQUE
+            ===================================================== */
+
+            const value =
+                field.val();
+
+
+            return value !== undefined
+                ? String(value).trim()
+                : '';
+
+        }
+
+
+        /* =========================================================
+           RADIO VALUE
+        ========================================================= */
+
+        function getStepperRadioValue(
+            field,
+            name
+        ) {
+
+            const form =
+                field.closest('form');
+
+
+            const checked =
+                form.find(
+                    `input[type="radio"][name="${name}"]:checked`
+                );
+
+
+            if (!checked.length) {
+
+                return '';
+
+            }
+
+
+            /*
+             * Possibilité d'utiliser un texte personnalisé.
+             */
+
+            return checked.attr(
+                'data-review-label'
+            )
+            || checked.val()
+            || '';
+
+        }
+
+
+        /* =========================================================
+           LIVE REVIEW UPDATE
+
+           Dès que l'utilisateur modifie un champ,
+           le récapitulatif est actualisé.
+        ========================================================= */
+
+        $(document).on(
+            'input change',
+            '.futuristicModal [data-review]',
+            function () {
+
+                const modal =
+                    $(this).closest(
+                        '.futuristicModal'
+                    );
+
+
+                updateStepperReview(
+                    modal
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           INITIALISATION DES STEPPERS
+        ========================================================= */
+
+        $('.futuristicModal[data-stepper="true"]')
+            .each(
+                function () {
+
+                    const modal =
+                        $(this);
+
+
+                    /* -------------------------------------------------
+                       CALCUL AUTOMATIQUE DU NOMBRE D'ÉTAPES
+                    ------------------------------------------------- */
+
+                    const totalSteps =
+                        modal
+                            .find('.stepItem')
+                            .length;
+
+
+                    /* -------------------------------------------------
+                       ENREGISTREMENT DU NOMBRE D'ÉTAPES
+                    ------------------------------------------------- */
+
+                    modal.attr(
+                        'data-max-step',
+                        totalSteps
+                    );
+
+
+                    /* -------------------------------------------------
+                       INITIALISATION À L'ÉTAPE 1
+                    ------------------------------------------------- */
+
+                    modal.attr(
+                        'data-step',
+                        1
+                    );
+
+
+                    updateStepper(
+                        modal,
+                        1
+                    );
+
+                }
+            );
+
+
+    });
+</script> --}}
+<script>
+    $(document).ready(function () {
+
+
+        /* =========================================================
+           RESET COMPLET D'UN MODAL
+           
+           Fonctionne pour TOUS les .futuristicModal :
+           
+           - modal avec stepper
+           - modal sans stepper
+           - modal de création
+           - modal de modification
+           - modal de consultation
+           
+           IMPORTANT :
+           Aucun changement des variables Blade / value.
+           Le reset utilise simplement le comportement natif
+           du formulaire.
+        ========================================================= */
+
+        function resetModal(modal) {
+
+            /* -----------------------------------------------------
+               RÉCUPÉRATION DU FORMULAIRE
+            ----------------------------------------------------- */
+
+            const form =
+                modal.find('form').first();
+
+
+            /* -----------------------------------------------------
+               RESET DU FORMULAIRE
+               
+               reset() remet les champs à leur valeur initiale
+               HTML.
+
+               Exemple :
+               value="ancienne valeur"
+               => revient à "ancienne valeur"
+
+               Pour un formulaire de création vide :
+               => revient à vide.
+            ----------------------------------------------------- */
+
+            if (form.length) {
+
+                form[0].reset();
+
+            }
+
+
+            /* -----------------------------------------------------
+               RESET DES VALIDATIONS PASSWORD
+            ----------------------------------------------------- */
+
+            modal
+                .find('.futureInput')
+                .removeClass(
+                    'passwordMismatch passwordValid'
+                );
+
+
+            modal
+                .find('.passwordError')
+                .remove();
+
+
+            /* -----------------------------------------------------
+               RESET DES PASSWORD TOGGLE
+            ----------------------------------------------------- */
+
+            modal
+                .find('.passwordToggle')
+                .each(function () {
+
+                    const button =
+                        $(this);
+
+
+                    const input =
+                        button
+                            .closest('.futureInput')
+                            .find('input')
+                            .first();
+
+
+                    if (input.length) {
+
+                        input.attr(
+                            'type',
+                            'password'
+                        );
+
+                    }
+
+
+                    const icon =
+                        button.find('i');
+
+
+                    icon
+                        .removeClass('fa-eye-slash')
+                        .addClass('fa-eye');
+
+
+                    button.attr(
+                        'aria-label',
+                        'Afficher le mot de passe'
+                    );
+
+                });
+
+
+            /* -----------------------------------------------------
+               RESET DU STEPPER
+            ----------------------------------------------------- */
+
+            if (
+                modal.attr('data-stepper') === 'true'
+            ) {
+
+                const totalSteps =
+                    modal.find('.stepItem').length;
+
+
+                modal.attr(
+                    'data-max-step',
+                    totalSteps
+                );
+
+
+                modal.attr(
+                    'data-step',
+                    1
+                );
+
+
+                /* -------------------------------------------------
+                   RESET VISUEL DES ÉTAPES
+                ------------------------------------------------- */
+
+                modal
+                    .find('.stepItem')
+                    .removeClass('active');
+
+
+                modal
+                    .find('.stepContent')
+                    .removeClass('active');
+
+
+                /* -------------------------------------------------
+                   PREMIÈRE ÉTAPE
+                ------------------------------------------------- */
+
+                const firstStep =
+                    modal.find(
+                        '.stepItem[data-step="1"]'
+                    );
+
+
+                const firstContent =
+                    modal.find(
+                        '.stepContent[data-content="1"]'
+                    );
+
+
+                firstStep.addClass('active');
+
+
+                firstContent
+                    .addClass('active')
+                    .css({
+                        opacity: 1,
+                        transform: 'none'
+                    });
+
+
+                /* -------------------------------------------------
+                   RESET DES BOUTONS DU STEPPER
+                ------------------------------------------------- */
+
+                modal
+                    .find('.prevStep')
+                    .hide();
+
+
+                if (totalSteps > 1) {
+
+                    modal
+                        .find('.nextStep')
+                        .show();
+
+                } else {
+
+                    modal
+                        .find('.nextStep')
+                        .hide();
+
+                }
+
+
+                modal
+                    .find('.submitStep')
+                    .hide();
+
+            }
+
+
+            /* -----------------------------------------------------
+               RESET DU REVIEW
+            ----------------------------------------------------- */
+
+            modal
+                .find('[data-review-value]')
+                .each(function () {
+
+                    $(this).text('—');
+
+                });
+
+
+            /*
+             * On recalcule le review après le reset.
+             *
+             * Cela permet notamment aux modals de modification
+             * de retrouver leurs valeurs initiales.
+             */
+
+            if (form.length) {
+
+                updateStepperReview(modal);
+
+            }
+
+
+            /* -----------------------------------------------------
+               RESET DES ANIMATIONS GSAP
+            ----------------------------------------------------- */
+
+            gsap.killTweensOf(
+                modal.find(
+                    '.modal-content, .futureField, .headerIcon, .modal-icon, .stepContent'
+                )
+            );
+
+
+            gsap.set(
+                modal.find('.modal-content'),
+                {
+                    scale: 1,
+                    opacity: 1
+                }
+            );
+
+
+            gsap.set(
+                modal.find('.futureField'),
+                {
+                    opacity: 1,
+                    y: 0
+                }
+            );
+
+
+            gsap.set(
+                modal.find('.headerIcon, .modal-icon'),
+                {
+                    scale: 1,
+                    rotation: 0
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           MODAL OPEN ANIMATION
+        ========================================================= */
+
+        $(document).on(
+            'show.bs.modal',
+            '.futuristicModal',
+            function () {
+
+                const modal = $(this);
+
+
+                gsap.set(
+                    modal.find('.modal-content'),
+                    {
+                        scale: 0.92,
+                        opacity: 0
+                    }
+                );
+
+
+                gsap.set(
+                    modal.find('.futureField'),
+                    {
+                        opacity: 0,
+                        y: 20
+                    }
+                );
+
+
+                gsap.set(
+                    modal.find(
+                        '.headerIcon, .modal-icon'
+                    ),
+                    {
+                        scale: 0,
+                        rotation: -90
+                    }
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           MODAL SHOWN
+        ========================================================= */
+
+        $(document).on(
+            'shown.bs.modal',
+            '.futuristicModal',
+            function () {
+
+                const modal = $(this);
+
+
+                /* -------------------------------------------------
+                   RESET DU STEPPER À L'OUVERTURE
+                   
+                   Uniquement pour les modals avec stepper.
+                ------------------------------------------------- */
+
+                if (
+                    modal.attr('data-stepper') === 'true'
+                ) {
+
+                    modal.attr(
+                        'data-step',
+                        1
+                    );
+
+
+                    updateStepper(
+                        modal,
+                        1
+                    );
+
+                }
+
+
+                /* -------------------------------------------------
+                   ANIMATION DU MODAL
+                ------------------------------------------------- */
+
+                const tl =
+                    gsap.timeline();
+
+
+                tl.to(
+                    modal.find('.modal-content'),
+                    {
+                        duration: 0.4,
+                        scale: 1,
+                        opacity: 1,
+                        ease: 'power3.out'
+                    }
+                )
+
+
+                .to(
+                    modal.find(
+                        '.headerIcon, .modal-icon'
+                    ),
+                    {
+                        duration: 0.4,
+                        scale: 1,
+                        rotation: 0,
+                        ease: 'back.out(1.7)'
+                    },
+                    '-=0.2'
+                )
+
+
+                .to(
+                    modal.find('.futureField'),
+                    {
+                        duration: 0.4,
+                        opacity: 1,
+                        y: 0,
+                        stagger: 0.06,
+                        ease: 'power2.out'
+                    },
+                    '-=0.2'
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           FERMETURE DES MODALS
+           
+           On intercepte TOUS les boutons de fermeture :
+           
+           - data-dismiss="modal"       Bootstrap 4
+           - data-bs-dismiss="modal"    Bootstrap 5
+           - .futuristicClose
+           
+           Cela évite de dépendre uniquement du HTML du bouton.
+        ========================================================= */
+
+        $(document).on(
+            'click',
+            '.futuristicModal [data-dismiss="modal"], ' +
+            '.futuristicModal [data-bs-dismiss="modal"], ' +
+            '.futuristicModal .futuristicClose',
+            function (event) {
+
+                event.preventDefault();
+
+
+                const modal =
+                    $(this).closest(
+                        '.futuristicModal'
+                    );
+
+
+                if (!modal.length) {
+
+                    return;
+
+                }
+
+
+                /* -------------------------------------------------
+                   RESET IMMÉDIAT DU FORMULAIRE
+                   
+                   On le fait ici également pour garantir que
+                   le reset se produit même si l'événement
+                   Bootstrap hidden n'est pas déclenché.
+                ------------------------------------------------- */
+
+                resetModal(modal);
+
+
+                /* -------------------------------------------------
+                   BOOTSTRAP 4
+                ------------------------------------------------- */
+
+                if (
+                    typeof modal.modal === 'function'
+                ) {
+
+                    modal.modal('hide');
+
+                    return;
+
+                }
+
+
+                /* -------------------------------------------------
+                   BOOTSTRAP 5
+                ------------------------------------------------- */
+
+                if (
+                    typeof bootstrap !== 'undefined' &&
+                    bootstrap.Modal
+                ) {
+
+                    const instance =
+                        bootstrap.Modal.getOrCreateInstance(
+                            modal[0]
+                        );
+
+
+                    instance.hide();
+
+                    return;
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           MODAL CLOSE ANIMATION
+        ========================================================= */
+
+        $(document).on(
+            'hide.bs.modal',
+            '.futuristicModal',
+            function () {
+
+                const modal = $(this);
+
+
+                gsap.to(
+                    modal.find('.modal-content'),
+                    {
+                        duration: 0.25,
+                        scale: 0.95,
+                        opacity: 0,
+                        ease: 'power2.in'
+                    }
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           MODAL HIDDEN
+           
+           SÉCURITÉ SUPPLÉMENTAIRE
+           
+           Même si le bouton a déjà effectué le reset,
+           on le refait ici.
+           
+           Cela couvre également :
+           
+           - fermeture avec ESC
+           - fermeture via backdrop
+           - fermeture programmée en JS
+           - fermeture via Bootstrap
+        ========================================================= */
+
+        $(document).on(
+            'hidden.bs.modal',
+            '.futuristicModal',
+            function () {
+
+                const modal = $(this);
+
+
+                resetModal(modal);
+
+            }
+        );
+
+
+        /* =========================================================
+           AFFICHER / MASQUER LES MOTS DE PASSE
+        ========================================================= */
+
+        $(document).on(
+            'click',
+            '.passwordToggle',
+            function () {
+
+                const button = $(this);
+
+
+                const input =
+                    button
+                        .closest('.futureInput')
+                        .find('input')
+                        .first();
+
+
+                if (!input.length) {
+
+                    return;
+
+                }
+
+
+                const isPassword =
+                    input.attr('type') === 'password';
+
+
+                input.attr(
+                    'type',
+                    isPassword
+                        ? 'text'
+                        : 'password'
+                );
+
+
+                const icon =
+                    button.find('i');
+
+
+                if (isPassword) {
+
+                    icon
+                        .removeClass('fa-eye')
+                        .addClass('fa-eye-slash');
+
+
+                    button.attr(
+                        'aria-label',
+                        'Masquer le mot de passe'
+                    );
+
+                } else {
+
+                    icon
+                        .removeClass('fa-eye-slash')
+                        .addClass('fa-eye');
+
+
+                    button.attr(
+                        'aria-label',
+                        'Afficher le mot de passe'
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           NEXT STEP
+        ========================================================= */
+
+        $(document).on(
+            'click',
+            '.nextStep',
+            function () {
+
+                const modal =
+                    $(this).closest(
+                        '.futuristicModal'
+                    );
+
+
+                let currentStep =
+                    parseInt(
+                        modal.attr('data-step')
+                    ) || 1;
+
+
+                const totalSteps =
+                    modal.find('.stepItem').length;
+
+
+                /* -------------------------------------------------
+                   VALIDATION DE L'ÉTAPE
+                ------------------------------------------------- */
+
+                if (
+                    !validateCurrentStep(
+                        modal,
+                        currentStep
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                /* -------------------------------------------------
+                   ÉTAPE SUIVANTE
+                ------------------------------------------------- */
+
+                if (
+                    currentStep < totalSteps
+                ) {
+
+                    currentStep++;
+
+
+                    updateStepper(
+                        modal,
+                        currentStep
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           PREVIOUS STEP
+        ========================================================= */
+
+        $(document).on(
+            'click',
+            '.prevStep',
+            function () {
+
+                const modal =
+                    $(this).closest(
+                        '.futuristicModal'
+                    );
+
+
+                let currentStep =
+                    parseInt(
+                        modal.attr('data-step')
+                    ) || 1;
+
+
+                if (currentStep > 1) {
+
+                    currentStep--;
+
+
+                    updateStepper(
+                        modal,
+                        currentStep
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           VALIDATION DE L'ÉTAPE COURANTE
+        ========================================================= */
+
+        function validateCurrentStep(
+            modal,
+            currentStep
+        ) {
+
+            const currentContent =
+                modal.find(
+                    `.stepContent[data-content="${currentStep}"]`
+                );
+
+
+            if (!currentContent.length) {
+
+                return true;
+
+            }
+
+
+            /* -----------------------------------------------------
+               MOT DE PASSE
+            ----------------------------------------------------- */
+
+            const password =
+                currentContent.find(
+                    '[name="password"]'
+                );
+
+
+            const passwordConfirmation =
+                currentContent.find(
+                    '[name="password_confirmation"]'
+                );
+
+
+            /*
+             * Si l'étape ne contient pas de mot de passe,
+             * aucune validation spécifique.
+             */
+
+            if (
+                !password.length ||
+                !passwordConfirmation.length
+            ) {
+
+                return true;
+
+            }
+
+
+            const passwordValue =
+                password.val() || '';
+
+
+            const confirmationValue =
+                passwordConfirmation.val() || '';
+
+
+            clearPasswordValidation(
+                currentContent
+            );
+
+
+            /* -----------------------------------------------------
+               MOT DE PASSE VIDE
+            ----------------------------------------------------- */
+
+            if (!passwordValue.trim()) {
+
+                showPasswordError(
+                    password,
+                    'Veuillez saisir un mot de passe.'
+                );
+
+
+                password.trigger('focus');
+
+
+                return false;
+
+            }
+
+
+            /* -----------------------------------------------------
+               CONFIRMATION VIDE
+            ----------------------------------------------------- */
+
+            if (!confirmationValue.trim()) {
+
+                showPasswordError(
+                    passwordConfirmation,
+                    'Veuillez confirmer votre mot de passe.'
+                );
+
+
+                passwordConfirmation.trigger(
+                    'focus'
+                );
+
+
+                return false;
+
+            }
+
+
+            /* -----------------------------------------------------
+               MOTS DE PASSE DIFFÉRENTS
+            ----------------------------------------------------- */
+
+            if (
+                passwordValue !==
+                confirmationValue
+            ) {
+
+                showPasswordError(
+                    passwordConfirmation,
+                    'Les mots de passe ne correspondent pas.'
+                );
+
+
+                passwordConfirmation.trigger(
+                    'focus'
+                );
+
+
+                return false;
+
+            }
+
+
+            /* -----------------------------------------------------
+               MOTS DE PASSE VALIDES
+            ----------------------------------------------------- */
+
+            markPasswordValid(
+                password
+            );
+
+
+            markPasswordValid(
+                passwordConfirmation
+            );
+
+
+            return true;
+
+        }
+
+
+        /* =========================================================
+           AFFICHER UNE ERREUR PASSWORD
+        ========================================================= */
+
+        function showPasswordError(
+            field,
+            message
+        ) {
+
+            const futureInput =
+                field.closest('.futureInput');
+
+
+            futureInput
+                .addClass('passwordMismatch')
+                .removeClass('passwordValid');
+
+
+            let error =
+                field
+                    .closest('.futureField')
+                    .find('.passwordError')
+                    .first();
+
+
+            if (!error.length) {
+
+                error = $(
+                    '<div class="passwordError"></div>'
+                );
+
+
+                field
+                    .closest('.futureField')
+                    .append(error);
+
+            }
+
+
+            error.html(
+                '<i class="fa fa-circle-exclamation"></i> ' +
+                message
+            );
+
+
+            error.show();
+
+        }
+
+
+        /* =========================================================
+           NETTOYER LA VALIDATION PASSWORD
+        ========================================================= */
+
+        function clearPasswordValidation(
+            container
+        ) {
+
+            container
+                .find('.futureInput')
+                .removeClass(
+                    'passwordMismatch passwordValid'
+                );
+
+
+            container
+                .find('.passwordError')
+                .hide();
+
+        }
+
+
+        /* =========================================================
+           MARQUER PASSWORD COMME VALIDE
+        ========================================================= */
+
+        function markPasswordValid(
+            field
+        ) {
+
+            const futureInput =
+                field.closest('.futureInput');
+
+
+            futureInput
+                .removeClass('passwordMismatch')
+                .addClass('passwordValid');
+
+
+            const error =
+                field
+                    .closest('.futureField')
+                    .find('.passwordError')
+                    .first();
+
+
+            if (error.length) {
+
+                error.hide();
+
+            }
+
+        }
+
+
+        /* =========================================================
+           VALIDATION PASSWORD EN DIRECT
+        ========================================================= */
+
+        $(document).on(
+            'input',
+            '.futuristicModal [name="password"], ' +
+            '.futuristicModal [name="password_confirmation"]',
+            function () {
+
+                const field =
+                    $(this);
+
+
+                const currentContent =
+                    field.closest('.stepContent');
+
+
+                const password =
+                    currentContent.find(
+                        '[name="password"]'
+                    );
+
+
+                const passwordConfirmation =
+                    currentContent.find(
+                        '[name="password_confirmation"]'
+                    );
+
+
+                if (
+                    !password.length ||
+                    !passwordConfirmation.length
+                ) {
+
+                    return;
+
+                }
+
+
+                const passwordValue =
+                    password.val() || '';
+
+
+                const confirmationValue =
+                    passwordConfirmation.val() || '';
+
+
+                /* -------------------------------------------------
+                   PAS ENCORE DE CONFIRMATION
+                ------------------------------------------------- */
+
+                if (
+                    !confirmationValue.length
+                ) {
+
+                    clearPasswordValidation(
+                        currentContent
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* -------------------------------------------------
+                   CORRESPONDANCE
+                ------------------------------------------------- */
+
+                if (
+                    passwordValue.length &&
+                    passwordValue ===
+                    confirmationValue
+                ) {
+
+                    markPasswordValid(
+                        password
+                    );
+
+
+                    markPasswordValid(
+                        passwordConfirmation
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* -------------------------------------------------
+                   DIFFÉRENTS
+                ------------------------------------------------- */
+
+                showPasswordError(
+                    passwordConfirmation,
+                    'Les mots de passe ne correspondent pas.'
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           UPDATE STEPPER
+        ========================================================= */
+
+        function updateStepper(
+            modal,
+            currentStep
+        ) {
+
+            const totalSteps =
+                modal.find('.stepItem').length;
+
+
+            /* -----------------------------------------------------
+               SÉCURITÉ
+            ----------------------------------------------------- */
+
+            if (currentStep < 1) {
+
+                currentStep = 1;
+
+            }
+
+
+            if (
+                totalSteps > 0 &&
+                currentStep > totalSteps
+            ) {
+
+                currentStep = totalSteps;
+
+            }
+
+
+            /* -----------------------------------------------------
+               RESET DES ÉTAPES
+            ----------------------------------------------------- */
+
+            modal
+                .find('.stepItem')
+                .removeClass('active');
+
+
+            modal
+                .find('.stepContent')
+                .removeClass('active');
+
+
+            /* -----------------------------------------------------
+               ÉTAPE ACTIVE
+            ----------------------------------------------------- */
+
+            const activeItem =
+                modal.find(
+                    `.stepItem[data-step="${currentStep}"]`
+                );
+
+
+            const activeContent =
+                modal.find(
+                    `.stepContent[data-content="${currentStep}"]`
+                );
+
+
+            activeItem.addClass('active');
+
+
+            activeContent.addClass('active');
+
+
+            /* -----------------------------------------------------
+               ANIMATION DU CONTENU
+            ----------------------------------------------------- */
+
+            if (activeContent.length) {
+
+                gsap.fromTo(
+                    activeContent,
+                    {
+                        opacity: 0,
+                        y: 20
+                    },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.4,
+                        ease: 'power2.out'
+                    }
+                );
+
+            }
+
+
+            /* -----------------------------------------------------
+               BOUTON RETOUR
+            ----------------------------------------------------- */
+
+            if (currentStep <= 1) {
+
+                modal
+                    .find('.prevStep')
+                    .hide();
+
+            } else {
+
+                modal
+                    .find('.prevStep')
+                    .show();
+
+            }
+
+
+            /* -----------------------------------------------------
+               CONTINUER / VALIDER
+            ----------------------------------------------------- */
+
+            if (
+                totalSteps > 0 &&
+                currentStep >= totalSteps
+            ) {
+
+                modal
+                    .find('.nextStep')
+                    .hide();
+
+
+                modal
+                    .find('.submitStep')
+                    .show();
+
+            } else {
+
+                modal
+                    .find('.nextStep')
+                    .show();
+
+
+                modal
+                    .find('.submitStep')
+                    .hide();
+
+            }
+
+
+            /* -----------------------------------------------------
+               SAUVEGARDE DE L'ÉTAPE
+            ----------------------------------------------------- */
+
+            modal.attr(
+                'data-step',
+                currentStep
+            );
+
+
+            /* -----------------------------------------------------
+               REVIEW
+            ----------------------------------------------------- */
+
+            updateStepperReview(
+                modal
+            );
+
+        }
+
+
+        /* =========================================================
+           STEPPER REVIEW
+        ========================================================= */
+
+        function updateStepperReview(
+            modal
+        ) {
+
+            const form =
+                modal.find('form').first();
+
+
+            if (!form.length) {
+
+                return;
+
+            }
+
+
+            form
+                .find('[data-review]')
+                .each(function () {
+
+                    const field =
+                        $(this);
+
+
+                    const reviewKey =
+                        field.attr(
+                            'data-review'
+                        );
+
+
+                    if (!reviewKey) {
+
+                        return;
+
+                    }
+
+
+                    const reviewElement =
+                        modal.find(
+                            `[data-review-value="${reviewKey}"]`
+                        );
+
+
+                    if (!reviewElement.length) {
+
+                        return;
+
+                    }
+
+
+                    const value =
+                        getStepperFieldValue(
+                            field
+                        );
+
+
+                    reviewElement.text(
+                        value !== null &&
+                        value !== undefined &&
+                        value !== ''
+                            ? value
+                            : '—'
+                    );
+
+                });
+
+        }
+
+
+        /* =========================================================
+           GET STEPPER FIELD VALUE
+        ========================================================= */
+
+        function getStepperFieldValue(
+            field
+        ) {
+
+            const tag =
+                field
+                    .prop('tagName')
+                    .toLowerCase();
+
+
+            const type =
+                (
+                    field.attr('type') ||
+                    ''
+                ).toLowerCase();
+
+
+            /* -----------------------------------------------------
+               SELECT
+            ----------------------------------------------------- */
+
+            if (tag === 'select') {
+
+                const selected =
+                    field.find(
+                        'option:selected'
+                    );
+
+
+                if (!selected.length) {
+
+                    return '';
+
+                }
+
+
+                return selected
+                    .text()
+                    .trim();
+
+            }
+
+
+            /* -----------------------------------------------------
+               FILE
+            ----------------------------------------------------- */
+
+            if (type === 'file') {
+
+                const files =
+                    field[0].files;
+
+
+                if (
+                    !files ||
+                    !files.length
+                ) {
+
+                    return '';
+
+                }
+
+
+                return Array
+                    .from(files)
+                    .map(
+                        function (file) {
+
+                            return file.name;
+
+                        }
+                    )
+                    .join(', ');
+
+            }
+
+
+            /* -----------------------------------------------------
+               CHECKBOX
+            ----------------------------------------------------- */
+
+            if (type === 'checkbox') {
+
+                if (!field.is(':checked')) {
+
+                    return '';
+
+                }
+
+
+                return field.attr(
+                    'data-review-label'
+                )
+                || field.val()
+                || 'Oui';
+
+            }
+
+
+            /* -----------------------------------------------------
+               RADIO
+            ----------------------------------------------------- */
+
+            if (type === 'radio') {
+
+                const name =
+                    field.attr('name');
+
+
+                if (!name) {
+
+                    return field.is(':checked')
+                        ? field.val()
+                        : '';
+
+                }
+
+
+                return getStepperRadioValue(
+                    field,
+                    name
+                );
+
+            }
+
+
+            /* -----------------------------------------------------
+               TEXTAREA
+            ----------------------------------------------------- */
+
+            if (tag === 'textarea') {
+
+                return field
+                    .val()
+                    .trim();
+
+            }
+
+
+            /* -----------------------------------------------------
+               INPUT CLASSIQUE
+            ----------------------------------------------------- */
+
+            const value =
+                field.val();
+
+
+            return value !== undefined
+                ? String(value).trim()
+                : '';
+
+        }
+
+
+        /* =========================================================
+           RADIO VALUE
+        ========================================================= */
+
+        function getStepperRadioValue(
+            field,
+            name
+        ) {
+
+            const form =
+                field.closest('form');
+
+
+            const checked =
+                form.find(
+                    `input[type="radio"][name="${name}"]:checked`
+                );
+
+
+            if (!checked.length) {
+
+                return '';
+
+            }
+
+
+            return checked.attr(
+                'data-review-label'
+            )
+            || checked.val()
+            || '';
+
+        }
+
+
+        /* =========================================================
+           LIVE REVIEW UPDATE
+        ========================================================= */
+
+        $(document).on(
+            'input change',
+            '.futuristicModal [data-review]',
+            function () {
+
+                const modal =
+                    $(this).closest(
+                        '.futuristicModal'
+                    );
+
+
+                updateStepperReview(
+                    modal
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           INITIALISATION DES STEPPERS
+        ========================================================= */
+
+        $('.futuristicModal[data-stepper="true"]')
+            .each(function () {
+
+                const modal =
+                    $(this);
+
+
+                const totalSteps =
+                    modal
+                        .find('.stepItem')
+                        .length;
+
+
+                modal.attr(
+                    'data-max-step',
+                    totalSteps
+                );
+
+
+                modal.attr(
+                    'data-step',
+                    1
+                );
+
+
+                updateStepper(
+                    modal,
+                    1
+                );
+
+            });
 
 
     });
