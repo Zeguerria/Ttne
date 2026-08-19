@@ -253,10 +253,88 @@
         futureModal .55s ease;
 
     }
-    .futuristicModal .modal-dialog .monstepper {
+    /* .futuristicModal .monstepper {
         max-width: 45vw;
         width: 45vw;
+    } */
+     /* .futuristicModal .monstepper {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+@media (max-width: 768px) {
+
+    .futuristicModal .modal-dialog {
+        width: 95%;
+        max-width: none;
+        margin: 1rem auto;
     }
+
+    .futuristicModal .monstepper {
+        width: 100%;
+        max-width: none;
+    }
+
+} */
+ /* =========================================
+   MODAL
+========================================= */
+
+.futuristicModal .modal-dialog {
+    width: 95%;
+    max-width: 1000px;
+    margin: 1.75rem auto;
+}
+
+/* =========================================
+   STEPPER
+========================================= */
+
+.futuristicModal .monstepper {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   TABLETTE
+========================================= */
+
+@media (max-width: 992px) {
+
+    .futuristicModal .modal-dialog {
+        width: 94%;
+        max-width: 850px;
+    }
+
+    .futuristicModal .monstepper {
+        max-width: 100%;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 576px) {
+
+    .futuristicModal .modal-dialog {
+        width: calc(100% - 20px);
+        max-width: none;
+        margin: 10px auto;
+    }
+
+    .futuristicModal .monstepper {
+        width: 100%;
+        max-width: none;
+    }
+
+    .futuristicModal .modal-content {
+        width: 100%;
+    }
+}
 
     @keyframes futureModal{
 
@@ -1643,3 +1721,8 @@ RESPONSIVE
         border-color: #28d17c;
     }
 /* GESTION DU MOT DE PASSE DE LA CONFIRMATION DANS LE STEEPER FIN */
+/* MON ESPACE INTER INPUT DEBUT */
+    .inter-input{
+        padding-top: 20px;
+    }
+/* MON ESPACE INTER INPUT N */

@@ -77,6 +77,7 @@ class UserController extends Controller
                 )
                 ->orderBy('libelle')
                 ->get(),
+                'typesPieces' => Parametre::where('supprimer', 0)->where('type_parametre_id','3')->orderBy('libelle')->get(),
 
                 'historiques' => $historiques
 
