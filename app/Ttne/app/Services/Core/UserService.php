@@ -80,7 +80,8 @@ class UserService
 
             'profil_id' => $data['profil_id'],
 
-            'statut_compte_id' => $data['statut_compte_id'],
+            // 'statut_compte_id' => $data['statut_compte_id'],
+            'statut_compte_id' => 3,
 
             'telephone' => $data['telephone'],
 

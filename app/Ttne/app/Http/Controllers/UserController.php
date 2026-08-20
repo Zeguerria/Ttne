@@ -92,42 +92,140 @@ class UserController extends Controller
     */
 
     public function store(Request $request)
-    {
-        $data = $request->validate([
+{
+    $data = $request->validate([
 
-            // Informations personnelles
-            'name' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'telephone' => 'required|string|max:30|unique:users,telephone',
-            'email' => 'required|email|max:255|unique:users,email',
-            'date_naissance' => 'nullable|date',
-            // Profil
-            'profil_id' => 'required|exists:profils,id',
-            // Statut
-            'statut_compte_id' => 'required|exists:parametres,id',
-            // Authentification
-            'password' => 'required|confirmed|min:8',
-            // Photo
-            'photo' => 'nullable|image|mimes:jpg,jpeg,pdf,png,jfif|max:2048',
-        ]);
+        /*
+        |--------------------------------------------------------------------------
+        | INFORMATIONS PERSONNELLES
+        |--------------------------------------------------------------------------
+        */
 
-        try {
+        'name' => 'required|string|max:255',
 
-            UserService::store($data);
-            toast(
-                'Utilisateur créé avec succès',
-                'success'
-            );
+        'prenom' => 'required|string|max:255',
 
-        } catch (Exception $e) {
+        'telephone' => [
+            'required',
+            'string',
+            'max:30',
+            'unique:users,telephone',
+        ],
 
-            toast(
-                $e->getMessage(),
-                'error'
-            );
+        'email' => [
+            'required',
+            'email',
+            'max:255',
+            'unique:users,email',
+        ],
 
-        }
+        'date_naissance' => [
+            'nullable',
+            'date',
+        ],
 
-        return back();
+
+        /*
+        |--------------------------------------------------------------------------
+        | PROFIL
+        |--------------------------------------------------------------------------
+        */
+
+        'profil_id' => [
+            'required',
+            'exists:profils,id',
+        ],
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | STATUT
+        |--------------------------------------------------------------------------
+        */
+
+        'statut_compte_id' => [
+            'nullable',
+            'exists:parametres,id',
+        ],
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | AUTHENTIFICATION
+        |--------------------------------------------------------------------------
+        */
+
+        'password' => [
+            'required',
+            'confirmed',
+            'min:8',
+        ],
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PHOTO UTILISATEUR
+        |--------------------------------------------------------------------------
+        */
+
+        'photo' => [
+            'nullable',
+            'image',
+            'mimes:jpg,jpeg,png,jfif,webp',
+            'max:2048',
+        ],
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PIÈCE D'IDENTITÉ
+        |--------------------------------------------------------------------------
+        */
+
+        'type_piece_id' => [
+            'required',
+            'exists:parametres,id',
+        ],
+
+        'numero' => [
+            'required',
+            'string',
+            'max:255',
+        ],
+
+        'date_expiration' => [
+            'nullable',
+            'date',
+        ],
+
+        'fichier' => [
+            'required',
+            'file',
+            'mimes:pdf,jpg,jpeg,png,webp',
+            'max:5120',
+        ],
+
+    ]);
+
+
+    try {
+
+        UserService::store($data);
+
+        toast(
+            'Utilisateur créé avec succès',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+
     }
+
+    return back();
+}
 }

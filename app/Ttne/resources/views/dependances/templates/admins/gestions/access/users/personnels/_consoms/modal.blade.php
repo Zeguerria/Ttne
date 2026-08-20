@@ -9,7 +9,7 @@
                 <div class="modal-dialog modal-xl modal-dialog-centered monstepper">
 
                     <div class="modal-content futuristicContent ">
-                        <form id="futureStepperForm" method="POST" enctype="multipart/form-data">
+                        <form id="futureStepperForm" method="POST" action="{{ route('AjouterUser') }}"  enctype="multipart/form-data">
                             @csrf
                             <!-- LIGHT -->
                             <div class="modalLight"></div>
@@ -677,6 +677,487 @@
 
                         </div>
                     {{-- CORBEILLE FIN --}}
+                    {{-- =========================================================
+     PIÈCE D'IDENTITÉ DEBUT
+========================================================= --}}
+
+@php
+
+    $piece = $value->pieces->first();
+
+@endphp
+
+@if($piece)
+
+    <div
+        id="piece{{ $piece->id }}"
+        class="modal modal-edu-general fade futuristicModal"
+        tabindex="-1"
+        role="dialog"
+        aria-hidden="true"
+    >
+
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+
+            <div class="modal-content futuristicContent">
+
+                {{-- =================================================
+                     BACK LIGHT
+                ================================================== --}}
+
+                <div class="modalLight"></div>
+
+
+                {{-- =================================================
+                     HEADER
+                ================================================== --}}
+
+                <div class="modal-header futuristicHeader">
+
+                    <div class="headerLeft">
+
+                        <div class="headerIcon">
+
+                            <i class="fa fa-id-card"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h4 class="modal-title futuristicTitle">
+
+                                Consultation de la pièce
+
+                            </h4>
+
+
+                            <p class="futuristicSubTitle">
+
+                                {{ $value->prenom }}
+                                {{ $value->name }}
+
+                                @if($piece->typePiece)
+
+                                    — {{ $piece->typePiece->libelle }}
+
+                                @endif
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    {{-- FERMER --}}
+                    <button
+                        type="button"
+                        class="close futuristicClose"
+                        data-dismiss="modal"
+                    >
+
+                        <span>&times;</span>
+
+                    </button>
+
+                </div>
+
+
+                {{-- =================================================
+                     BODY
+                ================================================== --}}
+
+                <div class="modal-body futuristicBody">
+
+                    <div class="form">
+
+                        <div class="container-fluid">
+
+                            <div class="row">
+
+
+                                {{-- =================================================
+                                     INFORMATIONS DE LA PIÈCE
+                                ================================================== --}}
+
+                                <div class="col-12 col-md-5">
+
+
+                                    {{-- TYPE DE PIÈCE --}}
+                                    <div class="futureField">
+
+                                        <label>
+
+                                            <i class="fa fa-id-card"></i>
+
+                                            Type de pièce
+
+                                        </label>
+
+
+                                        <div class="futureInput">
+
+                                            <i class="fa fa-id-card inputIcon"></i>
+
+                                            <input
+                                                type="text"
+                                                value="{{ $piece->typePiece->libelle ?? 'Non défini' }}"
+                                                readonly
+                                            >
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {{-- NUMÉRO --}}
+                                    <div class="futureField">
+
+                                        <label>
+
+                                            <i class="fa fa-hashtag"></i>
+
+                                            Numéro de la pièce
+
+                                        </label>
+
+
+                                        <div class="futureInput">
+
+                                            <i class="fa fa-hashtag inputIcon"></i>
+
+                                            <input
+                                                type="text"
+                                                value="{{ $piece->numero ?? 'Non renseigné' }}"
+                                                readonly
+                                            >
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {{-- DATE D'EXPIRATION --}}
+                                    <div class="futureField">
+
+                                        <label>
+
+                                            <i class="fa fa-calendar-times"></i>
+
+                                            Date d'expiration
+
+                                        </label>
+
+
+                                        <div class="futureInput">
+
+                                            <i class="fa fa-calendar-times inputIcon"></i>
+
+                                            <input
+                                                type="text"
+                                                value="{{
+                                                    $piece->date_expiration
+                                                        ? \Carbon\Carbon::parse($piece->date_expiration)->format('d/m/Y')
+                                                        : 'Non renseignée'
+                                                }}"
+                                                readonly
+                                            >
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {{-- TYPE MIME --}}
+                                    <div class="futureField">
+
+                                        <label>
+
+                                            <i class="fa fa-file"></i>
+
+                                            Type de fichier
+
+                                        </label>
+
+
+                                        <div class="futureInput">
+
+                                            <i class="fa fa-file inputIcon"></i>
+
+                                            <input
+                                                type="text"
+                                                value="{{ $piece->mime_type ?? 'Non renseigné' }}"
+                                                readonly
+                                            >
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {{-- NOM DU FICHIER --}}
+                                    <div class="futureField">
+
+                                        <label>
+
+                                            <i class="fa fa-paperclip"></i>
+
+                                            Document
+
+                                        </label>
+
+
+                                        <div class="futureInput">
+
+                                            <i class="fa fa-file-alt inputIcon"></i>
+
+                                            <input
+                                                type="text"
+                                                value="{{
+                                                    $piece->fichier
+                                                        ? basename($piece->fichier)
+                                                        : 'Aucun fichier'
+                                                }}"
+                                                readonly
+                                            >
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                {{-- =================================================
+                                     APERÇU DOCUMENT
+                                ================================================== --}}
+
+                                <div class="col-12 col-md-7">
+
+                                    <div class="futureField">
+
+                                        <label>
+
+                                            <i class="fa fa-file-alt"></i>
+
+                                            Aperçu du document
+
+                                        </label>
+
+
+                                        @if($piece->fichier)
+
+                                            @php
+
+                                                $extension = strtolower(
+                                                    pathinfo(
+                                                        $piece->fichier,
+                                                        PATHINFO_EXTENSION
+                                                    )
+                                                );
+
+                                                $documentUrl = asset(
+                                                    'storage/' . $piece->fichier
+                                                );
+
+                                            @endphp
+
+
+                                            {{-- =====================================
+                                                 PDF
+                                            ====================================== --}}
+
+                                            @if($extension === 'pdf')
+
+                                                <div
+                                                    style="
+                                                        width:100%;
+                                                        height:500px;
+                                                        overflow:hidden;
+                                                        border-radius:12px;
+                                                        background:rgba(0,0,0,.25);
+                                                        border:1px solid rgba(255,255,255,.08);
+                                                    "
+                                                >
+
+                                                    <iframe
+                                                        src="{{ $documentUrl }}"
+                                                        title="Document PDF"
+                                                        style="
+                                                            width:100%;
+                                                            height:100%;
+                                                            border:none;
+                                                        "
+                                                    ></iframe>
+
+                                                </div>
+
+
+                                            {{-- =====================================
+                                                 IMAGE
+                                            ====================================== --}}
+
+                                            @elseif(
+                                                in_array(
+                                                    $extension,
+                                                    [
+                                                        'jpg',
+                                                        'jpeg',
+                                                        'png',
+                                                        'webp',
+                                                        'jfif'
+                                                    ]
+                                                )
+                                            )
+
+                                                <div
+                                                    style="
+                                                        width:100%;
+                                                        height:500px;
+                                                        display:flex;
+                                                        align-items:center;
+                                                        justify-content:center;
+                                                        overflow:auto;
+                                                        border-radius:12px;
+                                                        background:rgba(0,0,0,.25);
+                                                        border:1px solid rgba(255,255,255,.08);
+                                                        padding:15px;
+                                                    "
+                                                >
+
+                                                    <img
+                                                        src="{{ $documentUrl }}"
+                                                        alt="Document d'identité"
+                                                        style="
+                                                            max-width:100%;
+                                                            max-height:470px;
+                                                            object-fit:contain;
+                                                            border-radius:8px;
+                                                        "
+                                                    >
+
+                                                </div>
+
+
+                                            {{-- =====================================
+                                                 AUTRE FORMAT
+                                            ====================================== --}}
+
+                                            @else
+
+                                                <div class="futureEmpty">
+
+                                                    <i class="fa fa-file fa-3x mb-3"></i>
+
+                                                    <h5>
+
+                                                        Aperçu indisponible
+
+                                                    </h5>
+
+                                                    <p>
+
+                                                        Ce type de fichier ne peut pas
+                                                        être affiché directement.
+
+                                                    </p>
+
+                                                </div>
+
+                                            @endif
+
+
+                                        @else
+
+                                            {{-- =====================================
+                                                 AUCUN DOCUMENT
+                                            ====================================== --}}
+
+                                            <div class="futureEmpty">
+
+                                                <i class="fa fa-file fa-3x mb-3"></i>
+
+                                                <h5>
+
+                                                    Aucun document
+
+                                                </h5>
+
+                                                <p>
+
+                                                    Aucun fichier n'est associé
+                                                    à cette pièce.
+
+                                                </p>
+
+                                            </div>
+
+                                        @endif
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {{-- =================================================
+                     FOOTER
+                ================================================== --}}
+
+                <div class="modal-footer futuristicFooter">
+
+                    @if($piece->fichier)
+
+                        <a
+                            href="{{ asset('storage/' . $piece->fichier) }}"
+                            target="_blank"
+                            class="futureBtn infoBtn"
+                        >
+
+                            <i class="fa fa-external-link-alt"></i>
+
+                            Ouvrir le document
+
+                        </a>
+
+                    @endif
+
+
+                    <button
+                        type="button"
+                        data-dismiss="modal"
+                        class="futureBtn dangerBtn"
+                    >
+
+                        <i class="fa fa-times"></i>
+
+                        Fermer
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+@endif
+
+{{-- =========================================================
+     PIÈCE D'IDENTITÉ FIN
+========================================================= --}}
+
+
                 @endforeach
             {{-- AUTRES MODALS FIN --}}
 

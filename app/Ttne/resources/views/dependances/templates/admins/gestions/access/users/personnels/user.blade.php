@@ -353,6 +353,19 @@
                                             CODE
 
                                         </th>
+                                        {{-- CODE --}}
+                                        <th>
+
+                                            CODE
+
+                                        </th>
+
+                                       
+                                         <th>
+
+                                            CODE
+
+                                        </th>
 
 
 
@@ -399,190 +412,8 @@
                                 {{-- TABLE BODY --}}
                                 <tbody id="futureTableBody">
 
-                                    @forelse($users as $key => $value)
+                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._datas.grandecran')
 
-                                    <tr
-                                        class="futureRow"
-                                        data-row="{{ $value->id }}"
-                                    >
-
-                                        {{-- CHECKBOX --}}
-                                        <td>
-
-                                            <input
-                                                type="checkbox"
-                                                class="futureCheckbox rowCheckbox"
-                                                data-row="{{ $value->id }}"
-                                            >
-
-                                        </td>
-
-
-
-                                        {{-- INDEX --}}
-                                        <td>
-
-                                            {{ $key + 1 }}
-
-                                        </td>
-
-
-
-                                        {{-- CODE --}}
-                                        <td>
-
-                                            <span class="futureCode">
-
-                                                {{ $value->slug }}
-
-                                            </span>
-
-                                        </td>
-
-
-
-                                        {{-- LIBELLE --}}
-                                        <td>
-
-                                            {{ $value->libelle }}
-
-                                        </td>
-                                       <td class="">
-
-                                            <form action="{{ route('profils.switchValidateur') }}"
-                                                method="POST"
-                                                class="d-inline">
-
-                                                @csrf
-                                                @method('PATCH')
-
-                                                <input
-                                                    type="hidden"
-                                                    name="id"
-                                                    value="{{ $value->id }}">
-
-                                                <div class="form-check form-switch d-flex justify-content-center">
-
-                                                    <input
-                                                        class="form-check-input"
-                                                        type="checkbox"
-                                                        role="switch"
-                                                        {{ $value->est_validateur ? 'checked' : '' }}
-                                                        onchange="this.form.submit()">
-
-                                                </div>
-
-                                            </form>
-
-                                        </td>
-
-
-
-                                        {{-- DESCRIPTION --}}
-                                        <td>
-
-                                            @if($value->description)
-
-                                                {{ $value->description }}
-
-                                            @else
-
-                                                <span class="futureEmptyText">
-
-                                                    Aucune observation
-
-                                                </span>
-
-                                            @endif
-
-                                        </td>
-
-
-
-                                        {{-- ACTIONS --}}
-                                        <td>
-
-                                            <div class="futureActions">
-
-                                                {{-- CONSULTER --}}
-                                                <button
-                                                    class="futureMiniBtn infoBtn"
-                                                    data-bs-toggle="tooltip"
-                                                    data-placement="bottom"
-                                                    data-toggle="modal"
-                                                    data-target="#consulter{{$value->id}}"
-                                                    title="Consulter"
-                                                    type="button"
-                                                >
-
-                                                    <i class="fa fa-eye"></i>
-
-                                                </button>
-
-
-
-                                                {{-- MODIFIER --}}
-                                                <button
-                                                    class="futureMiniBtn warningBtn"
-                                                    data-bs-toggle="tooltip"
-                                                    data-placement="bottom"
-                                                    data-toggle="modal"
-                                                    data-target="#modifier{{$value->id}}"
-                                                    title="Modifier"
-                                                    type="button"
-                                                >
-
-                                                    <i class="fa fa-edit"></i>
-
-                                                </button>
-
-
-
-                                                {{-- DELETE --}}
-                                                <button
-                                                    class="futureMiniBtn dangerBtn"
-                                                    data-bs-toggle="tooltip"
-                                                    data-placement="bottom"
-                                                    data-toggle="modal"
-                                                    data-target="#corbeille{{$value->id}}"
-                                                    title="Supprimer"
-                                                    type="button"
-                                                >
-
-                                                    <i class="fa fa-trash"></i>
-
-                                                </button>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-                                    @empty
-
-                                    {{-- EMPTY --}}
-                                    <tr>
-
-                                        <td colspan="6">
-
-                                            <div class="futureEmpty">
-
-                                                <i class="fa fa-database mb-3"></i>
-
-                                                <h5>
-
-                                                    Aucune donnée trouvée
-
-                                                </h5>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-                                    @endforelse
 
                                 </tbody>
 
