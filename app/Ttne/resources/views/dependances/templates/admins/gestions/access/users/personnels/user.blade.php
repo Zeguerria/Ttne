@@ -347,46 +347,46 @@
 
 
 
-                                        {{-- CODE --}}
+                                        {{-- PHOTO PROFIL --}}
                                         <th>
 
-                                            CODE
+                                            PHOTO PROFIL
 
                                         </th>
                                         {{-- CODE --}}
                                         <th>
 
-                                            CODE
+                                            NOM & PRENOM
 
                                         </th>
 
-                                       
+
                                          <th>
 
-                                            CODE
+                                            PROFIL
 
                                         </th>
 
 
 
-                                        {{-- LIBELLE --}}
+                                        {{-- CONTACT --}}
                                         <th>
 
-                                            LIBELLÉ
+                                            EMAIL
 
                                         </th>
                                         <th>
 
-                                            DROIT
+                                            CONTACT
 
                                         </th>
 
 
 
-                                        {{-- DESCRIPTION --}}
+                                        {{-- PIECE --}}
                                         <th>
 
-                                            DESCRIPTION
+                                            PIECE
 
                                         </th>
 

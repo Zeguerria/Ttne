@@ -249,433 +249,1139 @@
             {{-- AUTRES MODALS DEBUT --}}
                 @foreach($users as $key => $value)
                     {{-- CONSULTER DEBUT --}}
-                        <div id="consulter{{$value->id}}" class="modal modal-edu-general fade futuristicModal" tabindex="-1" role="dialog" aria-hidden="true">
+                       {{-- =========================================================
+     CONSULTER DEBUT
+========================================================= --}}
 
-                            <div class="modal-dialog modal-xl modal-dialog-centered">
+<div class="modal fade futuristicModal" tabindex="-1"aria-hidden="true" id="consulter{{ $value->id }}"
+  data-stepper="true"
+    data-step="1"
+    data-max-step="5">
 
-                                <div class="modal-content futuristicContent">
+    <div class="modal-dialog modal-xl modal-dialog-centered monstepper">
 
-                                    {{-- BACK LIGHT --}}
-                                    <div class="modalLight"></div>
+        <div class="modal-content futuristicContent">
 
-                                    {{-- HEADER --}}
-                                    <div class="modal-header futuristicHeader">
+            {{-- =====================================================
+                 HEADER
+            ====================================================== --}}
 
-                                        <div class="headerLeft">
+            <div class="modal-header futuristicHeader">
 
-                                            <div class="headerIcon">
-                                                <i class="fa fa-eye"></i>
-                                            </div>
+                <div class="headerLeft">
 
-                                            <div>
+                    <div class="headerIcon">
 
-                                                <h4 class="modal-title futuristicTitle">
+                        <i class="fa fa-eye"></i>
 
-                                                    Consultation de : {{$value->libelle}}
+                    </div>
 
-                                                </h4>
+                    <div>
 
-                                                <p class="futuristicSubTitle">
+                        <h2 class="futuristicTitle">
 
-                                                    Info' avancée du système fintech
+                            Consultation de :
+                            {{ $value->prenom }}
+                            {{ $value->name }}
 
-                                                </p>
+                        </h2>
 
-                                            </div>
+                        <p class="futuristicSubTitle">
 
-                                        </div>
+                            Consultation détaillée du compte utilisateur
 
-                                        <button type="button"
-                                                class="close futuristicClose"
-                                                data-dismiss="modal">
+                        </p>
 
-                                            <span>&times;</span>
+                    </div>
 
-                                        </button>
+                </div>
 
-                                    </div>
 
-                                    {{-- FORM --}}
-                                    <form method="POST" enctype="multipart/form-data">
-                                        <input type="hidden" name="id" value="{{$value->id}}">
-                                        @csrf
 
-                                        {{-- BODY --}}
-                                        <div class="modal-body futuristicBody">
-                                            <div class="form">
-                                                <div class="container-fluid">
+                 <button type="button" class="btn-close btn-close-white futuristicClose"
+                                        data-bs-dismiss="modal">
+                                </button>
 
-                                                    <div class="row ">
-                                                        {{-- CODE --}}
-                                                        <div class="col-12 col-md-6 mb-4 ">
-                                                            <div class="futureField">
-                                                                <label>
-                                                                    <i class="fa fa-code"></i>
-                                                                    Code
-                                                                </label>
-                                                                <div class="futureInput">
-                                                                    <i class="fa fa-code inputIcon"></i>
-                                                                    <input type="text" name="code" value="{{$value->code}}" readonly id="consulter{{$value->id}}" placeholder="Entrer le code">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        {{-- LIBELLE --}}
-                                                        <div class="col-12 col-md-6 mb-4">
-                                                            <div class="futureField">
-                                                                <label>
-                                                                    <i class="fa fa-crosshairs"></i>
-                                                                    Libellé
-                                                                </label>
-                                                                <div class="futureInput">
-                                                                    <i class="fa fa-pencil inputIcon"></i>
-                                                                    <input type="text" name="libelle" value="{{$value->libelle}}" readonly id="consulter{{$value->id}}" placeholder="Entrer le libellé" required>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mt-4">
-                                                        {{-- DESCRIPTION --}}
-                                                        <div class="col-12 col-md-12 mb-4 ">
-                                                            <div class="futureField">
-                                                                <label class="">
-                                                                    <i class="fa fa-comment"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="futureTextarea">
-                                                                    <i class="fa fa-align-left inputIcon textareaIcon"></i>
-                                                                    @if($value->description !=null)
-                                                                        <textarea class="" disabled name="description" value="{{$value->description}}" placeholder="Entrer la description">{{$value->description}}</textarea>
-                                                                    @else
-                                                                        <textarea class="" disabled name="description" value="{{$value->description}}" placeholder="Entrer la description">Aucune Description</textarea>
-                                                                    @endif
-                                                                </div>
+            </div>
 
-                                                            </div>
 
-                                                        </div>
-                                                    </div>
+            {{-- =====================================================
+                 BODY
+            ====================================================== --}}
 
-                                                </div>
-                                            </div>
-                                        </div>
+            <div>
 
-                                        {{-- FOOTER --}}
-                                        <div class="modal-footer futuristicFooter">
+                <div class="form">
 
-                                            <button type="button"
-                                                    data-dismiss="modal"
-                                                    class="futureBtn dangerBtn">
+                    <div class="modal-body futuristicBody">
 
-                                                <i class="fa fa-times"></i>
 
-                                                Fermer
+                        {{-- =================================================
+                             STEPPER
+                        ================================================== --}}
 
-                                            </button>
+                        <div class="futureStepper">
 
-                                            {{-- <button type="submit"
-                                                    class="futureBtn successBtn">
 
-                                                <i class="fa fa-check"></i>
+                            {{-- STEP 1 --}}
+                            <div
+                                class="stepItem active"
+                                data-step="1"
+                            >
 
-                                                Valider
+                                <span>1</span>
 
-                                            </button> --}}
+                                <p>
+                                    Informations
+                                </p>
 
-                                        </div>
+                            </div>
 
-                                    </form>
 
-                                </div>
+                            <div class="stepLine"></div>
+
+
+                            {{-- STEP 2 --}}
+                            <div
+                                class="stepItem"
+                                data-step="2"
+                            >
+
+                                <span>2</span>
+
+                                <p>
+                                    Contact
+                                </p>
+
+                            </div>
+
+
+                            <div class="stepLine"></div>
+
+
+                            {{-- STEP 3 --}}
+                            <div
+                                class="stepItem"
+                                data-step="3"
+                            >
+
+                                <span>3</span>
+
+                                <p>
+                                    Identité
+                                </p>
+
+                            </div>
+
+
+                            <div class="stepLine"></div>
+
+
+                            {{-- STEP 4 --}}
+                            <div
+                                class="stepItem"
+                                data-step="4"
+                            >
+
+                                <span>4</span>
+
+                                <p>
+                                    Compte
+                                </p>
+
+                            </div>
+
+
+                            <div class="stepLine"></div>
+
+
+                            {{-- STEP 5 --}}
+                            <div
+                                class="stepItem"
+                                data-step="5"
+                            >
+
+                                <span>5</span>
+
+                                <p>
+                                    Validation
+                                </p>
 
                             </div>
 
                         </div>
+
+
+                        {{-- =================================================
+                             STEP 1
+                             INFORMATIONS
+                        ================================================== --}}
+
+                        <div
+                            class="stepContent active"
+                            data-content="1"
+                        >
+
+                            {{-- Le contenu viendra ici après réception du STEP 1 --}}
+                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep1')
+
+
+                        </div>
+
+
+                        {{-- =================================================
+                             STEP 2
+                             CONTACT
+                        ================================================== --}}
+
+                        <div
+                            class="stepContent"
+                            data-content="2"
+                        >
+
+                            {{-- Le contenu viendra ici après réception du STEP 2 --}}
+                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep2')
+
+
+                        </div>
+
+
+                        {{-- =================================================
+                             STEP 3
+                             IDENTITÉ
+                        ================================================== --}}
+
+                        <div
+                            class="stepContent"
+                            data-content="3"
+                        >
+
+                            {{-- Le contenu viendra ici après réception du STEP 3 --}}
+                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep3')
+
+
+                        </div>
+
+
+                        {{-- =================================================
+                             STEP 4
+                             COMPTE
+                        ================================================== --}}
+
+                        <div
+                            class="stepContent"
+                            data-content="4"
+                        >
+
+                            {{-- Le contenu viendra ici après réception du STEP 4 --}}
+                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep4')
+
+
+                        </div>
+
+
+                        {{-- =================================================
+                             STEP 5
+                             VALIDATION
+                        ================================================== --}}
+
+                        <div
+                            class="stepContent"
+                            data-content="5"
+                        >
+
+                            {{-- Le contenu viendra ici après réception du STEP 5 --}}
+                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep5')
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {{-- =====================================================
+                 FOOTER
+            ====================================================== --}}
+
+            <div class="modal-footer futuristicFooter justify-content-between">
+
+
+                {{-- LEFT --}}
+
+                 <!-- LEFT -->
+                    <button type="button" class="futureBtn darkBtn" data-dismiss="modal">
+
+                        <i class="fa fa-times"></i>
+                        Annuler
+
+                    </button>
+
+
+                {{-- RIGHT --}}
+
+                <div
+                    class="d-flex align-items-center"
+                    style="gap:15px;"
+                >
+
+
+                    {{-- PREVIOUS --}}
+
+                    <button
+                        type="button"
+                        class="futureBtn dangerBtn prevStep"
+                        style="display:none;"
+                    >
+
+                        <i class="fa fa-arrow-left"></i>
+
+                        Retour
+
+                    </button>
+
+
+                    {{-- NEXT --}}
+
+                    <button
+                        type="button"
+                        class="futureBtn successBtn nextStep"
+                    >
+
+                        Continuer
+
+                        <i class="fa fa-arrow-right"></i>
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{{-- =========================================================
+     CONSULTER FIN
+========================================================= --}}
                     {{-- CONSULTER FIN --}}
                     {{-- MODIFICATION DEBUT --}}
-                        <div id="modifier{{$value->id}}" class="modal modal-edu-general fade futuristicModal" tabindex="-1" role="dialog" aria-hidden="true">
+                       {{-- =========================================================
+     MODIFIER DEBUT
+========================================================= --}}
 
-                            <div class="modal-dialog modal-xl modal-dialog-centered">
+<div
+    class="modal fade futuristicModal"
+    tabindex="-1"
+    aria-hidden="true"
+    id="modifier{{ $value->id }}"
+    data-stepper="true"
+    data-step="1"
+    data-max-step="5"
+>
 
-                                <div class="modal-content futuristicContent">
+    <div class="modal-dialog modal-xl modal-dialog-centered monstepper">
 
-                                    {{-- BACK LIGHT --}}
-                                    <div class="modalLight"></div>
+        <div class="modal-content futuristicContent">
 
-                                    {{-- HEADER --}}
-                                    <div class="modal-header futuristicHeader">
+            {{-- =====================================================
+                 FORMULAIRE
+            ====================================================== --}}
 
-                                        <div class="headerLeft">
+            <form
+                id="futureModifierForm{{ $value->id }}"
+                method="POST"
+                action="{{ route('ModifierUser', $value->id) }}"
+                enctype="multipart/form-data"
+            >
 
-                                            <div class="headerIcon">
-                                                <i class="fa fa-steam"></i>
-                                            </div>
+                @csrf
 
-                                            <div>
+                @method('PUT')
 
-                                                <h4 class="modal-title futuristicTitle">
 
-                                                    Modification de : {{$value->libelle}}
+                {{-- =====================================================
+                     HEADER
+                ====================================================== --}}
 
-                                                </h4>
+                <div class="modal-header futuristicHeader">
 
-                                                <p class="futuristicSubTitle">
+                    <div class="headerLeft">
 
-                                                    Modification avancée du système fintech
+                        <div class="headerIcon">
 
-                                                </p>
+                            <i class="fa fa-user-edit"></i>
 
-                                            </div>
+                        </div>
 
-                                        </div>
 
-                                        <button type="button"
-                                                class="close futuristicClose"
-                                                data-dismiss="modal">
+                        <div>
 
-                                            <span>&times;</span>
+                            <h2 class="futuristicTitle">
 
-                                        </button>
+                                Modifier :
 
-                                    </div>
+                                {{ $value->prenom }}
+                                {{ $value->name }}
 
-                                    {{-- FORM --}}
-                                    <form method="POST" action="{{route('ModifierProfil')}}" enctype="multipart/form-data">
-                                        <input type="hidden" name="id" value="{{$value->id}}">
-                                        @csrf
+                            </h2>
 
-                                        {{-- BODY --}}
-                                        <div class="modal-body futuristicBody">
-                                            <div class="form">
-                                                <div class="container-fluid">
 
-                                                    <div class="row ">
-                                                        {{-- CODE --}}
-                                                        <div class="col-12 col-md-6 mb-4 ">
-                                                            <div class="futureField">
-                                                                <label>
-                                                                    <i class="fa fa-code"></i>
-                                                                    Code
-                                                                </label>
-                                                                <div class="futureInput">
-                                                                    <i class="fa fa-code inputIcon"></i>
-                                                                    <input type="text" name="code" value="{{$value->code}}"  id="consulter{{$value->id}}" placeholder="Entrer le code">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        {{-- LIBELLE --}}
-                                                        <div class="col-12 col-md-6 mb-4">
-                                                            <div class="futureField">
-                                                                <label>
-                                                                    <i class="fa fa-crosshairs"></i>
-                                                                    Libellé
-                                                                </label>
-                                                                <div class="futureInput">
-                                                                    <i class="fa fa-pencil inputIcon"></i>
-                                                                    <input type="text" name="libelle" value="{{$value->libelle}}"  id="consulter{{$value->id}}" placeholder="Entrer le libellé" required>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mt-4">
-                                                        {{-- DESCRIPTION --}}
-                                                        <div class="col-12 col-md-12 mb-4 ">
-                                                            <div class="futureField">
-                                                                <label class="">
-                                                                    <i class="fa fa-comment"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="futureTextarea">
-                                                                    <i class="fa fa-align-left inputIcon textareaIcon"></i>
-                                                                    @if($value->description !=null)
-                                                                        <textarea class=""  name="description" value="{{$value->description}}" placeholder="Entrer la description">{{$value->description}}</textarea>
-                                                                    @else
-                                                                        <textarea class=""  name="description" value="{{$value->description}}" placeholder="Entrer la description">Aucune Description</textarea>
-                                                                    @endif
-                                                                </div>
+                            <p class="futuristicSubTitle">
 
-                                                            </div>
+                                Modification détaillée du compte utilisateur
 
-                                                        </div>
-                                                    </div>
+                            </p>
 
-                                                </div>
-                                            </div>
-                                        </div>
+                        </div>
 
-                                        {{-- FOOTER --}}
-                                        <div class="modal-footer futuristicFooter">
+                    </div>
 
-                                            <button type="button"
-                                                    data-dismiss="modal"
-                                                    class="futureBtn dangerBtn">
 
-                                                <i class="fa fa-times"></i>
+                    {{-- =================================================
+                         FERMER
+                    ================================================== --}}
 
-                                                Fermer
+                    <button
+                        type="button"
+                        class="btn-close btn-close-white futuristicClose"
+                        data-bs-dismiss="modal"
+                    >
+                    </button>
 
-                                            </button>
+                </div>
 
-                                            <button type="submit"
-                                                    class="futureBtn successBtn">
 
-                                                <i class="fa fa-check"></i>
+                {{-- =====================================================
+                     BODY
+                ====================================================== --}}
 
-                                                Valider
+                <div>
 
-                                            </button>
+                    <div class="form">
 
-                                        </div>
+                        <div class="modal-body futuristicBody">
 
-                                    </form>
+
+                            {{-- =================================================
+                                 STEPPER
+                            ================================================== --}}
+
+                            <div class="futureStepper">
+
+
+                                {{-- =================================================
+                                     STEP 1
+                                ================================================== --}}
+
+                                <div
+                                    class="stepItem active"
+                                    data-step="1"
+                                >
+
+                                    <span>1</span>
+
+                                    <p>
+
+                                        Informations
+
+                                    </p>
 
                                 </div>
 
+
+                                <div class="stepLine"></div>
+
+
+                                {{-- =================================================
+                                     STEP 2
+                                ================================================== --}}
+
+                                <div
+                                    class="stepItem"
+                                    data-step="2"
+                                >
+
+                                    <span>2</span>
+
+                                    <p>
+
+                                        Contact
+
+                                    </p>
+
+                                </div>
+
+
+                                <div class="stepLine"></div>
+
+
+                                {{-- =================================================
+                                     STEP 3
+                                ================================================== --}}
+
+                                <div
+                                    class="stepItem"
+                                    data-step="3"
+                                >
+
+                                    <span>3</span>
+
+                                    <p>
+
+                                        Identité
+
+                                    </p>
+
+                                </div>
+
+
+                                <div class="stepLine"></div>
+
+
+                                {{-- =================================================
+                                     STEP 4
+                                ================================================== --}}
+
+                                <div
+                                    class="stepItem"
+                                    data-step="4"
+                                >
+
+                                    <span>4</span>
+
+                                    <p>
+
+                                        Compte
+
+                                    </p>
+
+                                </div>
+
+
+                                <div class="stepLine"></div>
+
+
+                                {{-- =================================================
+                                     STEP 5
+                                ================================================== --}}
+
+                                <div
+                                    class="stepItem"
+                                    data-step="5"
+                                >
+
+                                    <span>5</span>
+
+                                    <p>
+
+                                        Validation
+
+                                    </p>
+
+                                </div>
+
+
                             </div>
 
+
+                            {{-- =================================================
+                                 STEP 1
+                                 INFORMATIONS PERSONNELLES
+                            ================================================== --}}
+
+                            <div
+                                class="stepContent active"
+                                data-content="1"
+                            >
+
+                                @include(
+                                    'dependances.templates.admins.gestions.access.users.personnels._consoms._modalmodifiers.steep1'
+                                )
+
+                            </div>
+
+
+                            {{-- =================================================
+                                 STEP 2
+                                 CONTACT
+                            ================================================== --}}
+
+                            <div
+                                class="stepContent"
+                                data-content="2"
+                            >
+
+                                @include(
+                                    'dependances.templates.admins.gestions.access.users.personnels._consoms._modalmodifiers.steep2'
+                                )
+
+                            </div>
+
+
+                            {{-- =================================================
+                                 STEP 3
+                                 IDENTITÉ
+                            ================================================== --}}
+
+                            <div
+                                class="stepContent"
+                                data-content="3"
+                            >
+
+                                @include(
+                                    'dependances.templates.admins.gestions.access.users.personnels._consoms._modalmodifiers.steep3'
+                                )
+
+                            </div>
+
+
+                            {{-- =================================================
+                                 STEP 4
+                                 COMPTE
+                            ================================================== --}}
+
+                            <div
+                                class="stepContent"
+                                data-content="4"
+                            >
+
+                                @include(
+                                    'dependances.templates.admins.gestions.access.users.personnels._consoms._modalmodifiers.steep4'
+                                )
+
+                            </div>
+
+
+                            {{-- =================================================
+                                 STEP 5
+                                 VALIDATION
+                            ================================================== --}}
+
+                            <div
+                                class="stepContent"
+                                data-content="5"
+                            >
+
+                                @include(
+                                    'dependances.templates.admins.gestions.access.users.personnels._consoms._modalmodifiers.steep5'
+                                )
+
+                            </div>
+
+
                         </div>
+
+                    </div>
+
+                </div>
+
+
+                {{-- =====================================================
+                     FOOTER
+                ====================================================== --}}
+
+                <div
+                    class="modal-footer futuristicFooter justify-content-between"
+                >
+
+
+                    {{-- =================================================
+                         LEFT
+                    ================================================== --}}
+
+                    <button
+                        type="button"
+                        class="futureBtn darkBtn"
+                        data-dismiss="modal"
+                    >
+
+                        <i class="fa fa-times"></i>
+
+                        Annuler
+
+                    </button>
+
+
+                    {{-- =================================================
+                         RIGHT
+                    ================================================== --}}
+
+                    <div
+                        class="d-flex align-items-center"
+                        style="gap:15px;"
+                    >
+
+
+                        {{-- =================================================
+                             PREVIOUS
+                        ================================================== --}}
+
+                        <button
+                            type="button"
+                            class="futureBtn dangerBtn prevStep"
+                            style="display:none;"
+                        >
+
+                            <i class="fa fa-arrow-left"></i>
+
+                            Retour
+
+                        </button>
+
+
+                        {{-- =================================================
+                             NEXT
+                        ================================================== --}}
+
+                        <button
+                            type="button"
+                            class="futureBtn successBtn nextStep"
+                        >
+
+                            Continuer
+
+                            <i class="fa fa-arrow-right"></i>
+
+                        </button>
+
+
+                        {{-- =================================================
+                             SUBMIT
+                        ================================================== --}}
+
+                        <button
+                            type="submit"
+                            class="futureBtn successBtn submitStep"
+                            style="display:none;"
+                            form="futureModifierForm{{ $value->id }}"
+                        >
+
+                            <i class="fa fa-check"></i>
+
+                            Enregistrer
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{{-- =========================================================
+     MODIFIER FIN
+========================================================= --}}
                     {{-- MODIFICATION FIN --}}
                     {{-- CORBEILLE DEBUT --}}
-                        <div id="corbeille{{$value->id}}" class="modal modal-edu-general fade futuristicModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        {{-- =========================================================
+     CORBEILLE / SUPPRESSION DE L'UTILISATEUR
+========================================================= --}}
 
-                            <div class="modal-dialog modal-xl modal-dialog-centered">
+<div class="modal fade futuristicModal" tabindex="-1" aria-hidden="true" id="corbeille{{ $value->id }}" data-stepper="true"  data-step="1"  data-max-step="5">
 
-                                <div class="modal-content futuristicContent">
+    <div class="modal-dialog modal-xl modal-dialog-centered monstepper">
 
-                                    {{-- BACK LIGHT --}}
-                                    <div class="modalLight"></div>
+        <div class="modal-content futuristicContent">
 
-                                    {{-- HEADER --}}
-                                    <div class="modal-header futuristicHeader">
 
-                                        <div class="headerLeft">
+            {{-- =====================================================
+                 HEADER
+            ====================================================== --}}
 
-                                            <div class="headerIcon">
-                                                <i class="fa fa-trash"></i>
-                                            </div>
+            <div class="modal-header futuristicHeader">
 
-                                            <div>
+                <div class="headerLeft">
 
-                                                <h4 class="modal-title futuristicTitle">
+                    <div class="headerIcon">
 
-                                                    Suppression de : {{$value->libelle}}
+                        <i class="fa fa-trash"></i>
 
-                                                </h4>
+                    </div>
 
-                                                <p class="futuristicSubTitle">
 
-                                                    Suppression avancée du système fintech
+                    <div>
 
-                                                </p>
+                        <h2 class="futuristicTitle">
 
-                                            </div>
+                            Mettre à la corbeille :
+                            {{ $value->prenom }}
+                            {{ $value->name }}
 
-                                        </div>
+                        </h2>
 
-                                        <button type="button"
-                                                class="close futuristicClose"
-                                                data-dismiss="modal">
 
-                                            <span>&times;</span>
+                        <p class="futuristicSubTitle">
 
-                                        </button>
+                            Vérification des informations avant
+                            la mise à la corbeille du compte utilisateur
 
-                                    </div>
+                        </p>
 
-                                    {{-- FORM --}}
-                                    <form method="POST" action="{{route('CorbeilleProfil')}}" enctype="multipart/form-data">
-                                        <input type="hidden" name="id" value="{{$value->id}}">
-                                        @csrf
+                    </div>
 
-                                        {{-- BODY --}}
-                                        <div class="modal-body futuristicBody">
-                                            <div class="form">
-                                                <div class="container-fluid">
+                </div>
 
-                                                    <div class="row ">
-                                                        {{-- CODE --}}
-                                                        <div class="col-12 col-md-6 mb-4 ">
-                                                            <div class="futureField">
-                                                                <label>
-                                                                    <i class="fa fa-code"></i>
-                                                                    Code
-                                                                </label>
-                                                                <div class="futureInput">
-                                                                    <i class="fa fa-code inputIcon"></i>
-                                                                    <input type="text" name="code" value="{{$value->code}}" readonly id="consulter{{$value->id}}" placeholder="Entrer le code">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        {{-- LIBELLE --}}
-                                                        <div class="col-12 col-md-6 mb-4">
-                                                            <div class="futureField">
-                                                                <label>
-                                                                    <i class="fa fa-crosshairs"></i>
-                                                                    Libellé
-                                                                </label>
-                                                                <div class="futureInput">
-                                                                    <i class="fa fa-pencil inputIcon"></i>
-                                                                    <input type="text" name="libelle" value="{{$value->libelle}}" readonly id="consulter{{$value->id}}" placeholder="Entrer le libellé" required>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mt-4">
-                                                        {{-- DESCRIPTION --}}
-                                                        <div class="col-12 col-md-12 mb-4 ">
-                                                            <div class="futureField">
-                                                                <label class="">
-                                                                    <i class="fa fa-comment"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="futureTextarea">
-                                                                    <i class="fa fa-align-left inputIcon textareaIcon"></i>
-                                                                    @if($value->description !=null)
-                                                                        <textarea class="" disabled name="description" value="{{$value->description}}" placeholder="Entrer la description">{{$value->description}}</textarea>
-                                                                    @else
-                                                                        <textarea class="" disabled name="description" value="{{$value->description}}" placeholder="Entrer la description">Aucune Description</textarea>
-                                                                    @endif
-                                                                </div>
 
-                                                            </div>
+                {{-- FERMER --}}
 
-                                                        </div>
-                                                    </div>
+                <button
+                    type="button"
+                    class="btn-close btn-close-white futuristicClose"
+                    data-dismiss="modal"
+                    aria-label="Fermer"
+                >
+                </button>
 
-                                                </div>
-                                            </div>
-                                        </div>
+            </div>
 
-                                        {{-- FOOTER --}}
-                                        <div class="modal-footer futuristicFooter">
 
-                                            <button type="button"
-                                                    data-dismiss="modal"
-                                                    class="futureBtn dangerBtn">
+            {{-- =====================================================
+                 BODY
+            ====================================================== --}}
 
-                                                <i class="fa fa-times"></i>
+            <div>
 
-                                                Fermer
+                <div class="form">
 
-                                            </button>
+                    <div class="modal-body futuristicBody">
 
-                                            <button type="submit"
-                                                    class="futureBtn successBtn">
 
-                                                <i class="fa fa-check"></i>
+                        {{-- =================================================
+                             STEPPER
+                        ================================================== --}}
 
-                                                Valider
+                        <div class="futureStepper">
 
-                                            </button>
+                            {{-- STEP 1 --}}
 
-                                        </div>
+                            <div  class="stepItem active" data-step="1" >
 
-                                    </form>
+                                <span>1</span>
+
+                                <p>
+                                    Informations
+                                </p>
+
+                            </div>
+                            <div class="stepLine"></div>
+                            {{-- STEP 2 --}}
+
+                            <div class="stepItem"  data-step="2" >
+
+                                <span>2</span>
+
+                                <p>
+                                    Contact
+                                </p>
+
+                            </div>
+                            <div class="stepLine"></div>
+
+
+                            {{-- STEP 3 --}}
+
+                            <div
+                                class="stepItem"
+                                data-step="3">
+
+                                <span>3</span>
+
+                                <p>
+                                    Identité
+                                </p>
+
+                            </div>
+
+
+                            <div class="stepLine"></div>
+
+
+                            {{-- STEP 4 --}}
+
+                            <div
+                                class="stepItem"
+                                data-step="4"
+                            >
+
+                                <span>4</span>
+
+                                <p>
+                                    Compte
+                                </p>
+
+                            </div>
+
+
+                            <div class="stepLine"></div>
+
+
+                            {{-- STEP 5 --}}
+
+                            <div
+                                class="stepItem"
+                                data-step="5"
+                            >
+
+                                <span>5</span>
+
+                                <p>
+                                    Validation
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- =================================================
+                             STEP 1
+                             INFORMATIONS
+                        ================================================== --}}
+
+                        <div
+                            class="stepContent active"
+                            data-content="1">
+
+                            @include(
+                                'dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep1'
+                            )
+
+                        </div>
+
+
+                        {{-- =================================================
+                             STEP 2
+                             CONTACT
+                        ================================================== --}}
+
+                        <div
+                            class="stepContent"
+                            data-content="2" >
+
+                            @include(
+                                'dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep2'
+                            )
+
+                        </div>
+
+
+                            {{-- =================================================
+                                STEP 3
+                                IDENTITÉ
+                            ================================================== --}}
+
+                        <div
+                            class="stepContent"
+                            data-content="3">
+
+                            @include(
+                                'dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep3'
+                            )
+
+                        </div>
+
+
+                        {{-- =================================================
+                             STEP 4
+                             COMPTE
+                        ================================================== --}}
+
+                        <div
+                            class="stepContent"
+                            data-content="4"
+                        >
+
+                            @include(
+                                'dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep4'
+                            )
+
+                        </div>
+
+
+                        {{-- =================================================
+                             STEP 5
+                             VALIDATION
+                        ================================================== --}}
+
+                        <div
+                            class="stepContent"
+                            data-content="5"
+                        >
+
+                            @include(
+                                'dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep5'
+                            )
+
+
+                            {{-- =================================================
+                                 AVERTISSEMENT CORBEILLE
+                            ================================================== --}}
+
+                            <div class="mt-4">
+
+                                <div class="futureFinal">
+
+                                    <i class="fa fa-triangle-exclamation"></i>
+
+                                    <h3>
+
+                                        Mise à la corbeille
+
+                                    </h3>
+
+                                    <p>
+
+                                        Vous êtes sur le point de mettre
+                                        cet utilisateur à la corbeille.
+
+                                        <br>
+
+                                        Cette action modifiera son statut
+                                        et l'utilisateur ne sera plus affiché
+                                        dans la liste principale.
+
+                                    </p>
 
                                 </div>
 
                             </div>
 
                         </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {{-- =====================================================
+                 FOOTER
+            ====================================================== --}}
+
+            <div class="modal-footer futuristicFooter justify-content-between">
+
+
+                {{-- =================================================
+                     GAUCHE : ANNULER
+                ================================================== --}}
+
+                <button
+                    type="button"
+                    class="futureBtn darkBtn"
+                    data-dismiss="modal"
+                >
+
+                    <i class="fa fa-times"></i>
+
+                    Annuler
+
+                </button>
+
+
+                {{-- =================================================
+                     DROITE
+                ================================================== --}}
+
+                <div
+                    class="d-flex align-items-center"
+                    style="gap:15px;"
+                >
+
+
+                    {{-- =================================================
+                         RETOUR
+                    ================================================== --}}
+
+                    <button
+                        type="button"
+                        class="futureBtn dangerBtn prevStep"
+                        style="display:none;"
+                    >
+
+                        <i class="fa fa-arrow-left"></i>
+
+                        Retour
+
+                    </button>
+
+
+                    {{-- =================================================
+                         CONTINUER
+                    ================================================== --}}
+
+                    <button
+                        type="button"
+                        class="futureBtn successBtn nextStep"
+                    >
+
+                        Continuer
+
+                        <i class="fa fa-arrow-right"></i>
+
+                    </button>
+
+
+                    {{-- =================================================
+                         CONFIRMER CORBEILLE
+                    ================================================== --}}
+
+                    <form
+                        method="POST"
+                        action="{{ route('CorbeilleUser') }}"
+                        style="margin:0;"
+                    >
+
+                        @csrf
+
+                        {{-- Si ta route utilise DELETE, décommente ceci --}}
+                        {{-- @method('DELETE') --}}
+
+                        <button
+                            type="submit"
+                            class="futureBtn dangerBtn submitStep"
+                            style="display:none;"
+                        >
+
+                            <i class="fa fa-trash"></i>
+
+                            Mettre à la corbeille
+
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{{-- =========================================================
+     CORBEILLE FIN
+========================================================= --}}
                     {{-- CORBEILLE FIN --}}
                     {{-- =========================================================
      PIÈCE D'IDENTITÉ DEBUT
