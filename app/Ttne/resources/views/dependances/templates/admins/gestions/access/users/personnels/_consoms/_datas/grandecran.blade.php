@@ -91,9 +91,10 @@
                 <td>
 
                     <span class="futureCode">
+                        {{ $value->name }}
 
                         {{ $value->prenom }}
-                        {{ $value->name }}
+
 
                     </span>
 

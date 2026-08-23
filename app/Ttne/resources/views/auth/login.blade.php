@@ -365,53 +365,85 @@ h2{
 
     <h2>Connexion</h2>
 
-    <form method="POST" action="#">
-        @csrf
+    <form method="POST" action="{{ route('login') }}">
+    @csrf
 
-        <!-- EMAIL -->
-        <div class="field">
-            <i class="fa-solid fa-envelope icon-left"></i>
-            <input type="email" placeholder="Email">
-        </div>
+    <!-- EMAIL -->
+    <div class="field">
+        <i class="fa-solid fa-envelope icon-left"></i>
 
-        <!-- PASSWORD -->
-        <div class="field">
+        <input
+            type="email"
+            name="email"
+            value="{{ old('email') }}"
+            placeholder="Email"
+            required
+            autofocus
+            autocomplete="username"
+        >
+    </div>
 
-            <i class="fa-solid fa-key icon-left"></i>
+    <!-- PASSWORD -->
+    <div class="field">
+        <i class="fa-solid fa-key icon-left"></i>
 
-            <input :type="show ? 'text' : 'password'"
-                   placeholder="Mot de passe">
+        <input
+            :type="show ? 'text' : 'password'"
+            name="password"
+            placeholder="Mot de passe"
+            required
+            autocomplete="current-password"
+        >
 
-            <button type="button" class="toggle-pass" @click="show=!show">
-                <i :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
-            </button>
-
-        </div>
-
-        <!-- OPTIONS -->
-        <div class="row">
-
-            <label>
-                <input type="checkbox">
-                Se souvenir de moi
-            </label>
-
-            <a href="#">Mot de passe oublié ?</a>
-
-        </div>
-
-        <!-- BTN -->
-        <button class="btn" type="submit">
-            Se connecter <i class="fa-solid fa-right-to-bracket"></i>
+        <button
+            type="button"
+            class="toggle-pass"
+            @click="show = !show"
+            :aria-label="show ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+        >
+            <i :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
         </button>
+    </div>
 
-        <!-- REGISTER -->
-        <div class="bottom">
-            Je n’ai pas de compte ?
-            <a href="#">Créer un compte</a>
+    <!-- OPTIONS -->
+    <div class="row">
+        <label>
+            <input
+                type="checkbox"
+                name="remember"
+                value="1"
+            >
+            Se souvenir de moi
+        </label>
+
+        @if (Route::has('password.request'))
+            <a href="{{ route('password.request') }}">
+                Mot de passe oublié ?
+            </a>
+        @endif
+    </div>
+
+    <!-- ERREUR LOGIN -->
+    @if ($errors->any())
+        <div style="margin-bottom: 20px; color: #ff6b6b; font-size: 14px;">
+            {{ $errors->first() }}
         </div>
+    @endif
 
-    </form>
+    <!-- BTN -->
+    <button class="btn" type="submit">
+        Se connecter
+        <i class="fa-solid fa-right-to-bracket"></i>
+    </button>
+
+    <!-- REGISTER -->
+    <div class="bottom">
+        Je n’ai pas de compte ?
+        <a href="#">
+            Créer un compte
+        </a>
+    </div>
+</form>
 
 </div>
 

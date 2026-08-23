@@ -128,11 +128,11 @@
                             </ul>
                         </li>
                         <li>
-                            <a class="has-arrow" href="all-students.html" aria-expanded="false"><span class="educate-icon educate-student icon-wrap"></span> <span class="mini-click-non">Students</span></a>
+                            <a class="has-arrow" href="all-students.html" aria-expanded="false"><span class="educate-icon educate-student icon-wrap"></span> <span class="mini-click-non">Users</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All Students" href="all-students.html"><span class="mini-sub-pro">All Students</span></a></li>
-                                <li><a title="Add Students" href="add-student.html"><span class="mini-sub-pro">Add Student</span></a></li>
-                                <li><a title="Edit Students" href="edit-student.html"><span class="mini-sub-pro">Edit Student</span></a></li>
+                                <li><a title="All Students" href="all-students.html"><span class="mini-sub-pro">User</span></a></li>
+                                <li><a title="Add Students" href="add-student.html"><span class="mini-sub-pro">Membres</span></a></li>
+                                <li><a title="Edit Students" href="{{route('ADM-USER-pers')}}"><span class="mini-sub-pro">Personnel</span></a></li>
                                 <li><a title="Students Profile" href="student-profile.html"><span class="mini-sub-pro">Student Profile</span></a></li>
                             </ul>
                         </li>
@@ -5647,7 +5647,7 @@ ${cell.innerText.trim()}
 
             /* -----------------------------------------------------
                RESET DU STEPPER À L'OUVERTURE
-               
+
                Uniquement pour les modals possédant un stepper.
             ----------------------------------------------------- */
 
@@ -5693,7 +5693,7 @@ ${cell.innerText.trim()}
 
         /* =========================================================
            MODAL CLOSE
-           
+
            Animation de fermeture.
         ========================================================= */
 
@@ -5713,11 +5713,11 @@ ${cell.innerText.trim()}
 
         /* =========================================================
            MODAL HIDDEN
-           
+
            RESET COMPLET DU MODAL
-           
+
            Valable pour TOUS les .futuristicModal :
-           
+
            - avec stepper
            - sans stepper
         ========================================================= */
@@ -5729,7 +5729,7 @@ ${cell.innerText.trim()}
 
             /* =====================================================
                RESET DU FORMULAIRE
-               
+
                Valable pour tous les modals possédant
                un formulaire.
             ===================================================== */
@@ -5763,7 +5763,7 @@ ${cell.innerText.trim()}
 
             /* =====================================================
                RESET DES CHAMPS PASSWORD
-               
+
                Si un mot de passe était affiché,
                on le remet en mode masqué.
             ===================================================== */
@@ -5812,7 +5812,7 @@ ${cell.innerText.trim()}
 
             /* =====================================================
                RESET DU STEPPER
-               
+
                UNIQUEMENT pour les modals qui possèdent
                un stepper.
             ===================================================== */
@@ -6951,15 +6951,15 @@ ${cell.innerText.trim()}
 
         /* =========================================================
            RESET COMPLET D'UN MODAL
-           
+
            Fonctionne pour TOUS les .futuristicModal :
-           
+
            - modal avec stepper
            - modal sans stepper
            - modal de création
            - modal de modification
            - modal de consultation
-           
+
            IMPORTANT :
            Aucun changement des variables Blade / value.
            Le reset utilise simplement le comportement natif
@@ -6978,7 +6978,7 @@ ${cell.innerText.trim()}
 
             /* -----------------------------------------------------
                RESET DU FORMULAIRE
-               
+
                reset() remet les champs à leur valeur initiale
                HTML.
 
@@ -7280,7 +7280,7 @@ ${cell.innerText.trim()}
 
                 /* -------------------------------------------------
                    RESET DU STEPPER À L'OUVERTURE
-                   
+
                    Uniquement pour les modals avec stepper.
                 ------------------------------------------------- */
 
@@ -7353,13 +7353,13 @@ ${cell.innerText.trim()}
 
         /* =========================================================
            FERMETURE DES MODALS
-           
+
            On intercepte TOUS les boutons de fermeture :
-           
+
            - data-dismiss="modal"       Bootstrap 4
            - data-bs-dismiss="modal"    Bootstrap 5
            - .futuristicClose
-           
+
            Cela évite de dépendre uniquement du HTML du bouton.
         ========================================================= */
 
@@ -7388,7 +7388,7 @@ ${cell.innerText.trim()}
 
                 /* -------------------------------------------------
                    RESET IMMÉDIAT DU FORMULAIRE
-                   
+
                    On le fait ici également pour garantir que
                    le reset se produit même si l'événement
                    Bootstrap hidden n'est pas déclenché.
@@ -7465,14 +7465,14 @@ ${cell.innerText.trim()}
 
         /* =========================================================
            MODAL HIDDEN
-           
+
            SÉCURITÉ SUPPLÉMENTAIRE
-           
+
            Même si le bouton a déjà effectué le reset,
            on le refait ici.
-           
+
            Cela couvre également :
-           
+
            - fermeture avec ESC
            - fermeture via backdrop
            - fermeture programmée en JS

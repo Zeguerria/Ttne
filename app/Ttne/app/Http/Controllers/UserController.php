@@ -2,88 +2,241 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Historique;
 use App\Models\Parametre;
 use App\Models\Profil;
 use App\Models\User;
 use App\Services\Core\UserService;
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class UserController extends Controller
 {
-     public function index(Request $request)
-    {
-        $historiques = Historique::where(
-            'record_type',
-            User::class
-        )
-        ->latest()
-        ->paginate(
-            5,
-            ['*'],
-            'history_page'
-        );
+    public function index(Request $request)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | UTILISATEUR CONNECTÉ
+    |--------------------------------------------------------------------------
+    */
 
-        /*
-        =========================================================
-        AJAX
-        =========================================================
-        */
+    $user = Auth::user();
 
-        if($request->ajax()){
-
-            return response()->json([
-
-                'historiques' => view(
-                    'dependances.templates.admins.gestions.access.users.personnels._consoms.historique',
-                    compact('historiques')
-                )->render(),
-
-                'current_page' => $historiques->currentPage(),
-
-                'last_page' => $historiques->lastPage(),
-
-                'has_more_pages' => $historiques->hasMorePages()
-
-            ]);
-
-        }
-
-        return view(
-            'dependances.templates.admins.gestions.access.users.personnels.user',
-            [
-
-                'UserT' => User::where(
-                    'supprimer',
-                    0
-                )->count(),
-
-                'UserTC' => User::where(
-                    'supprimer',
-                    1
-                )->count(),
-
-                'users' => User::where(
-                    'supprimer',
-                    0
-                )
-                ->orderBy('name')
-                ->get(),
-                'profils' => Profil::where(
-                    'supprimer',
-                    0
-                )
-                ->orderBy('libelle')
-                ->get(),
-                'typesPieces' => Parametre::where('supprimer', 0)->where('type_parametre_id','3')->orderBy('libelle')->get(),
-
-                'historiques' => $historiques
-
-            ]
-        );
+    if (!$user) {
+        abort(403, 'Accès non autorisé.');
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROFIL DE L'UTILISATEUR CONNECTÉ
+    |--------------------------------------------------------------------------
+    */
+
+    $profilConnecte = $user->profil;
+
+    if (!$profilConnecte) {
+        abort(403, 'Aucun profil associé à cet utilisateur.');
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROFILS AUTORISÉS À ÊTRE CRÉÉS / ATTRIBUÉS
+    |--------------------------------------------------------------------------
+    */
+
+    $profilsAutorises = match ($profilConnecte->code) {
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+    'ADMIN' => [
+        'OPERATEUR',
+        'JURISTE',
+        'RH',
+    ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RH
+    |--------------------------------------------------------------------------
+    */
+
+    'RH' => [
+        'OPERATEUR',
+        'JURISTE',
+        'RH',
+        'DEVELOPPEUR',
+    ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DRH
+    |--------------------------------------------------------------------------
+    */
+
+    'DRH' => [
+        'RH',
+        'OPERATEUR',
+        'JURISTE',
+        'DEVELOPPEUR',
+    ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DIRECTEUR GÉNÉRAL
+    |--------------------------------------------------------------------------
+    */
+
+    'DIRECTEUR-GENERAL' => [
+        'OPERATEUR',
+        'JURISTE',
+        'RH',
+        'DRH',
+        'ADMIN',
+        'DEVELOPPEUR',
+        'SUPER-DEVELOPPEUR',
+    ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SUPER DÉVELOPPEUR
+    |--------------------------------------------------------------------------
+    |
+    | Autorité technique maximale sur la plateforme.
+    | Peut gérer tous les profils, y compris le DG.
+    |
+    */
+
+    'SUPER-DEVELOPPEUR' => [
+        'MEMBRE-COMMUNAUTE',
+        'OPERATEUR',
+        'JURISTE',
+        'RH',
+        'DRH',
+        'DIRECTEUR-GENERAL',
+        'ADMIN',
+        'DEVELOPPEUR',
+        'SUPER-DEVELOPPEUR',
+    ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | AUTRES PROFILS
+    |--------------------------------------------------------------------------
+    */
+
+    default => [],
+};
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROFILS DISPONIBLES DANS LA VUE
+    |--------------------------------------------------------------------------
+    */
+
+    $profils = Profil::where('supprimer', 0)
+        ->whereIn('code', $profilsAutorises)
+        ->orderBy('libelle')
+        ->get();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HISTORIQUE
+    |--------------------------------------------------------------------------
+    */
+
+    $historiques = Historique::where(
+        'record_type',
+        User::class
+    )
+    ->latest()
+    ->paginate(
+        5,
+        ['*'],
+        'history_page'
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | AJAX
+    |--------------------------------------------------------------------------
+    */
+
+    if ($request->ajax()) {
+
+        return response()->json([
+            'historiques' => view(
+                'dependances.templates.admins.gestions.access.users.personnels._consoms.historique',
+                compact('historiques')
+            )->render(),
+
+            'current_page' => $historiques->currentPage(),
+            'last_page' => $historiques->lastPage(),
+            'has_more_pages' => $historiques->hasMorePages()
+        ]);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | VUE
+    |--------------------------------------------------------------------------
+    */
+
+    return view(
+        'dependances.templates.admins.gestions.access.users.personnels.user',
+        [
+            'UserT' => User::where(
+                'supprimer',
+                0
+            )->count(),
+
+            'UserTC' => User::where(
+                'supprimer',
+                1
+            )->count(),
+
+            'users' => User::where(
+                'supprimer',
+                0
+            )
+            ->orderBy('name')
+            ->get(),
+
+            'profils' => $profils,
+
+            'typesPieces' => Parametre::where(
+                'supprimer',
+                0
+            )
+            ->where(
+                'type_parametre_id',
+                '3'
+            )
+            ->orderBy('libelle')
+            ->get(),
+
+            'historiques' => $historiques,
+
+            'profilConnecte' => $profilConnecte,
+        ]
+    );
+}
         //
         /*
     |--------------------------------------------------------------------------

@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Services\Core\FichierService;
 use App\Services\Core\HistoriqueService;
 
 class UserService
@@ -35,12 +36,11 @@ class UserService
         $photo = null;
 
         if (!empty($data['photo'])) {
-
-            $photo = $data['photo']->store(
-                'dependances/photos/users',
-                'public'
+            $photo = FichierService::stockerPhoto(
+                $data['photo'],
+                null,
+                $data['prenom'] . ' ' . $data['name']
             );
-
         }
 
         /*
@@ -105,31 +105,27 @@ class UserService
         |--------------------------------------------------------------------------
         */
 
+        $document = null;
+
         if (!empty($data['fichier'])) {
 
-            $document = $data['fichier']->store(
-                'dependances/documents/pieces',
-                'public'
+            $documentData = FichierService::stockerDocument(
+                $data['fichier'],
+                null,
+                $data['numero'] ?? 'piece'
             );
 
+            $document = $documentData['path'];
+
             Piece::create([
-
                 'user_id' => $user->id,
-
                 'type_piece_id' => $data['type_piece_id'],
-
                 'numero' => $data['numero'] ?? null,
-
                 'fichier' => $document,
-
-                'mime_type' => $data['fichier']->getMimeType(),
-
+                'mime_type' => $documentData['mime_type'],
                 'date_expiration' => $data['date_expiration'] ?? null,
-
                 'commentaire' => null,
-
             ]);
-
         }
 
         /*

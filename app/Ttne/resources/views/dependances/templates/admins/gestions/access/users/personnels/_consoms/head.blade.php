@@ -23,7 +23,7 @@
 
                             <h2>
 
-                               Profils
+                               Personnels
 
                             </h2>
 
@@ -39,7 +39,7 @@
 
                                 <a href="#">
 
-                                    Access
+                                    Users
 
                                 </a>
 
@@ -47,7 +47,7 @@
 
                                 <strong>
 
-                                   Profils
+                                   Membre du personnel
 
                                 </strong>
 
