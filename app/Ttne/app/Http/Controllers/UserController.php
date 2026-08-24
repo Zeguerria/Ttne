@@ -15,228 +15,477 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     public function index(Request $request)
-{
-    /*
-    |--------------------------------------------------------------------------
-    | UTILISATEUR CONNECTÉ
-    |--------------------------------------------------------------------------
-    */
+    {
+            /*
+            |--------------------------------------------------------------------------
+            | UTILISATEUR CONNECTÉ
+            |--------------------------------------------------------------------------
+            */
 
-    $user = Auth::user();
+            $user = Auth::user();
 
-    if (!$user) {
-        abort(403, 'Accès non autorisé.');
+            if (!$user) {
+                abort(403, 'Accès non autorisé.');
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL DE L'UTILISATEUR CONNECTÉ
+            |--------------------------------------------------------------------------
+            */
+
+            $profilConnecte = $user->profil;
+
+            if (!$profilConnecte) {
+                abort(403, 'Aucun profil associé à cet utilisateur.');
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFILS AUTORISÉS À ÊTRE CRÉÉS / ATTRIBUÉS
+            |--------------------------------------------------------------------------
+            */
+
+            $profilsAutorises = match ($profilConnecte->code) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | ADMIN
+            |--------------------------------------------------------------------------
+            */
+
+            'ADMIN' => [
+                'OPERATEUR',
+                'JURISTE',
+                'RH',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | RH
+            |--------------------------------------------------------------------------
+            */
+
+            'RH' => [
+                'OPERATEUR',
+                'JURISTE',
+                'RH',
+                'DEVELOPPEUR',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | DRH
+            |--------------------------------------------------------------------------
+            */
+
+            'DRH' => [
+                'RH',
+                'OPERATEUR',
+                'JURISTE',
+                'DEVELOPPEUR',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | DIRECTEUR GÉNÉRAL
+            |--------------------------------------------------------------------------
+            */
+
+            'DIRECTEUR-GENERAL' => [
+                'OPERATEUR',
+                'JURISTE',
+                'RH',
+                'DRH',
+                'ADMIN',
+                'DEVELOPPEUR',
+                'SUPER-DEVELOPPEUR',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | SUPER DÉVELOPPEUR
+            |--------------------------------------------------------------------------
+            |
+            | Autorité technique maximale sur la plateforme.
+            | Peut gérer tous les profils, y compris le DG.
+            |
+            */
+
+            'SUPER-DEVELOPPEUR' => [
+                'MEMBRE-COMMUNAUTE',
+                'OPERATEUR',
+                'JURISTE',
+                'RH',
+                'DRH',
+                'DIRECTEUR-GENERAL',
+                'ADMIN',
+                'DEVELOPPEUR',
+                'SUPER-DEVELOPPEUR',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | AUTRES PROFILS
+            |--------------------------------------------------------------------------
+            */
+
+            default => [],
+        };
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFILS DISPONIBLES DANS LA VUE
+            |--------------------------------------------------------------------------
+            */
+
+            $profils = Profil::where('supprimer', 0)
+                ->whereIn('code', $profilsAutorises)
+                ->orderBy('libelle')
+                ->get();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | HISTORIQUE
+            |--------------------------------------------------------------------------
+            */
+
+            $historiques = Historique::where(
+                'record_type',
+                User::class
+            )
+            ->latest()
+            ->paginate(
+                5,
+                ['*'],
+                'history_page'
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | AJAX
+            |--------------------------------------------------------------------------
+            */
+
+            if ($request->ajax()) {
+
+                return response()->json([
+                    'historiques' => view(
+                        'dependances.templates.admins.gestions.access.users.personnels._consoms.historique',
+                        compact('historiques')
+                    )->render(),
+
+                    'current_page' => $historiques->currentPage(),
+                    'last_page' => $historiques->lastPage(),
+                    'has_more_pages' => $historiques->hasMorePages()
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | VUE
+            |--------------------------------------------------------------------------
+            */
+
+            return view(
+                'dependances.templates.admins.gestions.access.users.personnels.user',
+                [
+                    'UserT' => User::where(
+                        'supprimer',
+                        0
+                    )->count(),
+
+                    'UserTC' => User::where(
+                        'supprimer',
+                        1
+                    )->count(),
+
+                    'users' => User::where(
+                        'supprimer',
+                        0
+                    )
+                    ->orderBy('name')
+                    ->get(),
+
+                    'profils' => $profils,
+
+                    'typesPieces' => Parametre::where(
+                        'supprimer',
+                        0
+                    )
+                    ->where(
+                        'type_parametre_id',
+                        '3'
+                    )
+                    ->orderBy('libelle')
+                    ->get(),
+
+                    'historiques' => $historiques,
+
+                    'profilConnecte' => $profilConnecte,
+                ]
+            );
     }
+    public function indexmembre(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | UTILISATEUR CONNECTÉ
+        |--------------------------------------------------------------------------
+        */
+
+        $user = Auth::user();
+
+        if (!$user) {
+            abort(403, 'Accès non autorisé.');
+        }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | PROFIL DE L'UTILISATEUR CONNECTÉ
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | PROFIL DE L'UTILISATEUR CONNECTÉ
+        |--------------------------------------------------------------------------
+        */
 
-    $profilConnecte = $user->profil;
+        $profilConnecte = $user->profil;
 
-    if (!$profilConnecte) {
-        abort(403, 'Aucun profil associé à cet utilisateur.');
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | PROFILS AUTORISÉS À ÊTRE CRÉÉS / ATTRIBUÉS
-    |--------------------------------------------------------------------------
-    */
-
-    $profilsAutorises = match ($profilConnecte->code) {
-
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN
-    |--------------------------------------------------------------------------
-    */
-
-    'ADMIN' => [
-        'OPERATEUR',
-        'JURISTE',
-        'RH',
-    ],
+        if (!$profilConnecte) {
+            abort(403, 'Aucun profil associé à cet utilisateur.');
+        }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | RH
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | PROFIL MEMBRE
+        |--------------------------------------------------------------------------
+        */
 
-    'RH' => [
-        'OPERATEUR',
-        'JURISTE',
-        'RH',
-        'DEVELOPPEUR',
-    ],
+        $profilMembre = Profil::where('supprimer', 0)
+            ->where('code', 'MEMBRE-COMMUNAUTE')
+            ->first();
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | DRH
-    |--------------------------------------------------------------------------
-    */
-
-    'DRH' => [
-        'RH',
-        'OPERATEUR',
-        'JURISTE',
-        'DEVELOPPEUR',
-    ],
+        if (!$profilMembre) {
+            abort(500, 'Le profil MEMBRE-COMMUNAUTE est introuvable.');
+        }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | DIRECTEUR GÉNÉRAL
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | PROFILS AUTORISÉS À ÊTRE CRÉÉS / ATTRIBUÉS
+        |--------------------------------------------------------------------------
+        |
+        | Pour les membres :
+        | tous les profils peuvent ajouter un membre,
+        | sauf USER et MEMBRE-COMMUNAUTE.
+        |
+        | Cette règle sera renforcée plus tard avec
+        | profil_habilitation.
+        |
+        */
 
-    'DIRECTEUR-GENERAL' => [
-        'OPERATEUR',
-        'JURISTE',
-        'RH',
-        'DRH',
-        'ADMIN',
-        'DEVELOPPEUR',
-        'SUPER-DEVELOPPEUR',
-    ],
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SUPER DÉVELOPPEUR
-    |--------------------------------------------------------------------------
-    |
-    | Autorité technique maximale sur la plateforme.
-    | Peut gérer tous les profils, y compris le DG.
-    |
-    */
-
-    'SUPER-DEVELOPPEUR' => [
-        'MEMBRE-COMMUNAUTE',
-        'OPERATEUR',
-        'JURISTE',
-        'RH',
-        'DRH',
-        'DIRECTEUR-GENERAL',
-        'ADMIN',
-        'DEVELOPPEUR',
-        'SUPER-DEVELOPPEUR',
-    ],
+        $peutAjouterMembre = !in_array(
+            $profilConnecte->code,
+            [
+                'USER',
+                'MEMBRE-COMMUNAUTE',
+            ]
+        );
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | AUTRES PROFILS
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | PROFIL DISPONIBLE DANS LA VUE
+        |--------------------------------------------------------------------------
+        |
+        | Uniquement le profil MEMBRE-COMMUNAUTE.
+        |
+        */
 
-    default => [],
-};
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | PROFILS DISPONIBLES DANS LA VUE
-    |--------------------------------------------------------------------------
-    */
-
-    $profils = Profil::where('supprimer', 0)
-        ->whereIn('code', $profilsAutorises)
-        ->orderBy('libelle')
-        ->get();
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | HISTORIQUE
-    |--------------------------------------------------------------------------
-    */
-
-    $historiques = Historique::where(
-        'record_type',
-        User::class
-    )
-    ->latest()
-    ->paginate(
-        5,
-        ['*'],
-        'history_page'
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | AJAX
-    |--------------------------------------------------------------------------
-    */
-
-    if ($request->ajax()) {
-
-        return response()->json([
-            'historiques' => view(
-                'dependances.templates.admins.gestions.access.users.personnels._consoms.historique',
-                compact('historiques')
-            )->render(),
-
-            'current_page' => $historiques->currentPage(),
-            'last_page' => $historiques->lastPage(),
-            'has_more_pages' => $historiques->hasMorePages()
+        $profils = collect([
+            $profilMembre
         ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | HISTORIQUE
+        |--------------------------------------------------------------------------
+        */
+
+        $historiques = Historique::where(
+            'record_type',
+            User::class
+        )
+            ->latest()
+            ->paginate(
+                5,
+                ['*'],
+                'history_page'
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | AJAX
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->ajax()) {
+
+            return response()->json([
+                'historiques' => view(
+                    'dependances.templates.admins.gestions.access.users.membres._consoms.historique',
+                    compact('historiques')
+                )->render(),
+
+                'current_page' => $historiques->currentPage(),
+
+                'last_page' => $historiques->lastPage(),
+
+                'has_more_pages' => $historiques->hasMorePages()
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VUE
+        |--------------------------------------------------------------------------
+        */
+
+        return view(
+            'dependances.templates.admins.gestions.access.users.membres.user',
+            [
+
+                /*
+                |--------------------------------------------------------------------------
+                | NOMBRE TOTAL DE MEMBRES ACTIFS
+                |--------------------------------------------------------------------------
+                */
+
+                'UserT' => User::where(
+                    'supprimer',
+                    0
+                )
+                    ->where(
+                        'profil_id',
+                        $profilMembre->id
+                    )
+                    ->count(),
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | NOMBRE TOTAL DE MEMBRES SUPPRIMÉS
+                |--------------------------------------------------------------------------
+                */
+
+                'UserTC' => User::where(
+                    'supprimer',
+                    1
+                )
+                    ->where(
+                        'profil_id',
+                        $profilMembre->id
+                    )
+                    ->count(),
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | LISTE DES MEMBRES ACTIFS
+                |--------------------------------------------------------------------------
+                */
+
+                'users' => User::where(
+                    'supprimer',
+                    0
+                )
+                    ->where(
+                        'profil_id',
+                        $profilMembre->id
+                    )
+                    ->orderBy('name')
+                    ->get(),
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFIL MEMBRE
+                |--------------------------------------------------------------------------
+                */
+
+                'profils' => $profils,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | TYPES DE PIÈCES
+                |--------------------------------------------------------------------------
+                */
+
+                'typesPieces' => Parametre::where(
+                    'supprimer',
+                    0
+                )
+                    ->where(
+                        'type_parametre_id',
+                        3
+                    )
+                    ->orderBy('libelle')
+                    ->get(),
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | HISTORIQUE
+                |--------------------------------------------------------------------------
+                */
+
+                'historiques' => $historiques,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFIL CONNECTÉ
+                |--------------------------------------------------------------------------
+                */
+
+                'profilConnecte' => $profilConnecte,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFIL MEMBRE
+                |--------------------------------------------------------------------------
+                */
+
+                'profilMembre' => $profilMembre,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | AUTORISATION D'AJOUT
+                |--------------------------------------------------------------------------
+                */
+
+                'peutAjouterMembre' => $peutAjouterMembre,
+
+            ]
+        );
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | VUE
-    |--------------------------------------------------------------------------
-    */
-
-    return view(
-        'dependances.templates.admins.gestions.access.users.personnels.user',
-        [
-            'UserT' => User::where(
-                'supprimer',
-                0
-            )->count(),
-
-            'UserTC' => User::where(
-                'supprimer',
-                1
-            )->count(),
-
-            'users' => User::where(
-                'supprimer',
-                0
-            )
-            ->orderBy('name')
-            ->get(),
-
-            'profils' => $profils,
-
-            'typesPieces' => Parametre::where(
-                'supprimer',
-                0
-            )
-            ->where(
-                'type_parametre_id',
-                '3'
-            )
-            ->orderBy('libelle')
-            ->get(),
-
-            'historiques' => $historiques,
-
-            'profilConnecte' => $profilConnecte,
-        ]
-    );
-}
         //
         /*
     |--------------------------------------------------------------------------
@@ -245,140 +494,252 @@ class UserController extends Controller
     */
 
     public function store(Request $request)
-{
-    $data = $request->validate([
+    {
+        $data = $request->validate([
 
-        /*
-        |--------------------------------------------------------------------------
-        | INFORMATIONS PERSONNELLES
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | INFORMATIONS PERSONNELLES
+            |--------------------------------------------------------------------------
+            */
 
-        'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
 
-        'prenom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
 
-        'telephone' => [
-            'required',
-            'string',
-            'max:30',
-            'unique:users,telephone',
-        ],
+            'telephone' => [
+                'required',
+                'string',
+                'max:30',
+                'unique:users,telephone',
+            ],
 
-        'email' => [
-            'required',
-            'email',
-            'max:255',
-            'unique:users,email',
-        ],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                'unique:users,email',
+            ],
 
-        'date_naissance' => [
-            'nullable',
-            'date',
-        ],
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | PROFIL
-        |--------------------------------------------------------------------------
-        */
-
-        'profil_id' => [
-            'required',
-            'exists:profils,id',
-        ],
+            'date_naissance' => [
+                'nullable',
+                'date',
+            ],
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | STATUT
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL
+            |--------------------------------------------------------------------------
+            */
 
-        'statut_compte_id' => [
-            'nullable',
-            'exists:parametres,id',
-        ],
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | AUTHENTIFICATION
-        |--------------------------------------------------------------------------
-        */
-
-        'password' => [
-            'required',
-            'confirmed',
-            'min:8',
-        ],
+            'profil_id' => [
+                'required',
+                'exists:profils,id',
+            ],
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | PHOTO UTILISATEUR
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | STATUT
+            |--------------------------------------------------------------------------
+            */
 
-        'photo' => [
-            'nullable',
-            'image',
-            'mimes:jpg,jpeg,png,jfif,webp',
-            'max:2048',
-        ],
+            'statut_compte_id' => [
+                'nullable',
+                'exists:parametres,id',
+            ],
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | PIÈCE D'IDENTITÉ
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | AUTHENTIFICATION
+            |--------------------------------------------------------------------------
+            */
 
-        'type_piece_id' => [
-            'required',
-            'exists:parametres,id',
-        ],
-
-        'numero' => [
-            'required',
-            'string',
-            'max:255',
-        ],
-
-        'date_expiration' => [
-            'nullable',
-            'date',
-        ],
-
-        'fichier' => [
-            'required',
-            'file',
-            'mimes:pdf,jpg,jpeg,png,webp',
-            'max:5120',
-        ],
-
-    ]);
+            'password' => [
+                'required',
+                'confirmed',
+                'min:8',
+            ],
 
 
-    try {
+            /*
+            |--------------------------------------------------------------------------
+            | PHOTO UTILISATEUR
+            |--------------------------------------------------------------------------
+            */
 
-        UserService::store($data);
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,jfif,webp',
+                'max:2048',
+            ],
 
-        toast(
-            'Utilisateur créé avec succès',
-            'success'
-        );
 
-    } catch (Exception $e) {
+            /*
+            |--------------------------------------------------------------------------
+            | PIÈCE D'IDENTITÉ
+            |--------------------------------------------------------------------------
+            */
 
-        toast(
-            $e->getMessage(),
-            'error'
-        );
+            'type_piece_id' => [
+                'required',
+                'exists:parametres,id',
+            ],
 
+            'numero' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'date_expiration' => [
+                'nullable',
+                'date',
+            ],
+
+            'fichier' => [
+                'required',
+                'file',
+                'mimes:pdf,jpg,jpeg,png,webp',
+                'max:5120',
+            ],
+
+        ]);
+
+
+        try {
+
+            UserService::store($data);
+
+            toast(
+                'Utilisateur créé avec succès',
+                'success'
+            );
+
+        } catch (Exception $e) {
+
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+
+        }
+
+        return back();
     }
+    public function storemembre(Request $request)
+    {
+        $data = $request->validate([
 
-    return back();
-}
+            /*
+            |--------------------------------------------------------------------------
+            | INFORMATIONS PERSONNELLES
+            |--------------------------------------------------------------------------
+            */
+
+            'name' => 'required|string|max:255',
+
+            'prenom' => 'required|string|max:255',
+
+            'telephone' => [
+                'required',
+                'string',
+                'max:30',
+                'unique:users,telephone',
+            ],
+
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                'unique:users,email',
+            ],
+
+            'date_naissance' => [
+                'nullable',
+                'date',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | AUTHENTIFICATION
+            |--------------------------------------------------------------------------
+            */
+
+            'password' => [
+                'required',
+                'confirmed',
+                'min:8',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PHOTO UTILISATEUR
+            |--------------------------------------------------------------------------
+            */
+
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,jfif,webp',
+                'max:2048',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PIÈCE D'IDENTITÉ
+            |--------------------------------------------------------------------------
+            */
+
+            'type_piece_id' => [
+                'required',
+                'exists:parametres,id',
+            ],
+
+            'numero' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'date_expiration' => [
+                'nullable',
+                'date',
+            ],
+
+            'fichier' => [
+                'required',
+                'file',
+                'mimes:pdf,jpg,jpeg,png,webp',
+                'max:5120',
+            ],
+
+        ]);
+
+
+        try {
+
+            UserService::storemembre($data);
+
+            toast(
+                'Membre créé avec succès',
+                'success'
+            );
+
+        } catch (Exception $e) {
+
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+        }
+
+        return back();
+    }
 }

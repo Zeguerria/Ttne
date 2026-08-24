@@ -104,6 +104,7 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
         //USER DEBUT
                 // CHEMIN DES PAGES DEBUT
                 Route::get('Admin/Users/Personnel', [UserController::class, 'index'])->name('ADM-USER-pers');
+                Route::get('Admin/Users/Membre', [UserController::class, 'indexmembre'])->name('ADM-USER-membre');
                 //CHEMIN DES PAGE FIN
             //AUTRES FUNCTION DEBUT
                 // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
@@ -113,6 +114,7 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
             //AUTRES FUNCTION FIN
             //FONCTIONS DEBUT
                 Route::post('AjouterUser', [UserController::class, 'store'])->name('AjouterUser');
+                Route::post('AjouterMembre', [UserController::class, 'storemembre'])->name('AjouterMembre');
                 Route::post('ModifierUser', [UserController::class, 'update'])->name('ModifierUser');
                 Route::post('CorbeilleUser', [UserController::class, 'corbeille'])->name('CorbeilleUser');
                 Route::post('/select/corbeille/personnel',[UserController::class, 'corbeilleSelection']);

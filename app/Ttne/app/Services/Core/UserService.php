@@ -2,15 +2,16 @@
 
 namespace App\Services\Core;
 
-use Exception;
-use App\Models\User;
 use App\Models\Piece;
-use Illuminate\Support\Str;
+use App\Models\Profil;
+use App\Models\User;
+use App\Services\Core\FichierService;
+use App\Services\Core\HistoriqueService;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use App\Services\Core\FichierService;
-use App\Services\Core\HistoriqueService;
+use Illuminate\Support\Str;
 
 class UserService
 {
@@ -21,153 +22,335 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-   public static function store(array $data)
-{
-    DB::beginTransaction();
+    public static function store(array $data)
+    {
+        DB::beginTransaction();
 
-    try {
+        try {
 
-        /*
-        |--------------------------------------------------------------------------
-        | Upload photo utilisateur
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | Upload photo utilisateur
+            |--------------------------------------------------------------------------
+            */
 
-        $photo = null;
+            $photo = null;
 
-        if (!empty($data['photo'])) {
-            $photo = FichierService::stockerPhoto(
-                $data['photo'],
-                null,
+            if (!empty($data['photo'])) {
+                $photo = FichierService::stockerPhoto(
+                    $data['photo'],
+                    null,
+                    $data['prenom'] . ' ' . $data['name']
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Génération du slug
+            |--------------------------------------------------------------------------
+            */
+
+            $slug = Str::slug(
+                $data['prenom'].' '.$data['name']
+            );
+
+            $baseSlug = $slug;
+            $i = 1;
+
+            while (User::where('slug', $slug)->exists()) {
+
+                $slug = $baseSlug.'-'.$i;
+
+                $i++;
+
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Création utilisateur
+            |--------------------------------------------------------------------------
+            */
+
+            $user = User::create([
+
+                'name' => $data['name'],
+
+                'prenom' => $data['prenom'],
+
+                'slug' => $slug,
+
+                'profil_id' => $data['profil_id'],
+
+                // 'statut_compte_id' => $data['statut_compte_id'],
+                'statut_compte_id' => 3,
+
+                'telephone' => $data['telephone'],
+
+                'email' => $data['email'],
+
+                'password' => Hash::make($data['password']),
+
+                'date_naissance' => $data['date_naissance'] ?? null,
+
+                'photo' => $photo,
+
+                'derniere_ip' => request()->ip(),
+
+                'supprimer' => false,
+
+            ]);
+
+            /*
+            |--------------------------------------------------------------------------
+            | Pièce d'identité
+            |--------------------------------------------------------------------------
+            */
+
+            $document = null;
+
+            if (!empty($data['fichier'])) {
+
+                $documentData = FichierService::stockerDocument(
+                    $data['fichier'],
+                    null,
+                    $data['numero'] ?? 'piece'
+                );
+
+                $document = $documentData['path'];
+
+                Piece::create([
+                    'user_id' => $user->id,
+                    'type_piece_id' => $data['type_piece_id'],
+                    'numero' => $data['numero'] ?? null,
+                    'fichier' => $document,
+                    'mime_type' => $documentData['mime_type'],
+                    'date_expiration' => $data['date_expiration'] ?? null,
+                    'commentaire' => null,
+                ]);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Historique
+            |--------------------------------------------------------------------------
+            */
+
+            HistoriqueService::creer($user);
+
+            DB::commit();
+
+            return $user;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Suppression des fichiers uploadés en cas d'erreur
+            |--------------------------------------------------------------------------
+            */
+
+            if (!empty($photo)) {
+
+                Storage::disk('public')->delete($photo);
+
+            }
+
+            if (!empty($document)) {
+
+                Storage::disk('public')->delete($document);
+
+            }
+
+            throw new Exception(
+                "Erreur lors de la création de l'utilisateur : ".$e->getMessage()
+            );
+
+        }
+    }
+    public static function storemembre(array $data)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL MEMBRE
+            |--------------------------------------------------------------------------
+            |
+            | Cette méthode crée exclusivement un membre.
+            | Le profil ne doit donc jamais être fourni par le formulaire.
+            |
+            */
+
+            $profilMembre = Profil::where('supprimer', 0)
+                ->where('code', 'MEMBRE-COMMUNAUTE')
+                ->firstOrFail();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Upload photo utilisateur
+            |--------------------------------------------------------------------------
+            */
+
+            $photo = null;
+
+            if (!empty($data['photo'])) {
+
+                $photo = FichierService::stockerPhoto(
+                    $data['photo'],
+                    null,
+                    $data['prenom'] . ' ' . $data['name']
+                );
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Génération du slug
+            |--------------------------------------------------------------------------
+            */
+
+            $slug = Str::slug(
                 $data['prenom'] . ' ' . $data['name']
             );
-        }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Génération du slug
-        |--------------------------------------------------------------------------
-        */
+            $baseSlug = $slug;
+            $i = 1;
 
-        $slug = Str::slug(
-            $data['prenom'].' '.$data['name']
-        );
+            while (User::where('slug', $slug)->exists()) {
 
-        $baseSlug = $slug;
-        $i = 1;
+                $slug = $baseSlug . '-' . $i;
+                $i++;
+            }
 
-        while (User::where('slug', $slug)->exists()) {
 
-            $slug = $baseSlug.'-'.$i;
+            /*
+            |--------------------------------------------------------------------------
+            | Création utilisateur
+            |--------------------------------------------------------------------------
+            */
 
-            $i++;
+            $user = User::create([
 
-        }
+                'name' => $data['name'],
 
-        /*
-        |--------------------------------------------------------------------------
-        | Création utilisateur
-        |--------------------------------------------------------------------------
-        */
+                'prenom' => $data['prenom'],
 
-        $user = User::create([
+                'slug' => $slug,
 
-            'name' => $data['name'],
+                /*
+                |------------------------------------------------------------------
+                | PROFIL IMPOSÉ
+                |------------------------------------------------------------------
+                */
 
-            'prenom' => $data['prenom'],
+                'profil_id' => $profilMembre->id,
 
-            'slug' => $slug,
+                'statut_compte_id' => 3,
 
-            'profil_id' => $data['profil_id'],
+                'telephone' => $data['telephone'],
 
-            // 'statut_compte_id' => $data['statut_compte_id'],
-            'statut_compte_id' => 3,
+                'email' => $data['email'],
 
-            'telephone' => $data['telephone'],
+                'password' => Hash::make($data['password']),
 
-            'email' => $data['email'],
+                'date_naissance' => $data['date_naissance'] ?? null,
 
-            'password' => Hash::make($data['password']),
+                'photo' => $photo,
 
-            'date_naissance' => $data['date_naissance'] ?? null,
+                'derniere_ip' => request()->ip(),
 
-            'photo' => $photo,
-
-            'derniere_ip' => request()->ip(),
-
-            'supprimer' => false,
-
-        ]);
-
-        /*
-        |--------------------------------------------------------------------------
-        | Pièce d'identité
-        |--------------------------------------------------------------------------
-        */
-
-        $document = null;
-
-        if (!empty($data['fichier'])) {
-
-            $documentData = FichierService::stockerDocument(
-                $data['fichier'],
-                null,
-                $data['numero'] ?? 'piece'
-            );
-
-            $document = $documentData['path'];
-
-            Piece::create([
-                'user_id' => $user->id,
-                'type_piece_id' => $data['type_piece_id'],
-                'numero' => $data['numero'] ?? null,
-                'fichier' => $document,
-                'mime_type' => $documentData['mime_type'],
-                'date_expiration' => $data['date_expiration'] ?? null,
-                'commentaire' => null,
+                'supprimer' => false,
             ]);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Pièce d'identité
+            |--------------------------------------------------------------------------
+            */
+
+            $document = null;
+
+            if (!empty($data['fichier'])) {
+
+                $documentData = FichierService::stockerDocument(
+                    $data['fichier'],
+                    null,
+                    $data['numero'] ?? 'piece'
+                );
+
+                $document = $documentData['path'];
+
+                Piece::create([
+
+                    'user_id' => $user->id,
+
+                    'type_piece_id' => $data['type_piece_id'],
+
+                    'numero' => $data['numero'] ?? null,
+
+                    'fichier' => $document,
+
+                    'mime_type' => $documentData['mime_type'],
+
+                    'date_expiration' => $data['date_expiration'] ?? null,
+
+                    'commentaire' => null,
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Historique
+            |--------------------------------------------------------------------------
+            */
+
+            HistoriqueService::creer($user);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Validation transaction
+            |--------------------------------------------------------------------------
+            */
+
+            DB::commit();
+
+            return $user;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Suppression des fichiers uploadés en cas d'erreur
+            |--------------------------------------------------------------------------
+            */
+
+            if (!empty($photo)) {
+
+                Storage::disk('public')->delete($photo);
+            }
+
+            if (!empty($document)) {
+
+                Storage::disk('public')->delete($document);
+            }
+
+
+            throw new Exception(
+                "Erreur lors de la création du membre : " . $e->getMessage()
+            );
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Historique
-        |--------------------------------------------------------------------------
-        */
-
-        HistoriqueService::creer($user);
-
-        DB::commit();
-
-        return $user;
-
-    } catch (Exception $e) {
-
-        DB::rollBack();
-
-        /*
-        |--------------------------------------------------------------------------
-        | Suppression des fichiers uploadés en cas d'erreur
-        |--------------------------------------------------------------------------
-        */
-
-        if (!empty($photo)) {
-
-            Storage::disk('public')->delete($photo);
-
-        }
-
-        if (!empty($document)) {
-
-            Storage::disk('public')->delete($document);
-
-        }
-
-        throw new Exception(
-            "Erreur lors de la création de l'utilisateur : ".$e->getMessage()
-        );
-
     }
-}
     /*
     |--------------------------------------------------------------------------
     | MODIFICATION
