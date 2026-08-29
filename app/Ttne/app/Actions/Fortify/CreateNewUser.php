@@ -6,10 +6,11 @@ use App\Models\User;
 use App\Models\Piece;
 use App\Notifications\NouvelleInscriptionNotification;
 use App\Services\Core\FichierService;
-
+use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 use Laravel\Fortify\Contracts\CreatesNewUsers;

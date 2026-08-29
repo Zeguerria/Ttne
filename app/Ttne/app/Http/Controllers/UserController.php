@@ -486,6 +486,267 @@ class UserController extends Controller
         );
     }
 
+    public function indexdemande(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | UTILISATEUR CONNECTÉ
+        |--------------------------------------------------------------------------
+        */
+
+        $user = Auth::user();
+
+        if (!$user) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PROFIL DE L'UTILISATEUR CONNECTÉ
+        |--------------------------------------------------------------------------
+        */
+
+        $profilConnecte = $user->profil;
+
+            if (!$profilConnecte) {
+                abort(403, 'Aucun profil associé à cet utilisateur.');
+            }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PROFIL SIMPLE UTILISATEUR
+        |--------------------------------------------------------------------------
+        */
+
+        $profilSimpleUtilisateur = Profil::where('supprimer', 0)
+            ->where('code', 'SIMPLE-UTILISATEUR')
+            ->first();
+
+        if (!$profilSimpleUtilisateur) {
+            abort(
+                500,
+                'Le profil SIMPLE-UTILISATEUR est introuvable.'
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | STATUT EN ATTENTE
+        |--------------------------------------------------------------------------
+        */
+
+        $statutAttente = Parametre::where('supprimer', 0)
+            ->where('code', 'S-U-ATTENTE')
+            ->first();
+
+        if (!$statutAttente) {
+            abort(
+                500,
+                'Le statut S-U-ATTENTE est introuvable.'
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DEMANDES ACTIVES
+        |--------------------------------------------------------------------------
+        |
+        | Une demande correspond à :
+        |
+        | - profil = SIMPLE-UTILISATEUR
+        | - statut = ATTENTE
+        | - supprimer = 0
+        |
+        */
+
+        $demandes = User::where('supprimer', 0)
+            ->where('profil_id', $profilSimpleUtilisateur->id)
+            ->where('statut_compte_id', $statutAttente->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | NOMBRE TOTAL DE DEMANDES
+        |--------------------------------------------------------------------------
+        */
+
+        $UserT = User::where('supprimer', 0)
+            ->where('profil_id', $profilSimpleUtilisateur->id)
+            ->where('statut_compte_id', $statutAttente->id)
+            ->count();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | NOMBRE TOTAL DE DEMANDES SUPPRIMÉES
+        |--------------------------------------------------------------------------
+        */
+
+        $UserTC = User::where('supprimer', 1)
+            ->where('profil_id', $profilSimpleUtilisateur->id)
+            ->where('statut_compte_id', $statutAttente->id)
+            ->count();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | TYPES DE PIÈCES
+        |--------------------------------------------------------------------------
+        */
+
+        $typesPieces = Parametre::where('supprimer', 0)
+            ->where('type_parametre_id', 3)
+            ->orderBy('libelle')
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | HISTORIQUE
+        |--------------------------------------------------------------------------
+        */
+
+        $historiques = Historique::where(
+            'record_type',
+            User::class
+        )
+            ->latest()
+            ->paginate(
+                5,
+                ['*'],
+                'history_page'
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | AJAX
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->ajax()) {
+
+            return response()->json([
+
+                'historiques' => view(
+                    'dependances.templates.admins.gestions.access.users.demandes._consoms.historique',
+                    compact('historiques')
+                )->render(),
+
+                'current_page' => $historiques->currentPage(),
+
+                'last_page' => $historiques->lastPage(),
+
+                'has_more_pages' => $historiques->hasMorePages(),
+
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VUE
+        |--------------------------------------------------------------------------
+        */
+
+        return view(
+            'dependances.templates.admins.gestions.access.users.demandes.user',
+            [
+
+                /*
+                |--------------------------------------------------------------------------
+                | TOTAL DEMANDES
+                |--------------------------------------------------------------------------
+                */
+
+                'UserT' => $UserT,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | DEMANDES SUPPRIMÉES
+                |--------------------------------------------------------------------------
+                */
+
+                'UserTC' => $UserTC,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | LISTE DES DEMANDES
+                |--------------------------------------------------------------------------
+                */
+
+                'users' => $demandes,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFILS
+                |--------------------------------------------------------------------------
+                */
+
+                'profils' => collect([
+                    $profilSimpleUtilisateur
+                ]),
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | TYPES DE PIÈCES
+                |--------------------------------------------------------------------------
+                */
+
+                'typesPieces' => $typesPieces,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | HISTORIQUE
+                |--------------------------------------------------------------------------
+                */
+
+                'historiques' => $historiques,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFIL CONNECTÉ
+                |--------------------------------------------------------------------------
+                */
+
+                'profilConnecte' => $profilConnecte,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFIL SIMPLE UTILISATEUR
+                |--------------------------------------------------------------------------
+                */
+
+                'profilSimpleUtilisateur' => $profilSimpleUtilisateur,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | STATUT EN ATTENTE
+                |--------------------------------------------------------------------------
+                */
+
+                'statutAttente' => $statutAttente,
+
+            ]
+        );
+    }
+
+
+
         //
         /*
     |--------------------------------------------------------------------------

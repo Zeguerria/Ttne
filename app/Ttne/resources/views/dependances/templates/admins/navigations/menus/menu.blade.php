@@ -131,9 +131,9 @@
                             <a class="has-arrow" href="all-students.html" aria-expanded="false"><span class="educate-icon educate-student icon-wrap"></span> <span class="mini-click-non">Users</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
                                 <li><a title="All Students" href="all-students.html"><span class="mini-sub-pro">User</span></a></li>
-                                <li><a title="Add Students" href="add-student.html"><span class="mini-sub-pro">Membres</span></a></li>
+                                <li><a title="Add Students" href="{{route('ADM-USER-membre')}}"><span class="mini-sub-pro">Membres</span></a></li>
                                 <li><a title="Edit Students" href="{{route('ADM-USER-pers')}}"><span class="mini-sub-pro">Personnel</span></a></li>
-                                <li><a title="Students Profile" href="student-profile.html"><span class="mini-sub-pro">Student Profile</span></a></li>
+                                <li><a title="Students Profile" href="{{route('ADM-USER-demande')}}"><span class="mini-sub-pro">Demandes</span></a></li>
                             </ul>
                         </li>
                         <li>

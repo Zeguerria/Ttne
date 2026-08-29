@@ -14,10 +14,23 @@ class ProfilSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+
         DB::table('profils')->insert([
+
             [
                 'id' => 1,
+                'code' => 'SIMPLE-UTILISATEUR',
+                'libelle' => 'Simple utilisateur',
+                'description' => 'Utilisateur inscrit dont le compte est en attente de validation.',
+                'est_validateur' => false,
+                'is_active' => true,
+                'supprimer' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'id' => 2,
                 'code' => 'MEMBRE-COMMUNAUTE',
                 'libelle' => 'Membre',
                 'description' => 'Membre de la communauté dont l’adhésion a été validée.',
@@ -29,7 +42,7 @@ class ProfilSeeder extends Seeder
             ],
 
             [
-                'id' => 2,
+                'id' => 3,
                 'code' => 'OPERATEUR',
                 'libelle' => 'Opérateur',
                 'description' => 'Gestion des appels, demandes, réclamations et orientation des dossiers.',
@@ -41,7 +54,7 @@ class ProfilSeeder extends Seeder
             ],
 
             [
-                'id' => 3,
+                'id' => 4,
                 'code' => 'JURISTE',
                 'libelle' => 'Juriste',
                 'description' => 'Analyse et traitement des dossiers et problématiques à caractère juridique.',
@@ -53,7 +66,7 @@ class ProfilSeeder extends Seeder
             ],
 
             [
-                'id' => 4,
+                'id' => 5,
                 'code' => 'RH',
                 'libelle' => 'Ressources Humaines',
                 'description' => 'Gestion administrative et opérationnelle des ressources humaines.',
@@ -65,7 +78,7 @@ class ProfilSeeder extends Seeder
             ],
 
             [
-                'id' => 5,
+                'id' => 6,
                 'code' => 'DRH',
                 'libelle' => 'Directeur des Ressources Humaines',
                 'description' => 'Supervision et direction de la gestion des ressources humaines.',
@@ -77,7 +90,7 @@ class ProfilSeeder extends Seeder
             ],
 
             [
-                'id' => 6,
+                'id' => 7,
                 'code' => 'DIRECTEUR-GENERAL',
                 'libelle' => 'Directeur Général',
                 'description' => 'Supervision générale de l’organisation et validation des décisions stratégiques.',
@@ -89,7 +102,7 @@ class ProfilSeeder extends Seeder
             ],
 
             [
-                'id' => 7,
+                'id' => 8,
                 'code' => 'ADMIN',
                 'libelle' => 'Administrateur',
                 'description' => 'Administration fonctionnelle et gestion de la plateforme.',
@@ -101,7 +114,7 @@ class ProfilSeeder extends Seeder
             ],
 
             [
-                'id' => 8,
+                'id' => 9,
                 'code' => 'DEVELOPPEUR',
                 'libelle' => 'Développeur',
                 'description' => 'Développement, maintenance, correction et évolution de l’application.',
@@ -113,7 +126,7 @@ class ProfilSeeder extends Seeder
             ],
 
             [
-                'id' => 9,
+                'id' => 10,
                 'code' => 'SUPER-DEVELOPPEUR',
                 'libelle' => 'Super Développeur',
                 'description' => 'Supervision technique, maintenance avancée et gestion technique de l’application.',
@@ -123,6 +136,9 @@ class ProfilSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
         ]);
+
+
     }
 }
