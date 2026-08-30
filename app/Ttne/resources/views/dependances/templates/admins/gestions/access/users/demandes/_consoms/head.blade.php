@@ -23,7 +23,7 @@
 
                             <h2>
 
-                               COMMUNAUTE
+                               DEMANDE
 
                             </h2>
 
@@ -47,7 +47,7 @@
 
                                 <strong>
 
-                                   Membre de Communauté
+                                   Demande d'adeshion
 
                                 </strong>
 
@@ -143,7 +143,7 @@
                                 <div class="futureHistoryBody" id="futureHistoryBody" >
 
                                     @include(
-                                        'dependances.templates.admins.gestions.access.users.membres._consoms.historique',
+                                        'dependances.templates.admins.gestions.access.users.demandes._consoms.historique',
                                         ['historiques' => $historiques]
                                     )
 

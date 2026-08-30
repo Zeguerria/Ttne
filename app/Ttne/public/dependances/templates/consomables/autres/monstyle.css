@@ -1726,3 +1726,446 @@ RESPONSIVE
         padding-top: 20px;
     }
 /* MON ESPACE INTER INPUT N */
+
+/* =========================================================
+   EXAMEN DEMANDE
+   FOOTER
+========================================================= */
+
+.examenDemandeFooter {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    flex-wrap: nowrap;
+
+}
+
+
+/* =========================================================
+   GROUPE DES ACTIONS DU STEPPER
+========================================================= */
+
+.examenDemandeActions {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-left: auto;
+
+    flex-wrap: nowrap;
+
+}
+
+
+/* =========================================================
+   BOUTONS DU FOOTER
+========================================================= */
+
+.examenDemandeFooter .futureBtn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    white-space: nowrap;
+
+}
+
+
+/* =========================================================
+   MOBILE — FOOTER
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .examenDemandeFooter {
+
+        flex-wrap: wrap;
+
+        gap: 12px;
+
+    }
+
+
+    .examenDemandeActions {
+
+        width: 100%;
+
+        margin-left: 0;
+
+        justify-content: flex-end;
+
+        flex-wrap: wrap;
+
+    }
+
+}
+
+
+/* =========================================================
+   STEP 5 — EXAMEN DEMANDE
+========================================================= */
+
+.steep-5 {
+
+    width: 100%;
+
+}
+
+.steep-05 {
+
+    width: 100%;
+
+}
+
+
+/* =========================================================
+   BLOC INFORMATION
+========================================================= */
+
+.examenDecisionInfo {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 18px 22px;
+
+    border: 1px solid rgba(255, 193, 7, 0.25);
+
+    border-radius: 12px;
+
+    background: rgba(255, 193, 7, 0.05);
+
+}
+
+
+.examenDecisionInfoIcon {
+
+    min-width: 42px;
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: rgba(255, 193, 7, 0.10);
+
+    font-size: 18px;
+
+}
+
+
+.examenDecisionInfoContent {
+
+    flex: 1;
+
+}
+
+
+.examenDecisionInfoContent strong {
+
+    display: block;
+
+}
+
+
+.examenDecisionInfoContent p {
+
+    margin: 5px 0 0;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   ZONE DE DÉCISION
+========================================================= */
+
+.examenDecisionBox {
+
+    width: 100%;
+
+    padding: 22px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+}
+
+
+/* =========================================================
+   HEADER DÉCISION
+========================================================= */
+
+.examenDecisionHeader {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.examenDecisionHeader > i {
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    font-size: 18px;
+
+    background: rgba(255, 255, 255, 0.06);
+
+}
+
+
+.examenDecisionHeader strong {
+
+    display: block;
+
+    font-size: 16px;
+
+}
+
+
+.examenDecisionHeader span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 13px;
+
+    opacity: 0.65;
+
+}
+
+
+/* =========================================================
+   BOUTONS DE DÉCISION
+========================================================= */
+
+.examenDecisionButtons {
+
+    display: flex;
+
+    align-items: stretch;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    width: 100%;
+
+}
+
+
+/* =========================================================
+   BOUTON DÉCISION
+========================================================= */
+
+.examenDecisionBtn {
+
+    flex: 1;
+
+    min-height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 14px;
+
+    padding: 14px 20px;
+
+    border-radius: 12px;
+
+    border: 1px solid transparent;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+
+}
+
+
+/* =========================================================
+   ICÔNE DU BOUTON
+========================================================= */
+
+.examenDecisionBtnIcon {
+
+    width: 44px;
+
+    height: 44px;
+
+    flex: 0 0 44px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    font-size: 19px;
+
+}
+
+
+/* =========================================================
+   TEXTE DU BOUTON
+========================================================= */
+
+.examenDecisionBtnText {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    text-align: left;
+
+}
+
+
+.examenDecisionBtnText strong {
+
+    font-size: 15px;
+
+}
+
+
+.examenDecisionBtnText small {
+
+    margin-top: 3px;
+
+    font-size: 12px;
+
+    opacity: 0.65;
+
+}
+
+
+/* =========================================================
+   REFUSER
+========================================================= */
+
+.examenRefuserBtn {
+
+    background: rgba(220, 53, 69, 0.08);
+
+    border-color: rgba(220, 53, 69, 0.25);
+
+}
+
+
+.examenRefuserBtn .examenDecisionBtnIcon {
+
+    background: rgba(220, 53, 69, 0.12);
+
+}
+
+
+/* =========================================================
+   ACCEPTER
+========================================================= */
+
+.examenAccepterBtn {
+
+    background: rgba(25, 135, 84, 0.08);
+
+    border-color: rgba(25, 135, 84, 0.25);
+
+}
+
+
+.examenAccepterBtn .examenDecisionBtnIcon {
+
+    background: rgba(25, 135, 84, 0.12);
+
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.examenDecisionBtn:hover {
+
+    transform: translateY(-2px);
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — BOUTONS DE DÉCISION
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .examenDecisionButtons {
+
+        flex-direction: column;
+
+    }
+
+
+    .examenDecisionBtn {
+
+        width: 100%;
+
+    }
+
+}
+

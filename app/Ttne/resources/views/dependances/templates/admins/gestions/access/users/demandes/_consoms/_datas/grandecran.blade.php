@@ -13,9 +13,7 @@
             @endphp
 
             <tr
-                class="futureRow"
-                data-row="{{ $value->id }}"
-            >
+                class="futureRow" data-row="{{ $value->id }}" >
 
                 {{-- =================================================
                      CHECKBOX
@@ -277,6 +275,19 @@
                         >
 
                             <i class="fa fa-edit"></i>
+
+                        </button>
+
+                         <button
+                            class="futureMiniBtn infoBtn"
+                            data-bs-toggle="tooltip"
+                            data-placement="bottom"
+                            data-toggle="modal"
+                            data-target="#examiner{{ $value->id }}"
+                            title="Examiner"
+                            type="button">
+                            <i class="fa fa-shield"></i>
+                            {{-- <i class="fa fa-choice"></i> --}}
 
                         </button>
 

@@ -74,7 +74,7 @@
                         document.querySelector(config.button || "#bulkDeleteBtn");
 
                     this.url =
-                        config.url || "/select/corbeille/profil";
+                        config.url || "/select/corbeille/demandes";
 
 
 
@@ -318,7 +318,7 @@
                 new BulkCorbeille({
 
                     button: "#bulkDeleteBtn",
-                    url: "/select/corbeille/profil"
+                    url: "/select/corbeille/demandes"
 
                 });
 

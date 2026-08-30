@@ -63,6 +63,23 @@
                             ========================================= --}}
 
                             <div class="futureTableLeft">
+                                 <button
+                                    class="futureBtn primaryBtn"
+                                    data-toggle="modal"
+                                    data-target="#Ajouter"
+                                    title="Ajouter"
+                                    type="button"
+                                >
+
+                                    <i class="fa fa-plus"></i>
+
+                                    <span>
+
+                                        Ajouter
+
+                                    </span>
+
+                                </button>
 
 
                                 {{-- =========================================
