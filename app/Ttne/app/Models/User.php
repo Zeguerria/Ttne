@@ -31,6 +31,7 @@ class User extends Authenticatable
         'name',
         'prenom',
         'slug',
+        'date_refus',
         'photo',
         'telephone',
         'email',

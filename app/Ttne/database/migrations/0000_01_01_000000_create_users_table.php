@@ -55,6 +55,7 @@ return new class extends Migration
 
             // Corbeille logique
             $table->boolean('supprimer')->default(false);
+            $table->date('date_refus')->nullable();
 
             // Jetstream
             $table->rememberToken();

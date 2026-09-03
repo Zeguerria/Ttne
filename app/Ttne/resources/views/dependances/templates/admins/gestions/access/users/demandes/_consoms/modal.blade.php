@@ -910,8 +910,7 @@
                                         <button
                                             type="button"
                                             class="futureBtn darkBtn"
-                                            data-dismiss="modal"
-                                        >
+                                            data-dismiss="modal" >
 
                                             <i class="fa fa-times"></i>
 
@@ -926,8 +925,7 @@
 
                                         <div
                                             class="d-flex align-items-center"
-                                            style="gap:15px;"
-                                        >
+                                            style="gap:15px;" >
 
 
                                             {{-- =================================================
@@ -2369,67 +2367,82 @@
                                                                                 REFUSER
                                                                             ====================================== --}}
 
-                                                                            <button
-                                                                                type="button"
-                                                                                class="examenDecisionBtn examenRefuserBtn"
-                                                                                id="refuserDemande{{ $value->id }}"
-                                                                                data-id="{{ $value->id }}"
-                                                                            >
+                                                                            <form 
+                                                                                action="{{ route('RefuserDemandeUser') }}" 
+                                                                                method="POST"
+                                                                                class="examenDecisionForm">
+                                                                                @csrf
 
-                                                                                <span class="examenDecisionBtnIcon">
+                                                                                <input 
+                                                                                    type="hidden" 
+                                                                                    name="id" 
+                                                                                    value="{{ $value->id }}">
 
-                                                                                    <i class="fa fa-times-circle"></i>
+                                                                                <button 
+                                                                                    type="submit"
+                                                                                    class="examenDecisionBtn examenRefuserBtn"
+                                                                                >
 
-                                                                                </span>
+                                                                                    <span class="examenDecisionBtnIcon">
+                                                                                        <i class="fa fa-times-circle"></i>
+                                                                                    </span>
 
+                                                                                    <span class="examenDecisionBtnText">
 
-                                                                                <span class="examenDecisionBtnText">
+                                                                                        <strong>
+                                                                                            Refuser
+                                                                                        </strong>
 
-                                                                                    <strong>
-                                                                                        Refuser
-                                                                                    </strong>
+                                                                                        <small>
+                                                                                            Refuser cette demande
+                                                                                        </small>
 
-                                                                                    <small>
-                                                                                        Refuser cette demande
-                                                                                    </small>
+                                                                                    </span>
 
-                                                                                </span>
+                                                                                </button>
 
-                                                                            </button>
+                                                                            </form>
 
 
                                                                             {{-- =====================================
                                                                                 ACCEPTER
                                                                             ====================================== --}}
 
-                                                                            <button
-                                                                                type="button"
-                                                                                class="examenDecisionBtn examenAccepterBtn"
-                                                                                id="accepterDemande{{ $value->id }}"
-                                                                                data-id="{{ $value->id }}"
-                                                                            >
+                                                                           <form 
+                                                                                action="{{ route('ValiderDemandeUser') }}" 
+                                                                                method="POST"
+                                                                                class="examenDecisionForm">
+                                                                                @csrf
 
-                                                                                <span class="examenDecisionBtnIcon">
+                                                                                <input 
+                                                                                    type="hidden" 
+                                                                                    name="id" 
+                                                                                    value="{{ $value->id }}"
+                                                                                >
 
-                                                                                    <i class="fa fa-check-circle"></i>
+                                                                                <button 
+                                                                                    type="submit"
+                                                                                    class="examenDecisionBtn examenAccepterBtn">
 
-                                                                                </span>
+                                                                                    <span class="examenDecisionBtnIcon">
+                                                                                        <i class="fa fa-check-circle"></i>
+                                                                                    </span>
 
+                                                                                    <span class="examenDecisionBtnText">
 
-                                                                                <span class="examenDecisionBtnText">
+                                                                                        <strong>
+                                                                                            Accepter
+                                                                                        </strong>
 
-                                                                                    <strong>
-                                                                                        Accepter
-                                                                                    </strong>
+                                                                                        <small>
+                                                                                            Devenir membre de la communauté
+                                                                                        </small>
 
-                                                                                    <small>
-                                                                                        Devenir membre de la communauté
-                                                                                    </small>
+                                                                                    </span>
 
-                                                                                </span>
+                                                                                </button>
 
-                                                                            </button>
-
+                                                                            </form>
 
                                                                         </div>
 
@@ -2477,8 +2490,7 @@
                                     <button
                                         type="button"
                                         class="futureBtn darkBtn examenBtnFermer"
-                                        data-bs-dismiss="modal"
-                                    >
+                                        data-bs-dismiss="modal">
 
                                         <i class="fa fa-times"></i>
 
@@ -2541,6 +2553,9 @@
                         </div>
 
                     </div>
+                    <script>
+                      
+                    </script>
 
 
                     {{-- =========================================================

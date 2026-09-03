@@ -112,6 +112,8 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
 
                 Route::get('Admin/Corebeille/Personnels/Tout-Destroy', [UserController::class, 'destroyTous'])->name('D-All-AD-PRO');
                 Route::post('Admin/Corebeille/Personnel/Tout-Soft', [UserController::class, 'corbeilleAll'])->name('C-All-HAB-H');
+                Route::post('Admin/Users/Demandes/Valider', [UserController::class, 'validerdemande'])->name('ValiderDemandeUser');
+                Route::post('Admin/Users/Demandes/Refuser',[UserController::class, 'refuserdemande'])->name('RefuserDemandeUser');
             //AUTRES FUNCTION FIN
             //FONCTIONS DEBUT
                 Route::post('AjouterUser', [UserController::class, 'store'])->name('AjouterUser');

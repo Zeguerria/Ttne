@@ -4,6 +4,7 @@ namespace App\Services\Core;
 
 use App\Models\Piece;
 use App\Models\Profil;
+use App\Models\Parametre;
 use App\Models\User;
 use App\Services\Core\FichierService;
 use App\Services\Core\HistoriqueService;
@@ -1117,6 +1118,9 @@ class UserService
         }
     }
 
+
+
+
     /*
     |--------------------------------------------------------------------------
     | VALIDER UN UTILISATEUR
@@ -1125,8 +1129,216 @@ class UserService
 
     public static function valider(array $data)
     {
+        DB::beginTransaction();
 
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL SIMPLE UTILISATEUR
+            |--------------------------------------------------------------------------
+            |
+            | L'utilisateur doit actuellement être un SIMPLE-UTILISATEUR
+            | avant de pouvoir être accepté.
+            |
+            */
+
+            $profilSimpleUtilisateur = Profil::where('supprimer', 0)
+                ->where('code', 'SIMPLE-UTILISATEUR')
+                ->firstOrFail();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL MEMBRE
+            |--------------------------------------------------------------------------
+            |
+            | Après validation, l'utilisateur devient automatiquement
+            | MEMBRE-COMMUNAUTE.
+            |
+            */
+
+            $profilMembre = Profil::where('supprimer', 0)
+                ->where('code', 'MEMBRE-COMMUNAUTE')
+                ->firstOrFail();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | STATUT EN ATTENTE
+            |--------------------------------------------------------------------------
+            */
+
+            $statutAttente = Parametre::where('supprimer', 0)
+                ->where('code', 'S-U-ATTENTE')
+                ->firstOrFail();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | STATUT ACCEPTE
+            |--------------------------------------------------------------------------
+            */
+
+            $statutAccepte = Parametre::where('supprimer', 0)
+                ->where('code', 'S-U-ACCEPTE')
+                ->firstOrFail();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DE L'UTILISATEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $user = User::findOrFail(
+                $data['id']
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | VERIFICATION DU PROFIL
+            |--------------------------------------------------------------------------
+            |
+            | Seul un SIMPLE-UTILISATEUR peut être accepté.
+            |
+            */
+
+            if ($user->profil_id !== $profilSimpleUtilisateur->id) {
+
+                throw new Exception(
+                    "L'utilisateur sélectionné n'est pas un simple utilisateur."
+                );
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | VERIFICATION DU STATUT
+            |--------------------------------------------------------------------------
+            |
+            | Seul un utilisateur EN ATTENTE peut être accepté.
+            |
+            */
+
+            if ($user->statut_compte_id !== $statutAttente->id) {
+
+                throw new Exception(
+                    "L'utilisateur sélectionné n'est pas en attente de validation."
+                );
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | ANCIENNE VALEUR POUR L'HISTORIQUE
+            |--------------------------------------------------------------------------
+            |
+            | On récupère l'état AVANT la validation.
+            |
+            */
+
+            $ancienneValeur = $user->toArray();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | VALIDATION DE L'UTILISATEUR
+            |--------------------------------------------------------------------------
+            |
+            | SIMPLE-UTILISATEUR
+            |        ↓
+            | MEMBRE-COMMUNAUTE
+            |
+            | S-U-ATTENTE
+            |        ↓
+            | S-U-ACCEPTE
+            |
+            */
+
+            $user->profil_id = $profilMembre->id;
+
+            $user->statut_compte_id = $statutAccepte->id;
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | DERNIERE IP
+            |--------------------------------------------------------------------------
+            */
+
+            $user->derniere_ip = request()->ip();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | ENREGISTREMENT
+            |--------------------------------------------------------------------------
+            */
+
+            $user->save();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | HISTORIQUE
+            |--------------------------------------------------------------------------
+            |
+            | On enregistre la différence entre l'ancien état
+            | et le nouvel état.
+            |
+            */
+
+            HistoriqueService::modifier(
+                $user,
+                $ancienneValeur,
+                $user->toArray()
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | VALIDATION TRANSACTION
+            |--------------------------------------------------------------------------
+            */
+
+            DB::commit();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | RETOUR
+            |--------------------------------------------------------------------------
+            */
+
+            return $user;
+
+
+        } catch (Exception $e) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | ANNULATION TRANSACTION
+            |--------------------------------------------------------------------------
+            */
+
+            DB::rollBack();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | ERREUR
+            |--------------------------------------------------------------------------
+            */
+
+            throw new Exception(
+                "Erreur lors de la validation de l'utilisateur : "
+                . $e->getMessage()
+            );
+        }
     }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -1136,7 +1348,135 @@ class UserService
 
     public static function rejeter(array $data)
     {
+        DB::beginTransaction();
 
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | RÉCUPÉRATION DES PROFILS
+            |--------------------------------------------------------------------------
+            */
+
+            $profilSimpleUtilisateur = Profil::where('supprimer', 0)
+                ->where('code', 'SIMPLE-UTILISATEUR')
+                ->firstOrFail();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | RÉCUPÉRATION DES STATUTS
+            |--------------------------------------------------------------------------
+            */
+
+            $statutAttente = Parametre::where('supprimer', 0)
+                ->where('code', 'S-U-ATTENTE')
+                ->firstOrFail();
+
+            $statutRefuse = Parametre::where('supprimer', 0)
+                ->where('code', 'S-U-REFUSE')
+                ->firstOrFail();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | RÉCUPÉRATION DE L'UTILISATEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $user = User::findOrFail($data['id']);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | VÉRIFICATION DU PROFIL
+            |--------------------------------------------------------------------------
+            */
+
+            if ($user->profil_id !== $profilSimpleUtilisateur->id) {
+                throw new Exception(
+                    "L'utilisateur sélectionné n'est pas un simple utilisateur."
+                );
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | VÉRIFICATION DU STATUT
+            |--------------------------------------------------------------------------
+            */
+
+            if ($user->statut_compte_id !== $statutAttente->id) {
+                throw new Exception(
+                    "L'utilisateur sélectionné n'est pas en attente de validation."
+                );
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | ANCIENNES VALEURS POUR L'HISTORIQUE
+            |--------------------------------------------------------------------------
+            */
+
+            $ancienneValeur = $user->toArray();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | REFUS DE LA DEMANDE
+            |--------------------------------------------------------------------------
+            |
+            | On conserve :
+            | - le profil SIMPLE-UTILISATEUR
+            | - l'utilisateur en base
+            |
+            | On modifie :
+            | - le statut → S-U-REFUSE
+            | - la date du refus
+            | - la dernière IP
+            |
+            */
+
+            $user->statut_compte_id = $statutRefuse->id;
+            $user->date_refus = now();
+            $user->derniere_ip = request()->ip();
+
+            $user->save();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | HISTORIQUE
+            |--------------------------------------------------------------------------
+            */
+
+            HistoriqueService::modifier(
+                $user,
+                $ancienneValeur,
+                $user->toArray()
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | VALIDATION TRANSACTION
+            |--------------------------------------------------------------------------
+            */
+
+            DB::commit();
+
+            return $user;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                "Erreur lors du rejet de l'utilisateur : "
+                . $e->getMessage()
+            );
+        }
     }
 
     /*
