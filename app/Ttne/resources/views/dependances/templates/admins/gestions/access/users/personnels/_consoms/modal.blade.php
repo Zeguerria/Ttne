@@ -611,10 +611,12 @@
                                         method="POST"
                                         action="{{ route('ModifierUser', $value->id) }}"
                                         enctype="multipart/form-data" >
+                                        <input type="hidden" name="id" value="{{$value->id}}">
+
 
                                         @csrf
 
-                                        @method('PUT')
+                                        {{-- @method('PUT') --}}
 
 
                                         {{-- =====================================================
@@ -899,8 +901,7 @@
                                         ====================================================== --}}
 
                                         <div
-                                            class="modal-footer futuristicFooter justify-content-between"
-                                        >
+                                            class="modal-footer futuristicFooter justify-content-between">
 
 
                                             {{-- =================================================
@@ -1354,8 +1355,9 @@
                     <form
                         method="POST"
                         action="{{ route('CorbeilleUser') }}"
-                        style="margin:0;"
-                    >
+                        style="margin:0;">
+                        <input type="hidden" name="id" value="{{$value->id}}">
+
 
                         @csrf
 

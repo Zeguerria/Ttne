@@ -8,7 +8,7 @@
             {{-- TOUT SUPPRIMER FIN --}}
             {{-- TOUT RECUPERER DEBUT --}}
                 <div class="restorer-selection">
-                    @include('dependances.templates.admins.gestions.corbeilles._consoms.toutrestorer')
+                    @include('dependances.templates.admins.gestions.corbeilles._consoms.restorerselection')
                 </div>
             {{-- TOUT RECUPERER FIN --}}
 

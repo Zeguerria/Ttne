@@ -9,7 +9,7 @@
                 <div class="modal-dialog modal-xl modal-dialog-centered monstepper">
 
                     <div class="modal-content futuristicContent ">
-                        <form id="futureStepperForm" method="POST" action="{{ route('AjouterMembre') }}"  enctype="multipart/form-data">
+                        <form id="futureStepperForm" method="POST" action="{{ route('AjouterDemande') }}"  enctype="multipart/form-data">
                             @csrf
                             <!-- LIGHT -->
                             <div class="modalLight"></div>
@@ -26,11 +26,11 @@
 
                                     <div>
                                         <h2 class="futuristicTitle">
-                                            Nouveau membre
+                                            Nouvelle demande
                                         </h2>
 
                                         <p class="futuristicSubTitle">
-                                            Création d'un compte utilisateur
+                                            Création d'une demande
                                         </p>
                                     </div>
 
@@ -126,7 +126,7 @@
                                         ====================================== -->
 
                                         <div class="stepContent active" data-content="1">
-                                            @include('dependances.templates.admins.gestions.access.users.membres._consoms._modalajouts.steep1')
+                                            @include('dependances.templates.admins.gestions.access.users.demandes._consoms._modalajouts.steep1')
                                         </div>
                                         <!-- =====================================
                                             STEP 2
@@ -134,7 +134,7 @@
                                         ====================================== -->
 
                                         <div class="stepContent" data-content="2">
-                                            @include('dependances.templates.admins.gestions.access.users.membres._consoms._modalajouts.steep2')
+                                            @include('dependances.templates.admins.gestions.access.users.demandes._consoms._modalajouts.steep2')
                                         </div>
                                         <!-- =====================================
                                             STEP 3
@@ -142,7 +142,7 @@
                                         ====================================== -->
 
                                         <div class="stepContent" data-content="3">
-                                            @include('dependances.templates.admins.gestions.access.users.membres._consoms._modalajouts.steep3')
+                                            @include('dependances.templates.admins.gestions.access.users.demandes._consoms._modalajouts.steep3')
                                         </div>
                                         <!-- =====================================
                                             STEP 4
@@ -151,7 +151,7 @@
 
                                         <div class="stepContent" data-content="4">
 
-                                            @include('dependances.templates.admins.gestions.access.users.membres._consoms._modalajouts.steep4')
+                                            @include('dependances.templates.admins.gestions.access.users.demandes._consoms._modalajouts.steep4')
                                         </div>
                                         <!-- =====================================
                                             STEP 5
@@ -159,7 +159,7 @@
                                         ====================================== -->
 
                                         <div class="stepContent" data-content="5">
-                                            @include('dependances.templates.admins.gestions.access.users.membres._consoms._modalajouts.steep5')
+                                            @include('dependances.templates.admins.gestions.access.users.demandes._consoms._modalajouts.steep5')
 
                                         </div>
 
@@ -170,22 +170,27 @@
 
                             </div>
                             <!-- FOOTER -->
-                            <div class="modal-footer futuristicFooter justify-content-between">
+                             <div class="modal-footer futuristicFooter justify-content-between ">
 
 
                                 <!-- LEFT -->
-                                <button type="button"
-                                        class="futureBtn darkBtn"
+
+                                <button
+                                        type="button"
+                                        class="futureBtn darkBtn examenBtnFermer"
                                         data-dismiss="modal">
 
-                                    <i class="fa fa-times"></i>
-                                    Annuler
+                                        <i class="fa fa-times"></i>
 
-                                </button>
+                                        Annuler
+
+                                 </button>
+
+
 
 
                                 <!-- RIGHT -->
-                                <div class="d-flex align-items-center"
+                                <div class=" examenDemandeActions"
                                     style="gap:15px;">
 
 
@@ -224,6 +229,15 @@
 
 
                                 </div>
+
+
+
+
+                                    {{-- =================================================
+                                        GROUPE DES ACTIONS DU STEPPER
+                                    ================================================== --}}
+
+
 
                             </div>
 
@@ -285,7 +299,7 @@
 
                                                 <p class="futuristicSubTitle">
 
-                                                    Consultation détaillée du compte utilisateur
+                                                    Consultation détaillée de la demande
 
                                                 </p>
 
@@ -296,7 +310,7 @@
 
 
                                         <button type="button" class="btn-close btn-close-white futuristicClose"
-                                            data-bs-dismiss="modal">
+                                            data-dismiss="modal">
                                         </button>
 
                                     </div>
@@ -506,71 +520,54 @@
 
 
 
-                                    <div class="modal-footer futuristicFooter examenDemandeFooter">
+                                    <div class="modal-footer futuristicFooter justify-content-between">
 
 
-                                        {{-- =================================================
-                                            BOUTON FERMER
-                                        ================================================== --}}
+                                        {{-- LEFT --}}
 
-
-                                        <button type="button" class="futureBtn darkBtn examenBtnFermer" data-dismiss="modal">
+                                        <!-- LEFT -->
+                                            <button type="button" class="futureBtn darkBtn" data-dismiss="modal">
 
                                                 <i class="fa fa-times"></i>
                                                 Annuler
 
-                                        </button>
+                                            </button>
 
 
+                                        {{-- RIGHT --}}
 
-                                        {{-- =================================================
-                                            GROUPE DES ACTIONS DU STEPPER
-                                        ================================================== --}}
-
-                                        <div class="examenDemandeActions">
-
-
-                                            {{-- =================================================
-                                                RETOUR
-                                            ================================================== --}}
-                                            {{--
-
-                                            {{-- =================================================
-                                                CONTINUER
-                                            ================================================== --}}
-
-                                            <div class="d-flex align-items-center" style="gap:15px;" >
+                                        <div
+                                            class=" examenDemandeActions"
+                                            style="gap:15px;" >
 
 
-                                                {{-- PREVIOUS --}}
+                                            {{-- PREVIOUS --}}
 
-                                                <button
-                                                    type="button"
-                                                    class="futureBtn dangerBtn prevStep" style="display:none;">
-                                                    <i class="fa fa-arrow-left"></i>
-                                                    Retour
-                                                </button>
+                                            <button
+                                                type="button"
+                                                class="futureBtn dangerBtn prevStep"
+                                                style="display:none;"
+                                            >
 
+                                                <i class="fa fa-arrow-left"></i>
 
-                                                {{-- NEXT --}}
+                                                Retour
 
-                                                <button
-                                                    type="button"
-                                                    class="futureBtn successBtn nextStep">
-
-                                                    Continuer
-
-                                                    <i class="fa fa-arrow-right"></i>
-
-                                                </button>
+                                            </button>
 
 
-                                            </div>
+                                            {{-- NEXT --}}
 
-                                            {{-- =================================================
-                                                ACTIONS FINALES
-                                                APPARAISSENT UNIQUEMENT AU STEP 5
-                                            ================================================== --}}
+                                            <button
+                                                type="button"
+                                                class="futureBtn successBtn nextStep"  >
+
+                                                Continuer
+
+                                                <i class="fa fa-arrow-right"></i>
+
+                                            </button>
+
 
                                         </div>
 
@@ -608,13 +605,14 @@
                                 <form
                                     id="futureModifierForm{{ $value->id }}"
                                     method="POST"
-                                    action="{{ route('ModifierUser', $value->id) }}"
-                                    enctype="multipart/form-data"
-                                >
+                                    action="{{ route('ModifierDemande', $value->id) }}"
+                                    enctype="multipart/form-data" >
+                                        <input type="hidden" name="id" value="{{$value->id}}">
+
 
                                     @csrf
 
-                                    @method('PUT')
+                                    {{-- @method('PUT') --}}
 
 
                                     {{-- =====================================================
@@ -898,88 +896,87 @@
                                         FOOTER
                                     ====================================================== --}}
 
-                                    <div
-                                        class="modal-footer futuristicFooter justify-content-between"
-                                    >
-
-
-                                        {{-- =================================================
-                                            LEFT
-                                        ================================================== --}}
-
-                                        <button
-                                            type="button"
-                                            class="futureBtn darkBtn"
-                                            data-dismiss="modal" >
-
-                                            <i class="fa fa-times"></i>
-
-                                            Annuler
-
-                                        </button>
-
-
-                                        {{-- =================================================
-                                            RIGHT
-                                        ================================================== --}}
-
-                                        <div
-                                            class="d-flex align-items-center"
-                                            style="gap:15px;" >
+                                    <div class="modal-footer futuristicFooter justify-content-between">
 
 
                                             {{-- =================================================
-                                                PREVIOUS
+                                                LEFT
                                             ================================================== --}}
 
                                             <button
                                                 type="button"
-                                                class="futureBtn dangerBtn prevStep"
-                                                style="display:none;"
+                                                class="futureBtn darkBtn"
+                                                data-dismiss="modal"
                                             >
 
-                                                <i class="fa fa-arrow-left"></i>
+                                                <i class="fa fa-times"></i>
 
-                                                Retour
+                                                Annuler
 
                                             </button>
 
 
                                             {{-- =================================================
-                                                NEXT
+                                                RIGHT
                                             ================================================== --}}
 
-                                            <button
-                                                type="button"
-                                                class="futureBtn successBtn nextStep"
-                                            >
-
-                                                Continuer
-
-                                                <i class="fa fa-arrow-right"></i>
-
-                                            </button>
+                                            <div
+                                                class="examenDemandeActions"
+                                                style="gap:15px;">
 
 
-                                            {{-- =================================================
-                                                SUBMIT
-                                            ================================================== --}}
+                                                {{-- =================================================
+                                                    PREVIOUS
+                                                ================================================== --}}
 
-                                            <button
-                                                type="submit"
-                                                class="futureBtn successBtn submitStep"
-                                                style="display:none;"
-                                                form="futureModifierForm{{ $value->id }}"
-                                            >
+                                                <button
+                                                    type="button"
+                                                    class="futureBtn dangerBtn prevStep"
+                                                    style="display:none;"
+                                                >
 
-                                                <i class="fa fa-check"></i>
+                                                    <i class="fa fa-arrow-left"></i>
 
-                                                Enregistrer
+                                                    Retour
 
-                                            </button>
+                                                </button>
 
 
-                                        </div>
+                                                {{-- =================================================
+                                                    NEXT
+                                                ================================================== --}}
+
+                                                <button
+                                                    type="button"
+                                                    class="futureBtn successBtn nextStep"
+                                                >
+
+                                                    Continuer
+
+                                                    <i class="fa fa-arrow-right"></i>
+
+                                                </button>
+
+
+                                                {{-- =================================================
+                                                    SUBMIT
+                                                ================================================== --}}
+
+                                                <button
+                                                    type="submit"
+                                                    class="futureBtn successBtn submitStep"
+                                                    style="display:none;"
+                                                    form="futureModifierForm{{ $value->id }}"
+                                                >
+
+                                                    <i class="fa fa-check"></i>
+
+                                                    Enregistrer
+
+                                                </button>
+
+
+                                            </div>
 
                                     </div>
 
@@ -1309,9 +1306,8 @@
                                     ================================================== --}}
 
                                     <div
-                                        class="d-flex align-items-center"
-                                        style="gap:15px;"
-                                    >
+                                        class="examenDemandeActions"
+                                        style="gap:15px;">
 
 
                                         {{-- =================================================
@@ -1354,8 +1350,9 @@
                                         <form
                                             method="POST"
                                             action="{{ route('CorbeilleUser') }}"
-                                            style="margin:0;"
-                                        >
+                                            style="margin:0;">
+                                            <input type="hidden" name="id" value="{{$value->id}}">
+
 
                                             @csrf
 
@@ -2367,18 +2364,18 @@
                                                                                 REFUSER
                                                                             ====================================== --}}
 
-                                                                            <form 
-                                                                                action="{{ route('RefuserDemandeUser') }}" 
+                                                                            <form
+                                                                                action="{{ route('RefuserDemandeUser') }}"
                                                                                 method="POST"
                                                                                 class="examenDecisionForm">
                                                                                 @csrf
 
-                                                                                <input 
-                                                                                    type="hidden" 
-                                                                                    name="id" 
+                                                                                <input
+                                                                                    type="hidden"
+                                                                                    name="id"
                                                                                     value="{{ $value->id }}">
 
-                                                                                <button 
+                                                                                <button
                                                                                     type="submit"
                                                                                     class="examenDecisionBtn examenRefuserBtn"
                                                                                 >
@@ -2408,19 +2405,19 @@
                                                                                 ACCEPTER
                                                                             ====================================== --}}
 
-                                                                           <form 
-                                                                                action="{{ route('ValiderDemandeUser') }}" 
+                                                                           <form
+                                                                                action="{{ route('ValiderDemandeUser') }}"
                                                                                 method="POST"
                                                                                 class="examenDecisionForm">
                                                                                 @csrf
 
-                                                                                <input 
-                                                                                    type="hidden" 
-                                                                                    name="id" 
+                                                                                <input
+                                                                                    type="hidden"
+                                                                                    name="id"
                                                                                     value="{{ $value->id }}"
                                                                                 >
 
-                                                                                <button 
+                                                                                <button
                                                                                     type="submit"
                                                                                     class="examenDecisionBtn examenAccepterBtn">
 
@@ -2554,7 +2551,7 @@
 
                     </div>
                     <script>
-                      
+
                     </script>
 
 

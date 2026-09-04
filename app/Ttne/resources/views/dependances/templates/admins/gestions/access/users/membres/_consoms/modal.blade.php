@@ -4,7 +4,7 @@
 
         {{-- AJOUTER DEBUT --}}
 
-            <div class="modal fade futuristicModal" tabindex="-1" aria-hidden="true" id="Ajouter" data-stepper="true" data-step="1"  data-max-step="4">
+            <div class="modal fade futuristicModal" tabindex="-1" aria-hidden="true" id="Ajouter" data-stepper="true" data-step="1"  data-max-step="5">
 
                 <div class="modal-dialog modal-xl modal-dialog-centered monstepper">
 
@@ -595,13 +595,15 @@
                                 <form
                                     id="futureModifierForm{{ $value->id }}"
                                     method="POST"
-                                    action="{{ route('ModifierUser', $value->id) }}"
+                                    action="{{ route('ModifierMembre', $value->id) }}"
                                     enctype="multipart/form-data"
                                 >
+                                        <input type="hidden" name="id" value="{{$value->id}}">
+
 
                                     @csrf
 
-                                    @method('PUT')
+                                    {{-- @method('PUT') --}}
 
 
                                     {{-- =====================================================
@@ -1343,8 +1345,9 @@
                                     <form
                                         method="POST"
                                         action="{{ route('CorbeilleUser') }}"
-                                        style="margin:0;"
-                                    >
+                                        style="margin:0;" >
+                                        <input type="hidden" name="id" value="{{$value->id}}">
+
 
                                         @csrf
 

@@ -614,9 +614,9 @@ public static function supprimerTout()
 
             foreach ($corbeilles as $corbeille) {
 
-                self::supprimerDefinitivement(
-                    $corbeille
-                );
+                self::supprimerDefinitivement([
+                    'id' => $corbeille->id
+                ]);
 
                 $count++;
             }

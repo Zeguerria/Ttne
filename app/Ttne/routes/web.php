@@ -118,9 +118,14 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
             //FONCTIONS DEBUT
                 Route::post('AjouterUser', [UserController::class, 'store'])->name('AjouterUser');
                 Route::post('AjouterMembre', [UserController::class, 'storemembre'])->name('AjouterMembre');
+                Route::post('AjouterDemande', [UserController::class, 'storedemande'])->name('AjouterDemande');
                 Route::post('ModifierUser', [UserController::class, 'update'])->name('ModifierUser');
+                Route::post('ModifierMembre', [UserController::class, 'updatemembre'])->name('ModifierMembre');
+                Route::post('ModifierDemande', [UserController::class, 'updatedemande'])->name('ModifierDemande');
                 Route::post('CorbeilleUser', [UserController::class, 'corbeille'])->name('CorbeilleUser');
                 Route::post('/select/corbeille/personnel',[UserController::class, 'corbeilleSelection']);
+                Route::post('/select/corbeille/membre',[UserController::class, 'corbeilleSelectionMembre']);
+                Route::post('/select/corbeille/demande',[UserController::class, 'corbeilleSelectionDemande']);
             // FONCTION FIN
         //USER FIN
 
