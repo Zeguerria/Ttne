@@ -1717,6 +1717,448 @@ public function store(Request $request)
 
         return back();
     }
+/*
+|--------------------------------------------------------------------------
+| METTRE EN CORBEILLE - PERSONNEL
+|--------------------------------------------------------------------------
+*/
+
+public function corbeille(Request $request)
+{
+    $data = $request->validate([
+
+        'id' => 'required|exists:users,id',
+    ]);
+
+    try {
+
+        UserService::mettreEnCorbeille(
+            $data
+        );
+
+        toast(
+            'Personnel supprimé',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| METTRE UNE SELECTION EN CORBEILLE - PERSONNEL
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleSelection(Request $request)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATION
+    |--------------------------------------------------------------------------
+    */
+
+    $data = $request->validate([
+
+        'ids' => 'required|array',
+        'ids.*' => 'exists:users,id',
+    ]);
+
+    try {
+
+        /*
+        |--------------------------------------------------------------------------
+        | APPEL SERVICE
+        |--------------------------------------------------------------------------
+        */
+
+        $count = UserService::mettreSelectionEnCorbeille(
+            $data['ids']
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | MESSAGE
+        |--------------------------------------------------------------------------
+        */
+
+        toast(
+            $count . ' personnel(s) mis en corbeille avec succès',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| METTRE TOUT LE PERSONNEL EN CORBEILLE
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleAll(Request $request)
+{
+    try {
+
+        $count = UserService::mettreEnCorbeilleAll();
+
+        toast(
+            $count . ' personnel(s) supprimé(s)',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+/*
+|--------------------------------------------------------------------------
+| METTRE UNE DEMANDE EN CORBEILLE
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleDemande(Request $request)
+{
+    $data = $request->validate([
+
+        'id' => 'required|exists:users,id',
+    ]);
+
+    try {
+
+        UserService::mettreCorbeilleDemande(
+            $data
+        );
+
+        toast(
+            'Demande supprimée',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| METTRE UNE SELECTION DE DEMANDES EN CORBEILLE
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleSelectionDemande(Request $request)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATION
+    |--------------------------------------------------------------------------
+    */
+
+    $data = $request->validate([
+
+        'ids' => 'required|array',
+        'ids.*' => 'exists:users,id',
+    ]);
+
+    try {
+
+        /*
+        |--------------------------------------------------------------------------
+        | APPEL SERVICE
+        |--------------------------------------------------------------------------
+        */
+
+        $count = UserService::mettreSelectionCorbeilleDemande(
+            $data['ids']
+        );
+
+        toast(
+            $count . ' demande(s) mise(s) en corbeille avec succès',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| METTRE TOUTES LES DEMANDES EN CORBEILLE
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleDemandeAll(Request $request)
+{
+    try {
+
+        $count = UserService::mettreCorbeilleDemandeAll();
+
+        toast(
+            $count . ' demande(s) supprimée(s)',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+/*
+|--------------------------------------------------------------------------
+| METTRE UN MEMBRE EN CORBEILLE
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleMembre(Request $request)
+{
+    $data = $request->validate([
+
+        'id' => 'required|exists:users,id',
+    ]);
+
+    try {
+
+        UserService::mettreCorbeilleMembre(
+            $data
+        );
+
+        toast(
+            'Membre supprimé',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| METTRE UNE SELECTION DE MEMBRES EN CORBEILLE
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleSelectionMembre(Request $request)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATION
+    |--------------------------------------------------------------------------
+    */
+
+    $data = $request->validate([
+
+        'ids' => 'required|array',
+        'ids.*' => 'exists:users,id',
+    ]);
+
+    try {
+
+        $count = UserService::mettreSelectionCorbeilleMembre(
+            $data['ids']
+        );
+
+        toast(
+            $count . ' membre(s) mis en corbeille avec succès',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| METTRE TOUS LES MEMBRES EN CORBEILLE
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleMembreAll(Request $request)
+{
+    try {
+
+        $count = UserService::mettreCorbeilleMembreAll();
+
+        toast(
+            $count . ' membre(s) supprimé(s)',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+/*
+|--------------------------------------------------------------------------
+| METTRE UNE DEMANDE REJETEE EN CORBEILLE
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleDemandeRejetee(Request $request)
+{
+    $data = $request->validate([
+
+        'id' => 'required|exists:users,id',
+    ]);
+
+    try {
+
+        UserService::mettreCorbeilleDemandeRejetee(
+            $data
+        );
+
+        toast(
+            'Demande rejetée supprimée',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| METTRE UNE SELECTION DE DEMANDES REJETEES EN CORBEILLE
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleSelectionDemandeRejetee(Request $request)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATION
+    |--------------------------------------------------------------------------
+    */
+
+    $data = $request->validate([
+
+        'ids' => 'required|array',
+        'ids.*' => 'exists:users,id',
+    ]);
+
+    try {
+
+        $count = UserService::mettreSelectionCorbeilleDemandeRejetee(
+            $data['ids']
+        );
+
+        toast(
+            $count . ' demande(s) rejetée(s) mise(s) en corbeille avec succès',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| METTRE TOUTES LES DEMANDES REJETEES EN CORBEILLE
+|--------------------------------------------------------------------------
+*/
+
+public function corbeilleDemandeRejeteeAll(Request $request)
+{
+    try {
+
+        $count = UserService::mettreCorbeilleDemandeRejeteeAll();
+
+        toast(
+            $count . ' demande(s) rejetée(s) supprimée(s)',
+            'success'
+        );
+
+    } catch (Exception $e) {
+
+        toast(
+            $e->getMessage(),
+            'error'
+        );
+    }
+
+    return back();
+}
 
 
 

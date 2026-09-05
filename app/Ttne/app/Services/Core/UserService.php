@@ -2093,7 +2093,13 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public static function mettreEnCorbeille(array $data)
+        /*
+    |--------------------------------------------------------------------------
+    | METTRE EN CORBEILLE - PERSONNEL
+    |--------------------------------------------------------------------------
+    */
+
+    public function mettreEnCorbeille(array $data)
     {
         DB::beginTransaction();
 
@@ -2101,14 +2107,11 @@ class UserService
 
             /*
             |--------------------------------------------------------------------------
-            | RECUPERATION
+            | RECUPERATION DU PERSONNEL
             |--------------------------------------------------------------------------
             */
 
-            $user = User::findOrFail(
-                $data['id']
-            );
-
+            $user = User::findOrFail($data['id']);
 
             /*
             |--------------------------------------------------------------------------
@@ -2117,51 +2120,18 @@ class UserService
             */
 
             if ($user->supprimer == 1) {
-
                 throw new Exception(
-                    'Cet utilisateur est déjà en corbeille.'
+                    'Ce personnel est déjà en corbeille.'
                 );
             }
 
-
             /*
             |--------------------------------------------------------------------------
-            | ANCIENNE VALEUR
+            | MISE EN CORBEILLE
             |--------------------------------------------------------------------------
             */
 
-            $ancienneValeur = $user->toArray();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | CORBEILLE
-            |--------------------------------------------------------------------------
-            */
-
-            CorbeilleService::mettreEnCorbeille(
-                $user
-            );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | HISTORIQUE
-            |--------------------------------------------------------------------------
-            */
-
-            HistoriqueService::modifier(
-                $user,
-                $ancienneValeur,
-                $user->toArray()
-            );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | VALIDATION TRANSACTION
-            |--------------------------------------------------------------------------
-            */
+            CorbeilleService::mettreEnCorbeille($user);
 
             DB::commit();
 
@@ -2172,54 +2142,807 @@ class UserService
             DB::rollBack();
 
             throw new Exception(
-                'Erreur lors de la mise en corbeille de l\'utilisateur : '
+                'Erreur lors de la mise en corbeille du personnel : '
                 . $e->getMessage()
             );
         }
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | METTRE UNE SELECTION EN CORBEILLE
-    |--------------------------------------------------------------------------
-    */
-
-    public static function mettreSelectionEnCorbeille(array $ids)
-    {
-
-    }
 
     /*
     |--------------------------------------------------------------------------
-    | TOUT METTRE EN CORBEILLE
+    | METTRE UNE SELECTION EN CORBEILLE - PERSONNEL
     |--------------------------------------------------------------------------
     */
 
-    public static function mettreEnCorbeilleAll()
+    public function mettreSelectionEnCorbeille(array $ids)
     {
+        DB::beginTransaction();
 
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DES PERSONNELS
+            |--------------------------------------------------------------------------
+            */
+
+            $users = User::whereIn('id', $ids)
+                ->where('supprimer', 0)
+                ->get();
+
+            if ($users->isEmpty()) {
+                throw new Exception(
+                    'Aucun personnel valide à mettre en corbeille.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPTEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $count = 0;
+
+            /*
+            |--------------------------------------------------------------------------
+            | MISE EN CORBEILLE
+            |--------------------------------------------------------------------------
+            */
+
+            foreach ($users as $user) {
+
+                CorbeilleService::mettreEnCorbeille($user);
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+            } catch (Exception $e) {
+
+                DB::rollBack();
+
+                throw new Exception(
+                    'Erreur lors de la mise en corbeille de la sélection : '
+                    . $e->getMessage()
+                );
+            }
     }
+
 
     /*
     |--------------------------------------------------------------------------
-    | RESTAURER
+    | METTRE TOUT LE PERSONNEL EN CORBEILLE
     |--------------------------------------------------------------------------
     */
 
-    public static function restaurer(array $data)
+    public function mettreEnCorbeilleAll()
     {
+        DB::beginTransaction();
 
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DES PERSONNELS ACTIFS
+            |--------------------------------------------------------------------------
+            */
+
+            $users = User::where('supprimer', 0)->get();
+
+            if ($users->isEmpty()) {
+                throw new Exception(
+                    'Aucun personnel à mettre en corbeille.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPTEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $count = 0;
+
+            /*
+            |--------------------------------------------------------------------------
+            | MISE EN CORBEILLE
+            |--------------------------------------------------------------------------
+            */
+
+            foreach ($users as $user) {
+
+                CorbeilleService::mettreEnCorbeille($user);
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la mise en corbeille de tous les personnels : '
+                . $e->getMessage()
+            );
+        }
     }
+
 
     /*
     |--------------------------------------------------------------------------
-    | SUPPRESSION DEFINITIVE
+    | METTRE UNE DEMANDE EN CORBEILLE
     |--------------------------------------------------------------------------
     */
 
-    public static function supprimer(array $data)
+    public function mettreCorbeilleDemande(array $data)
     {
+        DB::beginTransaction();
 
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DE LA DEMANDE
+            |--------------------------------------------------------------------------
+            */
+
+            $user = User::where('id', $data['id'])
+                ->where('supprimer', 0)
+                ->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | VERIFICATION DU PROFIL
+            |--------------------------------------------------------------------------
+            */
+
+            $profilDemande = Profil::where(
+                'code',
+                'SIMPLE-UTILISATEUR'
+            )->firstOrFail();
+
+            if ($user->profil_id != $profilDemande->id) {
+                throw new Exception(
+                    'Cet utilisateur ne correspond pas à une demande.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | MISE EN CORBEILLE
+            |--------------------------------------------------------------------------
+            */
+
+            CorbeilleService::mettreEnCorbeille($user);
+
+            DB::commit();
+
+            return true;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la mise en corbeille de la demande : '
+                . $e->getMessage()
+            );
+        }
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METTRE UNE SELECTION DE DEMANDES EN CORBEILLE
+    |--------------------------------------------------------------------------
+    */
+
+    public function mettreSelectionCorbeilleDemande(array $ids)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL DEMANDE
+            |--------------------------------------------------------------------------
+            */
+
+            $profilDemande = Profil::where(
+                'code',
+                'SIMPLE-UTILISATEUR'
+            )->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DES DEMANDES
+            |--------------------------------------------------------------------------
+            */
+
+            $users = User::whereIn('id', $ids)
+                ->where('profil_id', $profilDemande->id)
+                ->where('supprimer', 0)
+                ->get();
+
+            if ($users->isEmpty()) {
+                throw new Exception(
+                    'Aucune demande valide à mettre en corbeille.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPTEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $count = 0;
+
+            foreach ($users as $user) {
+
+                CorbeilleService::mettreEnCorbeille($user);
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la mise en corbeille de la sélection des demandes : '
+                . $e->getMessage()
+            );
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METTRE TOUTES LES DEMANDES EN CORBEILLE
+    |--------------------------------------------------------------------------
+    */
+
+    public function mettreCorbeilleDemandeAll()
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL DEMANDE
+            |--------------------------------------------------------------------------
+            */
+
+            $profilDemande = Profil::where(
+                'code',
+                'SIMPLE-UTILISATEUR'
+            )->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DES DEMANDES
+            |--------------------------------------------------------------------------
+            */
+
+            $users = User::where(
+                    'profil_id',
+                    $profilDemande->id
+                )
+                ->where('supprimer', 0)
+                ->get();
+
+            if ($users->isEmpty()) {
+                throw new Exception(
+                    'Aucune demande à mettre en corbeille.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPTEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $count = 0;
+
+            foreach ($users as $user) {
+
+                CorbeilleService::mettreEnCorbeille($user);
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la mise en corbeille de toutes les demandes : '
+                . $e->getMessage()
+            );
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METTRE UN MEMBRE EN CORBEILLE
+    |--------------------------------------------------------------------------
+    */
+
+    public function mettreCorbeilleMembre(array $data)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DU MEMBRE
+            |--------------------------------------------------------------------------
+            */
+
+            $user = User::where('id', $data['id'])
+                ->where('supprimer', 0)
+                ->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL MEMBRE
+            |--------------------------------------------------------------------------
+            */
+
+            $profilMembre = Profil::where(
+                'code',
+                'MEMBRE-COMMUNAUTE'
+            )->firstOrFail();
+
+            if ($user->profil_id != $profilMembre->id) {
+                throw new Exception(
+                    'Cet utilisateur ne correspond pas à un membre.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | MISE EN CORBEILLE
+            |--------------------------------------------------------------------------
+            */
+
+            CorbeilleService::mettreEnCorbeille($user);
+
+            DB::commit();
+
+            return true;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la mise en corbeille du membre : '
+                . $e->getMessage()
+            );
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METTRE UNE SELECTION DE MEMBRES EN CORBEILLE
+    |--------------------------------------------------------------------------
+    */
+
+    public function mettreSelectionCorbeilleMembre(array $ids)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL MEMBRE
+            |--------------------------------------------------------------------------
+            */
+
+            $profilMembre = Profil::where(
+                'code',
+                'MEMBRE-COMMUNAUTE'
+            )->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DES MEMBRES
+            |--------------------------------------------------------------------------
+            */
+
+            $users = User::whereIn('id', $ids)
+                ->where('profil_id', $profilMembre->id)
+                ->where('supprimer', 0)
+                ->get();
+
+            if ($users->isEmpty()) {
+                throw new Exception(
+                    'Aucun membre valide à mettre en corbeille.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPTEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $count = 0;
+
+            foreach ($users as $user) {
+
+                CorbeilleService::mettreEnCorbeille($user);
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la mise en corbeille de la sélection des membres : '
+                . $e->getMessage()
+            );
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METTRE TOUS LES MEMBRES EN CORBEILLE
+    |--------------------------------------------------------------------------
+    */
+
+    public function mettreCorbeilleMembreAll()
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL MEMBRE
+            |--------------------------------------------------------------------------
+            */
+
+            $profilMembre = Profil::where(
+                'code',
+                'MEMBRE-COMMUNAUTE'
+            )->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DES MEMBRES
+            |--------------------------------------------------------------------------
+            */
+
+            $users = User::where(
+                    'profil_id',
+                    $profilMembre->id
+                )
+                ->where('supprimer', 0)
+                ->get();
+
+            if ($users->isEmpty()) {
+                throw new Exception(
+                    'Aucun membre à mettre en corbeille.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPTEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $count = 0;
+
+            foreach ($users as $user) {
+
+                CorbeilleService::mettreEnCorbeille($user);
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la mise en corbeille de tous les membres : '
+                . $e->getMessage()
+            );
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METTRE UNE DEMANDE REJETEE EN CORBEILLE
+    |--------------------------------------------------------------------------
+    */
+
+    public function mettreCorbeilleDemandeRejetee(array $data)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DE LA DEMANDE
+            |--------------------------------------------------------------------------
+            */
+
+            $user = User::where('id', $data['id'])
+                ->where('supprimer', 0)
+                ->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL DEMANDE
+            |--------------------------------------------------------------------------
+            */
+
+            $profilDemande = Profil::where(
+                'code',
+                'SIMPLE-UTILISATEUR'
+            )->firstOrFail();
+
+            if ($user->profil_id != $profilDemande->id) {
+                throw new Exception(
+                    'Cet utilisateur ne correspond pas à une demande.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | STATUT REFUSE
+            |--------------------------------------------------------------------------
+            */
+
+            $statutRefuse = Parametre::where(
+                'code',
+                'S-U-REFUSE'
+            )->firstOrFail();
+
+            if ($user->statut_compte_id != $statutRefuse->id) {
+                throw new Exception(
+                    'Cette demande n\'est pas rejetée.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | MISE EN CORBEILLE
+            |--------------------------------------------------------------------------
+            */
+
+            CorbeilleService::mettreEnCorbeille($user);
+
+            DB::commit();
+
+            return true;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la mise en corbeille de la demande rejetée : '
+                . $e->getMessage()
+            );
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METTRE UNE SELECTION DE DEMANDES REJETEES EN CORBEILLE
+    |--------------------------------------------------------------------------
+    */
+
+    public function mettreSelectionCorbeilleDemandeRejetee(array $ids)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL DEMANDE
+            |--------------------------------------------------------------------------
+            */
+
+            $profilDemande = Profil::where(
+                'code',
+                'SIMPLE-UTILISATEUR'
+            )->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | STATUT REFUSE
+            |--------------------------------------------------------------------------
+            */
+
+            $statutRefuse = Parametre::where(
+                'code',
+                'S-U-REFUSE'
+            )->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DES DEMANDES REJETEES
+            |--------------------------------------------------------------------------
+            */
+
+            $users = User::whereIn('id', $ids)
+                ->where('profil_id', $profilDemande->id)
+                ->where(
+                    'statut_compte_id',
+                    $statutRefuse->id
+                )
+                ->where('supprimer', 0)
+                ->get();
+
+            if ($users->isEmpty()) {
+                throw new Exception(
+                    'Aucune demande rejetée valide à mettre en corbeille.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPTEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $count = 0;
+
+            foreach ($users as $user) {
+
+                CorbeilleService::mettreEnCorbeille($user);
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la mise en corbeille de la sélection des demandes rejetées : '
+                . $e->getMessage()
+            );
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METTRE TOUTES LES DEMANDES REJETEES EN CORBEILLE
+    |--------------------------------------------------------------------------
+    */
+
+    public function mettreCorbeilleDemandeRejeteeAll()
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL DEMANDE
+            |--------------------------------------------------------------------------
+            */
+
+            $profilDemande = Profil::where(
+                'code',
+                'SIMPLE-UTILISATEUR'
+            )->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | STATUT REFUSE
+            |--------------------------------------------------------------------------
+            */
+
+            $statutRefuse = Parametre::where(
+                'code',
+                'S-U-REFUSE'
+            )->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DES DEMANDES REJETEES
+            |--------------------------------------------------------------------------
+            */
+
+            $users = User::where(
+                    'profil_id',
+                    $profilDemande->id
+                )
+                ->where(
+                    'statut_compte_id',
+                    $statutRefuse->id
+                )
+                ->where('supprimer', 0)
+                ->get();
+
+            if ($users->isEmpty()) {
+                throw new Exception(
+                    'Aucune demande rejetée à mettre en corbeille.'
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPTEUR
+            |--------------------------------------------------------------------------
+            */
+
+            $count = 0;
+
+            foreach ($users as $user) {
+
+                CorbeilleService::mettreEnCorbeille($user);
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la mise en corbeille de toutes les demandes rejetées : '
+                . $e->getMessage()
+            );
+        }
+    }
+
 
 }
