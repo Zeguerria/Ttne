@@ -68,10 +68,14 @@ class Corbeille extends Model
     {
         $models = [
             'type_parametres' => \App\Models\TypeParametre::class,
+
             'parametres' => \App\Models\Parametre::class,
+
             'users' => \App\Models\User::class,
-            'users' => \App\Models\Profil::class,
-            'users' => \App\Models\Habilitation::class,
+
+            'profils' => \App\Models\Profil::class,
+
+            'habilitations' => \App\Models\Habilitation::class,
 
             // ajouter les autres tables ici
             // 'users' => User::class,

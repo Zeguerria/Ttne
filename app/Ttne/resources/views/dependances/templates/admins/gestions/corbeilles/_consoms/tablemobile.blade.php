@@ -98,15 +98,15 @@
                                             <div class="futureMobileItem">
 
                                                 <span>
-
                                                     RESPONSABLE
-
                                                 </span>
 
                                                 <strong>
-
-                                                    {{ $value->user_id ?? "Le responsable n'était pas connecté" }}
-
+                                                    @if($value->deleted_by && $value->user)
+                                                        {{ $value->user->name }} {{ $value->user->prenom }}
+                                                    @else
+                                                        L'auteur n'était pas connecté
+                                                    @endif
                                                 </strong>
 
                                             </div>

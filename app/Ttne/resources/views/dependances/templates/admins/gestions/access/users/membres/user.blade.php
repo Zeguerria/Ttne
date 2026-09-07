@@ -21,7 +21,7 @@
         <div>
             <div>
 
-                <div class="futureTableWrapper" data-bulk-delete-url="{{ url('select/corbeille/membres') }}">
+                <div class="futureTableWrapper" data-bulk-delete-url="{{ url('/select/corbeille/membres') }}">
 
                     <div class="futureTableCard">
 

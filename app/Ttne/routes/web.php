@@ -110,8 +110,10 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
             //AUTRES FUNCTION DEBUT
                 // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
 
-                Route::get('Admin/Corebeille/Personnels/Tout-Destroy', [UserController::class, 'destroyTous'])->name('D-All-AD-PRO');
-                Route::post('Admin/Corebeille/Personnel/Tout-Soft', [UserController::class, 'corbeilleAll'])->name('C-All-HAB-H');
+                // Route::get('Admin/Corebeille/Personnels/Tout-Destroy', [UserController::class, 'destroyTous'])->name('D-All-AD-PRO');
+                Route::post('Admin/Corebeille/Personnel/Tout-Soft', [UserController::class, 'corbeilleAll'])->name('C-All-PERS-pers');
+                Route::post('Admin/Corebeille/Membre/Tout-Soft', [UserController::class, 'corbeilleMembreAll'])->name('C-All-MEMB-memb');
+                Route::post('Admin/Corebeille/Demande/Tout-Soft', [UserController::class, 'corbeilleDemandeAll'])->name('C-All-DEMAN-deman');
                 Route::post('Admin/Users/Demandes/Valider', [UserController::class, 'validerdemande'])->name('ValiderDemandeUser');
                 Route::post('Admin/Users/Demandes/Refuser',[UserController::class, 'refuserdemande'])->name('RefuserDemandeUser');
             //AUTRES FUNCTION FIN
@@ -123,9 +125,9 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
                 Route::post('ModifierMembre', [UserController::class, 'updatemembre'])->name('ModifierMembre');
                 Route::post('ModifierDemande', [UserController::class, 'updatedemande'])->name('ModifierDemande');
                 Route::post('CorbeilleUser', [UserController::class, 'corbeille'])->name('CorbeilleUser');
-                Route::post('/select/corbeille/personnel',[UserController::class, 'corbeilleSelection']);
-                Route::post('/select/corbeille/membre',[UserController::class, 'corbeilleSelectionMembre']);
-                Route::post('/select/corbeille/demande',[UserController::class, 'corbeilleSelectionDemande']);
+                Route::post('/select/corbeille/personnels',[UserController::class, 'corbeilleSelection']);
+                Route::post('/select/corbeille/membres',[UserController::class, 'corbeilleSelectionMembre']);
+                Route::post('/select/corbeille/demandes',[UserController::class, 'corbeilleSelectionDemande']);
             // FONCTION FIN
         //USER FIN
 

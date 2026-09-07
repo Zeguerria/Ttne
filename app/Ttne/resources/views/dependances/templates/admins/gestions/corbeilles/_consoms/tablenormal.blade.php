@@ -141,16 +141,14 @@
                                         {{-- DESCRIPTION --}}
                                         <td>
 
-                                            @if($value->user_id)
+                                            @if($value->deleted_by && $value->user)
 
-                                                {{ $value->user_id }}
+                                                {{ $value->user->name }} {{ $value->user->prenom }}
 
                                             @else
 
                                                 <span class="futureEmptyText">
-
-                                                    L'auteur n'etait pas connecté
-
+                                                    L'auteur n'était pas connecté
                                                 </span>
 
                                             @endif

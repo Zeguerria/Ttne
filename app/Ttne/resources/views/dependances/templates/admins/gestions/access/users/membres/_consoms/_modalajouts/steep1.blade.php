@@ -81,14 +81,13 @@
                     <div class="futureField">
 
                         <label>
-                            <i class="fa fa-calendar"></i>
+                            <i class="fa fa-calendar "></i>
                             Date de naissance
                         </label>
 
                         <div class="futureInput">
 
-                            <i class="fa fa-calendar inputIcon"></i>
-
+                            <i class="fa fa-calendar inputIcon " ></i>
                             <input
                                 type="date"
                                 name="date_naissance"

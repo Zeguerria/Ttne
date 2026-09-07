@@ -45,8 +45,7 @@
 
                 <div
                     class="futureTableWrapper"
-                    data-bulk-delete-url="{{ url('select/corbeille/demandes') }}"
-                >
+                    data-bulk-delete-url="{{ url('select/corbeille/demandes') }}">
 
                     <div class="futureTableCard">
 

@@ -58,7 +58,7 @@
 
                         <div class="futureInput">
 
-                            <span class="review-telephone" data-review-value="name">
+                            <span class="review-telephone" data-review-value="telephone">
                             —
                             </span>
 

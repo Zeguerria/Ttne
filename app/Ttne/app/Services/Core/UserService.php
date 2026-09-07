@@ -2,13 +2,14 @@
 
 namespace App\Services\Core;
 
+use App\Models\Parametre;
 use App\Models\Piece;
 use App\Models\Profil;
-use App\Models\Parametre;
 use App\Models\User;
 use App\Services\Core\FichierService;
 use App\Services\Core\HistoriqueService;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -2099,38 +2100,51 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public function mettreEnCorbeille(array $data)
+        /**
+     * |--------------------------------------------------------------------------
+     * | METTRE UN PERSONNEL EN CORBEILLE
+     * |--------------------------------------------------------------------------
+     */
+    public static function mettreEnCorbeille(array $data)
     {
         DB::beginTransaction();
 
         try {
 
-            /*
-            |--------------------------------------------------------------------------
-            | RECUPERATION DU PERSONNEL
-            |--------------------------------------------------------------------------
-            */
-
+            /**
+             * |--------------------------------------------------------------------------
+             * | RECUPERATION DU PERSONNEL
+             * |--------------------------------------------------------------------------
+             */
             $user = User::findOrFail($data['id']);
 
-            /*
-            |--------------------------------------------------------------------------
-            | VERIFICATION
-            |--------------------------------------------------------------------------
-            */
-
-            if ($user->supprimer == 1) {
+            /**
+             * |--------------------------------------------------------------------------
+             * | EMPECHER L'AUTO-SUPPRESSION
+             * |--------------------------------------------------------------------------
+             */
+            if ($user->id === Auth::id()) {
                 throw new Exception(
-                    'Ce personnel est déjà en corbeille.'
+                    'Vous ne pouvez pas mettre votre propre compte en corbeille.'
                 );
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | MISE EN CORBEILLE
-            |--------------------------------------------------------------------------
-            */
+            /**
+             * |--------------------------------------------------------------------------
+             * | VERIFICATION
+             * |--------------------------------------------------------------------------
+             */
+            if ($user->supprimer == 1) {
+                throw new Exception(
+                    'Cet utilisateur est supprimé .'
+                );
+            }
 
+            /**
+             * |--------------------------------------------------------------------------
+             * | MISE EN CORBEILLE
+             * |--------------------------------------------------------------------------
+             */
             CorbeilleService::mettreEnCorbeille($user);
 
             DB::commit();
@@ -2142,31 +2156,47 @@ class UserService
             DB::rollBack();
 
             throw new Exception(
-                'Erreur lors de la mise en corbeille du personnel : '
+                "Erreur lors de la suppression de l'utilisateur : "
                 . $e->getMessage()
             );
         }
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | METTRE UNE SELECTION EN CORBEILLE - PERSONNEL
-    |--------------------------------------------------------------------------
-    */
-
-    public function mettreSelectionEnCorbeille(array $ids)
+    /**
+     * |--------------------------------------------------------------------------
+     * | METTRE UNE SELECTION DE PERSONNELS EN CORBEILLE
+     * |--------------------------------------------------------------------------
+     */
+    public static function mettreSelectionEnCorbeille(array $ids)
     {
         DB::beginTransaction();
 
         try {
 
-            /*
-            |--------------------------------------------------------------------------
-            | RECUPERATION DES PERSONNELS
-            |--------------------------------------------------------------------------
-            */
+            /**
+             * |--------------------------------------------------------------------------
+             * | IDENTIFIANT DE L'UTILISATEUR CONNECTE
+             * |--------------------------------------------------------------------------
+             */
+            $currentUserId = Auth::id();
 
+            /**
+             * |--------------------------------------------------------------------------
+             * | EMPECHER L'AUTO-SUPPRESSION DANS LA SELECTION
+             * |--------------------------------------------------------------------------
+             */
+            if (in_array($currentUserId, $ids)) {
+                throw new Exception(
+                    'Vous ne pouvez pas mettre votre propre compte en corbeille.'
+                );
+            }
+
+            /**
+             * |--------------------------------------------------------------------------
+             * | RECUPERATION DES PERSONNELS ACTIFS
+             * |--------------------------------------------------------------------------
+             */
             $users = User::whereIn('id', $ids)
                 ->where('supprimer', 0)
                 ->get();
@@ -2177,83 +2207,18 @@ class UserService
                 );
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | COMPTEUR
-            |--------------------------------------------------------------------------
-            */
-
+            /**
+             * |--------------------------------------------------------------------------
+             * | COMPTEUR
+             * |--------------------------------------------------------------------------
+             */
             $count = 0;
 
-            /*
-            |--------------------------------------------------------------------------
-            | MISE EN CORBEILLE
-            |--------------------------------------------------------------------------
-            */
-
-            foreach ($users as $user) {
-
-                CorbeilleService::mettreEnCorbeille($user);
-
-                $count++;
-            }
-
-            DB::commit();
-
-            return $count;
-
-            } catch (Exception $e) {
-
-                DB::rollBack();
-
-                throw new Exception(
-                    'Erreur lors de la mise en corbeille de la sélection : '
-                    . $e->getMessage()
-                );
-            }
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | METTRE TOUT LE PERSONNEL EN CORBEILLE
-    |--------------------------------------------------------------------------
-    */
-
-    public function mettreEnCorbeilleAll()
-    {
-        DB::beginTransaction();
-
-        try {
-
-            /*
-            |--------------------------------------------------------------------------
-            | RECUPERATION DES PERSONNELS ACTIFS
-            |--------------------------------------------------------------------------
-            */
-
-            $users = User::where('supprimer', 0)->get();
-
-            if ($users->isEmpty()) {
-                throw new Exception(
-                    'Aucun personnel à mettre en corbeille.'
-                );
-            }
-
-            /*
-            |--------------------------------------------------------------------------
-            | COMPTEUR
-            |--------------------------------------------------------------------------
-            */
-
-            $count = 0;
-
-            /*
-            |--------------------------------------------------------------------------
-            | MISE EN CORBEILLE
-            |--------------------------------------------------------------------------
-            */
-
+            /**
+             * |--------------------------------------------------------------------------
+             * | MISE EN CORBEILLE
+             * |--------------------------------------------------------------------------
+             */
             foreach ($users as $user) {
 
                 CorbeilleService::mettreEnCorbeille($user);
@@ -2270,7 +2235,76 @@ class UserService
             DB::rollBack();
 
             throw new Exception(
-                'Erreur lors de la mise en corbeille de tous les personnels : '
+                'Erreur lors de la mise en corbeille de la sélection : '
+                . $e->getMessage()
+            );
+        }
+    }
+
+
+    /**
+     * |--------------------------------------------------------------------------
+     * | METTRE TOUT LE PERSONNEL EN CORBEILLE
+     * |--------------------------------------------------------------------------
+     */
+    public static function mettreEnCorbeilleAll()
+    {
+        DB::beginTransaction();
+
+        try {
+
+            /**
+             * |--------------------------------------------------------------------------
+             * | IDENTIFIANT DE L'UTILISATEUR CONNECTE
+             * |--------------------------------------------------------------------------
+             */
+            $currentUserId = Auth::id();
+
+            /**
+             * |--------------------------------------------------------------------------
+             * | RECUPERATION DES PERSONNELS ACTIFS
+             * | EXCLUSION DU COMPTE CONNECTE
+             * |--------------------------------------------------------------------------
+             */
+            $users = User::where('supprimer', 0)
+                ->where('id', '!=', $currentUserId)
+                ->get();
+
+            if ($users->isEmpty()) {
+                throw new Exception(
+                    'Aucun personnel à supprimer .'
+                );
+            }
+
+            /**
+             * |--------------------------------------------------------------------------
+             * | COMPTEUR
+             * |--------------------------------------------------------------------------
+             */
+            $count = 0;
+
+            /**
+             * |--------------------------------------------------------------------------
+             * | MISE EN CORBEILLE
+             * |--------------------------------------------------------------------------
+             */
+            foreach ($users as $user) {
+
+                CorbeilleService::mettreEnCorbeille($user);
+
+                $count++;
+            }
+
+            DB::commit();
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            throw new Exception(
+                'Erreur lors de la suppression de tous les personnels : '
                 . $e->getMessage()
             );
         }
@@ -2283,7 +2317,7 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public function mettreCorbeilleDemande(array $data)
+    public static function mettreCorbeilleDemande(array $data)
     {
         DB::beginTransaction();
 
@@ -2346,7 +2380,7 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public function mettreSelectionCorbeilleDemande(array $ids)
+    public static function mettreSelectionCorbeilleDemande(array $ids)
     {
         DB::beginTransaction();
 
@@ -2417,7 +2451,7 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public function mettreCorbeilleDemandeAll()
+    public static function mettreCorbeilleDemandeAll()
     {
         DB::beginTransaction();
 
@@ -2490,7 +2524,7 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public function mettreCorbeilleMembre(array $data)
+    public static function mettreCorbeilleMembre(array $data)
     {
         DB::beginTransaction();
 
@@ -2553,7 +2587,7 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public function mettreSelectionCorbeilleMembre(array $ids)
+    public static function mettreSelectionCorbeilleMembre(array $ids)
     {
         DB::beginTransaction();
 
@@ -2624,7 +2658,7 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public function mettreCorbeilleMembreAll()
+    public static function mettreCorbeilleMembreAll()
     {
         DB::beginTransaction();
 
@@ -2697,7 +2731,7 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public function mettreCorbeilleDemandeRejetee(array $data)
+    public static function mettreCorbeilleDemandeRejetee(array $data)
     {
         DB::beginTransaction();
 
@@ -2863,7 +2897,7 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public function mettreCorbeilleDemandeRejeteeAll()
+    public static function mettreCorbeilleDemandeRejeteeAll()
     {
         DB::beginTransaction();
 

@@ -26,7 +26,7 @@
                         </div>
 
                         <!-- FORM DIRECT LARAVEL -->
-                        <form method="POST" action="{{route('C-All-PRO-PRO')}}" id="bulkAllForm">
+                        <form method="POST" action="{{route('C-All-PERS-pers')}}" id="bulkAllForm">
 
                             @csrf
 
