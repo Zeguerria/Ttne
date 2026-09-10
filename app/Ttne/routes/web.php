@@ -106,6 +106,7 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
                 Route::get('Admin/Users/Personnel', [UserController::class, 'index'])->name('ADM-USER-pers');
                 Route::get('Admin/Users/Membre', [UserController::class, 'indexmembre'])->name('ADM-USER-membre');
                 Route::get('Admin/Users/Demande', [UserController::class, 'indexdemande'])->name('ADM-USER-demande');
+                Route::get('Admin/Users/Rejete', [UserController::class, 'indexdemandeRejete'])->name('ADM-USER-rejeter');
                 //CHEMIN DES PAGE FIN
             //AUTRES FUNCTION DEBUT
                 // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');

@@ -487,687 +487,697 @@ class UserController extends Controller
         );
     }
 
-        public function indexdemande(Request $request)
-        {
-            /*
-            |--------------------------------------------------------------------------
-            | UTILISATEUR CONNECTÉ
-            |--------------------------------------------------------------------------
-            */
-
-            $user = Auth::user();
-
-            if (!$user) {
-                abort(403, 'Accès non autorisé.');
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | PROFIL DE L'UTILISATEUR CONNECTÉ
-            |--------------------------------------------------------------------------
-            */
-
-            $profilConnecte = $user->profil;
-
-                if (!$profilConnecte) {
-                    abort(403, 'Aucun profil associé à cet utilisateur.');
-                }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | PROFIL SIMPLE UTILISATEUR
-            |--------------------------------------------------------------------------
-            */
-
-            $profilSimpleUtilisateur = Profil::where('supprimer', 0)
-                ->where('code', 'SIMPLE-UTILISATEUR')
-                ->first();
-
-            if (!$profilSimpleUtilisateur) {
-                abort(
-                    500,
-                    'Le profil SIMPLE-UTILISATEUR est introuvable.'
-                );
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | STATUT EN ATTENTE
-            |--------------------------------------------------------------------------
-            */
-
-            $statutAttente = Parametre::where('supprimer', 0)
-                ->where('code', 'S-U-ATTENTE')
-                ->first();
-
-            if (!$statutAttente) {
-                abort(
-                    500,
-                    'Le statut S-U-ATTENTE est introuvable.'
-                );
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | DEMANDES ACTIVES
-            |--------------------------------------------------------------------------
-            |
-            | Une demande correspond à :
-            |
-            | - profil = SIMPLE-UTILISATEUR
-            | - statut = ATTENTE
-            | - supprimer = 0
-            |
-            */
-
-            $demandes = User::where('supprimer', 0)
-                ->where('profil_id', $profilSimpleUtilisateur->id)
-                ->where('statut_compte_id', $statutAttente->id)
-                ->orderBy('created_at', 'desc')
-                ->get();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | NOMBRE TOTAL DE DEMANDES
-            |--------------------------------------------------------------------------
-            */
-
-            $UserT = User::where('supprimer', 0)
-                ->where('profil_id', $profilSimpleUtilisateur->id)
-                ->where('statut_compte_id', $statutAttente->id)
-                ->count();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | NOMBRE TOTAL DE DEMANDES SUPPRIMÉES
-            |--------------------------------------------------------------------------
-            */
-
-            $UserTC = User::where('supprimer', 1)
-                ->where('profil_id', $profilSimpleUtilisateur->id)
-                ->where('statut_compte_id', $statutAttente->id)
-                ->count();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | TYPES DE PIÈCES
-            |--------------------------------------------------------------------------
-            */
-
-            $typesPieces = Parametre::where('supprimer', 0)
-                ->where('type_parametre_id', 3)
-                ->orderBy('libelle')
-                ->get();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | HISTORIQUE
-            |--------------------------------------------------------------------------
-            */
-
-            $historiques = Historique::where(
-                'record_type',
-                User::class
-            )
-                ->latest()
-                ->paginate(
-                    5,
-                    ['*'],
-                    'history_page'
-                );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | AJAX
-            |--------------------------------------------------------------------------
-            */
-
-            if ($request->ajax()) {
-
-                return response()->json([
-
-                    'historiques' => view(
-                        'dependances.templates.admins.gestions.access.users.demandes._consoms.historique',
-                        compact('historiques')
-                    )->render(),
-
-                    'current_page' => $historiques->currentPage(),
-
-                    'last_page' => $historiques->lastPage(),
-
-                    'has_more_pages' => $historiques->hasMorePages(),
-
-                ]);
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | VUE
-            |--------------------------------------------------------------------------
-            */
-
-            return view(
-                'dependances.templates.admins.gestions.access.users.demandes.user',
-                [
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | TOTAL DEMANDES
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'UserT' => $UserT,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | DEMANDES SUPPRIMÉES
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'UserTC' => $UserTC,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | LISTE DES DEMANDES
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'users' => $demandes,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | PROFILS
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'profils' => collect([
-                        $profilSimpleUtilisateur
-                    ]),
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | TYPES DE PIÈCES
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'typesPieces' => $typesPieces,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | HISTORIQUE
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'historiques' => $historiques,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | PROFIL CONNECTÉ
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'profilConnecte' => $profilConnecte,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | PROFIL SIMPLE UTILISATEUR
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'profilSimpleUtilisateur' => $profilSimpleUtilisateur,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | STATUT EN ATTENTE
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'statutAttente' => $statutAttente,
-
-                ]
-            );
+    public function indexdemande(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | UTILISATEUR CONNECTÉ
+        |--------------------------------------------------------------------------
+        */
+
+        $user = Auth::user();
+
+        if (!$user) {
+            abort(403, 'Accès non autorisé.');
         }
-     public function indexdemande(Request $request)
-        {
-            /*
-            |--------------------------------------------------------------------------
-            | UTILISATEUR CONNECTÉ
-            |--------------------------------------------------------------------------
-            */
 
-            $user = Auth::user();
 
-            if (!$user) {
-                abort(403, 'Accès non autorisé.');
-            }
+        /*
+        |--------------------------------------------------------------------------
+        | PROFIL DE L'UTILISATEUR CONNECTÉ
+        |--------------------------------------------------------------------------
+        */
 
+        $profilConnecte = $user->profil;
 
-            /*
-            |--------------------------------------------------------------------------
-            | PROFIL DE L'UTILISATEUR CONNECTÉ
-            |--------------------------------------------------------------------------
-            */
+        if (!$profilConnecte) {
+            abort(403, 'Aucun profil associé à cet utilisateur.');
+        }
 
-            $profilConnecte = $user->profil;
 
-                if (!$profilConnecte) {
-                    abort(403, 'Aucun profil associé à cet utilisateur.');
-                }
+        /*
+        |--------------------------------------------------------------------------
+        | PROFIL SIMPLE UTILISATEUR
+        |--------------------------------------------------------------------------
+        */
 
+        $profilSimpleUtilisateur = Profil::where('supprimer', 0)
+            ->where('code', 'SIMPLE-UTILISATEUR')
+            ->first();
 
-            /*
-            |--------------------------------------------------------------------------
-            | PROFIL SIMPLE UTILISATEUR
-            |--------------------------------------------------------------------------
-            */
-
-            $profilSimpleUtilisateur = Profil::where('supprimer', 0)
-                ->where('code', 'SIMPLE-UTILISATEUR')
-                ->first();
-
-            if (!$profilSimpleUtilisateur) {
-                abort(
-                    500,
-                    'Le profil SIMPLE-UTILISATEUR est introuvable.'
-                );
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | STATUT EN ATTENTE
-            |--------------------------------------------------------------------------
-            */
-
-            $statutAttente = Parametre::where('supprimer', 0)
-                ->where('code', 'S-U-REFUSE')
-                ->first();
-
-            if (!$statutAttente) {
-                abort(
-                    500,
-                    'Le statut S-U-REFUSE est introuvable.'
-                );
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | DEMANDES ACTIVES
-            |--------------------------------------------------------------------------
-            |
-            | Une demande correspond à :
-            |
-            | - profil = SIMPLE-UTILISATEUR
-            | - statut = ATTENTE
-            | - supprimer = 0
-            |
-            */
-
-            $demandes = User::where('supprimer', 0)
-                ->where('profil_id', $profilSimpleUtilisateur->id)
-                ->where('statut_compte_id', $statutAttente->id)
-                ->orderBy('created_at', 'desc')
-                ->get();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | NOMBRE TOTAL DE DEMANDES
-            |--------------------------------------------------------------------------
-            */
-
-            $UserT = User::where('supprimer', 0)
-                ->where('profil_id', $profilSimpleUtilisateur->id)
-                ->where('statut_compte_id', $statutAttente->id)
-                ->count();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | NOMBRE TOTAL DE DEMANDES SUPPRIMÉES
-            |--------------------------------------------------------------------------
-            */
-
-            $UserTC = User::where('supprimer', 1)
-                ->where('profil_id', $profilSimpleUtilisateur->id)
-                ->where('statut_compte_id', $statutAttente->id)
-                ->count();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | TYPES DE PIÈCES
-            |--------------------------------------------------------------------------
-            */
-
-            $typesPieces = Parametre::where('supprimer', 0)
-                ->where('type_parametre_id', 3)
-                ->orderBy('libelle')
-                ->get();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | HISTORIQUE
-            |--------------------------------------------------------------------------
-            */
-
-            $historiques = Historique::where(
-                'record_type',
-                User::class
-            )
-                ->latest()
-                ->paginate(
-                    5,
-                    ['*'],
-                    'history_page'
-                );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | AJAX
-            |--------------------------------------------------------------------------
-            */
-
-            if ($request->ajax()) {
-
-                return response()->json([
-
-                    'historiques' => view(
-                        'dependances.templates.admins.gestions.access.users.demandes._consoms.historique',
-                        compact('historiques')
-                    )->render(),
-
-                    'current_page' => $historiques->currentPage(),
-
-                    'last_page' => $historiques->lastPage(),
-
-                    'has_more_pages' => $historiques->hasMorePages(),
-
-                ]);
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | VUE
-            |--------------------------------------------------------------------------
-            */
-
-            return view(
-                'dependances.templates.admins.gestions.access.users.demandes.rejet',
-                [
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | TOTAL DEMANDES
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'UserT' => $UserT,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | DEMANDES SUPPRIMÉES
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'UserTC' => $UserTC,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | LISTE DES DEMANDES
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'users' => $demandes,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | PROFILS
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'profils' => collect([
-                        $profilSimpleUtilisateur
-                    ]),
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | TYPES DE PIÈCES
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'typesPieces' => $typesPieces,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | HISTORIQUE
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'historiques' => $historiques,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | PROFIL CONNECTÉ
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'profilConnecte' => $profilConnecte,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | PROFIL SIMPLE UTILISATEUR
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'profilSimpleUtilisateur' => $profilSimpleUtilisateur,
-
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | STATUT EN ATTENTE
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'statutAttente' => $statutAttente,
-
-                ]
+        if (!$profilSimpleUtilisateur) {
+            abort(
+                500,
+                'Le profil SIMPLE-UTILISATEUR est introuvable.'
             );
         }
 
 
-
-        //
-        /*
-
-/*
-|--------------------------------------------------------------------------
-| STORE UTILISATEUR
-|--------------------------------------------------------------------------
-*/
-
-public function store(Request $request)
-{
-    /*
-    |--------------------------------------------------------------------------
-    | VALIDATION
-    |--------------------------------------------------------------------------
-    */
-
-    $data = $request->validate([
-
         /*
         |--------------------------------------------------------------------------
-        | INFORMATIONS PERSONNELLES
+        | STATUT EN ATTENTE
         |--------------------------------------------------------------------------
         */
 
-        'name' => [
-            'required',
-            'string',
-            'max:255',
-        ],
+        $statutAttente = Parametre::where('supprimer', 0)
+            ->where('code', 'S-U-ATTENTE')
+            ->first();
 
-        'prenom' => [
-            'required',
-            'string',
-            'max:255',
-        ],
-
-        'telephone' => [
-            'required',
-            'string',
-            'max:30',
-            'unique:users,telephone',
-        ],
-
-        'email' => [
-            'required',
-            'email',
-            'max:255',
-            'unique:users,email',
-        ],
-
-        'date_naissance' => [
-            'nullable',
-            'date',
-        ],
+        if (!$statutAttente) {
+            abort(
+                500,
+                'Le statut S-U-ATTENTE est introuvable.'
+            );
+        }
 
 
         /*
         |--------------------------------------------------------------------------
-        | PROFIL
+        | DEMANDES ACTIVES
         |--------------------------------------------------------------------------
+        |
+        | Une demande en attente correspond à :
+        |
+        | - profil = SIMPLE-UTILISATEUR
+        | - statut = S-U-ATTENTE
+        | - supprimer = 0
+        |
+        | IMPORTANT :
+        | Une demande qui vient d'être rejetée possède désormais
+        | le statut S-U-REFUSE et ne sera donc plus retournée ici.
+        |
         */
 
-        'profil_id' => [
-            'required',
-            'integer',
-            'exists:profils,id',
-        ],
+        $demandes = User::where('supprimer', 0)
+            ->where('profil_id', $profilSimpleUtilisateur->id)
+            ->where('statut_compte_id', $statutAttente->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
 
         /*
         |--------------------------------------------------------------------------
-        | AUTHENTIFICATION
+        | NOMBRE TOTAL DE DEMANDES
         |--------------------------------------------------------------------------
         */
 
-        'password' => [
-            'required',
-            'confirmed',
-            'min:8',
-        ],
+        $UserT = User::where('supprimer', 0)
+            ->where('profil_id', $profilSimpleUtilisateur->id)
+            ->where('statut_compte_id', $statutAttente->id)
+            ->count();
 
 
         /*
         |--------------------------------------------------------------------------
-        | PHOTO UTILISATEUR
+        | NOMBRE TOTAL DE DEMANDES SUPPRIMÉES
         |--------------------------------------------------------------------------
+        |
+        | Il s'agit des demandes EN ATTENTE placées dans la corbeille.
+        |
         */
 
-        'photo' => [
-            'nullable',
-            'image',
-            'mimes:jpg,jpeg,png,jfif,webp',
-            'max:2048',
-        ],
+        $UserTC = User::where('supprimer', 1)
+            ->where('profil_id', $profilSimpleUtilisateur->id)
+            ->where('statut_compte_id', $statutAttente->id)
+            ->count();
 
 
         /*
         |--------------------------------------------------------------------------
-        | PIÈCE D'IDENTITÉ
+        | TYPES DE PIÈCES
         |--------------------------------------------------------------------------
         */
 
-        'type_piece_id' => [
-            'required',
-            'integer',
-            'exists:parametres,id',
-        ],
-
-        'numero' => [
-            'required',
-            'string',
-            'max:255',
-        ],
-
-        'date_expiration' => [
-            'nullable',
-            'date',
-        ],
-
-        'fichier' => [
-            'required',
-            'file',
-            'mimes:pdf,jpg,jpeg,png,webp',
-            'max:5120',
-        ],
-
-    ]);
+        $typesPieces = Parametre::where('supprimer', 0)
+            ->where('type_parametre_id', 3)
+            ->orderBy('libelle')
+            ->get();
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | CRÉATION
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | HISTORIQUE
+        |--------------------------------------------------------------------------
+        */
 
-    try {
+        $historiques = Historique::where(
+            'record_type',
+            User::class
+        )
+            ->latest()
+            ->paginate(
+                5,
+                ['*'],
+                'history_page'
+            );
 
-        UserService::store($data);
 
-        toast(
-            'Utilisateur créé avec succès.',
-            'success'
+        /*
+        |--------------------------------------------------------------------------
+        | AJAX
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->ajax()) {
+
+            return response()->json([
+
+                'historiques' => view(
+                    'dependances.templates.admins.gestions.access.users.demandes._consoms.historique',
+                    compact('historiques')
+                )->render(),
+
+                'current_page' => $historiques->currentPage(),
+
+                'last_page' => $historiques->lastPage(),
+
+                'has_more_pages' => $historiques->hasMorePages(),
+
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VUE
+        |--------------------------------------------------------------------------
+        */
+
+        return view(
+            'dependances.templates.admins.gestions.access.users.demandes.user',
+            [
+
+                /*
+                |--------------------------------------------------------------------------
+                | TOTAL DEMANDES
+                |--------------------------------------------------------------------------
+                */
+
+                'UserT' => $UserT,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | DEMANDES SUPPRIMÉES
+                |--------------------------------------------------------------------------
+                */
+
+                'UserTC' => $UserTC,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | LISTE DES DEMANDES
+                |--------------------------------------------------------------------------
+                */
+
+                'users' => $demandes,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFILS
+                |--------------------------------------------------------------------------
+                */
+
+                'profils' => collect([
+                    $profilSimpleUtilisateur
+                ]),
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | TYPES DE PIÈCES
+                |--------------------------------------------------------------------------
+                */
+
+                'typesPieces' => $typesPieces,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | HISTORIQUE
+                |--------------------------------------------------------------------------
+                */
+
+                'historiques' => $historiques,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFIL CONNECTÉ
+                |--------------------------------------------------------------------------
+                */
+
+                'profilConnecte' => $profilConnecte,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFIL SIMPLE UTILISATEUR
+                |--------------------------------------------------------------------------
+                */
+
+                'profilSimpleUtilisateur' => $profilSimpleUtilisateur,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | STATUT EN ATTENTE
+                |--------------------------------------------------------------------------
+                */
+
+                'statutAttente' => $statutAttente,
+
+            ]
         );
+    }
 
-    } catch (Exception $e) {
+    public function indexdemandeRejete(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | UTILISATEUR CONNECTÉ
+        |--------------------------------------------------------------------------
+        */
 
-        toast(
-            $e->getMessage(),
-            'error'
+        $user = Auth::user();
+
+        if (!$user) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PROFIL DE L'UTILISATEUR CONNECTÉ
+        |--------------------------------------------------------------------------
+        */
+
+        $profilConnecte = $user->profil;
+
+        if (!$profilConnecte) {
+            abort(403, 'Aucun profil associé à cet utilisateur.');
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PROFIL SIMPLE UTILISATEUR
+        |--------------------------------------------------------------------------
+        */
+
+        $profilSimpleUtilisateur = Profil::where('supprimer', 0)
+            ->where('code', 'SIMPLE-UTILISATEUR')
+            ->first();
+
+        if (!$profilSimpleUtilisateur) {
+            abort(
+                500,
+                'Le profil SIMPLE-UTILISATEUR est introuvable.'
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | STATUT REFUSÉ
+        |--------------------------------------------------------------------------
+        */
+
+        $statutRefuse = Parametre::where('supprimer', 0)
+            ->where('code', 'S-U-REFUSE')
+            ->first();
+
+        if (!$statutRefuse) {
+            abort(
+                500,
+                'Le statut S-U-REFUSE est introuvable.'
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DEMANDES REJETÉES ACTIVES
+        |--------------------------------------------------------------------------
+        |
+        | Une demande rejetée correspond à :
+        |
+        | - profil = SIMPLE-UTILISATEUR
+        | - statut = S-U-REFUSE
+        | - supprimer = 0
+        |
+        | Ces utilisateurs sont conservés en base afin de permettre
+        | leur consultation et éventuellement leur réexamen.
+        |
+        */
+
+        $demandesRejetees = User::where('supprimer', 0)
+            ->where('profil_id', $profilSimpleUtilisateur->id)
+            ->where('statut_compte_id', $statutRefuse->id)
+            ->orderBy('date_refus', 'desc')
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | NOMBRE TOTAL DE DEMANDES REJETÉES
+        |--------------------------------------------------------------------------
+        */
+
+        $UserT = User::where('supprimer', 0)
+            ->where('profil_id', $profilSimpleUtilisateur->id)
+            ->where('statut_compte_id', $statutRefuse->id)
+            ->count();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | NOMBRE TOTAL DE DEMANDES REJETÉES SUPPRIMÉES
+        |--------------------------------------------------------------------------
+        |
+        | Il s'agit des demandes REJETÉES placées dans la corbeille.
+        |
+        */
+
+        $UserTC = User::where('supprimer', 1)
+            ->where('profil_id', $profilSimpleUtilisateur->id)
+            ->where('statut_compte_id', $statutRefuse->id)
+            ->count();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | TYPES DE PIÈCES
+        |--------------------------------------------------------------------------
+        */
+
+        $typesPieces = Parametre::where('supprimer', 0)
+            ->where('type_parametre_id', 3)
+            ->orderBy('libelle')
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | HISTORIQUE
+        |--------------------------------------------------------------------------
+        */
+
+        $historiques = Historique::where(
+            'record_type',
+            User::class
+        )
+            ->latest()
+            ->paginate(
+                5,
+                ['*'],
+                'history_page'
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | AJAX
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->ajax()) {
+
+            return response()->json([
+
+                'historiques' => view(
+                    'dependances.templates.admins.gestions.access.users.demandes._consoms.historique',
+                    compact('historiques')
+                )->render(),
+
+                'current_page' => $historiques->currentPage(),
+
+                'last_page' => $historiques->lastPage(),
+
+                'has_more_pages' => $historiques->hasMorePages(),
+
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VUE
+        |--------------------------------------------------------------------------
+        */
+
+        return view(
+            'dependances.templates.admins.gestions.access.users.demandes.rejet',
+            [
+
+                /*
+                |--------------------------------------------------------------------------
+                | TOTAL DEMANDES REJETÉES
+                |--------------------------------------------------------------------------
+                */
+
+                'UserT' => $UserT,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | DEMANDES REJETÉES SUPPRIMÉES
+                |--------------------------------------------------------------------------
+                */
+
+                'UserTC' => $UserTC,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | LISTE DES DEMANDES REJETÉES
+                |--------------------------------------------------------------------------
+                */
+
+                'users' => $demandesRejetees,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFILS
+                |--------------------------------------------------------------------------
+                */
+
+                'profils' => collect([
+                    $profilSimpleUtilisateur
+                ]),
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | TYPES DE PIÈCES
+                |--------------------------------------------------------------------------
+                */
+
+                'typesPieces' => $typesPieces,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | HISTORIQUE
+                |--------------------------------------------------------------------------
+                */
+
+                'historiques' => $historiques,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFIL CONNECTÉ
+                |--------------------------------------------------------------------------
+                */
+
+                'profilConnecte' => $profilConnecte,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PROFIL SIMPLE UTILISATEUR
+                |--------------------------------------------------------------------------
+                */
+
+                'profilSimpleUtilisateur' => $profilSimpleUtilisateur,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | STATUT REFUSÉ
+                |--------------------------------------------------------------------------
+                */
+
+                'statutRefuse' => $statutRefuse,
+
+            ]
         );
     }
 
 
     /*
     |--------------------------------------------------------------------------
-    | RETOUR
+    | STORE UTILISATEUR
     |--------------------------------------------------------------------------
     */
 
-    return back();
-}
+    public function store(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATION
+        |--------------------------------------------------------------------------
+        */
+
+        $data = $request->validate([
+
+            /*
+            |--------------------------------------------------------------------------
+            | INFORMATIONS PERSONNELLES
+            |--------------------------------------------------------------------------
+            */
+
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'prenom' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'telephone' => [
+                'required',
+                'string',
+                'max:30',
+                'unique:users,telephone',
+            ],
+
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                'unique:users,email',
+            ],
+
+            'date_naissance' => [
+                'nullable',
+                'date',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PROFIL
+            |--------------------------------------------------------------------------
+            */
+
+            'profil_id' => [
+                'required',
+                'integer',
+                'exists:profils,id',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | AUTHENTIFICATION
+            |--------------------------------------------------------------------------
+            */
+
+            'password' => [
+                'required',
+                'confirmed',
+                'min:8',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PHOTO UTILISATEUR
+            |--------------------------------------------------------------------------
+            */
+
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,jfif,webp',
+                'max:2048',
+            ],
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PIÈCE D'IDENTITÉ
+            |--------------------------------------------------------------------------
+            */
+
+            'type_piece_id' => [
+                'required',
+                'integer',
+                'exists:parametres,id',
+            ],
+
+            'numero' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'date_expiration' => [
+                'nullable',
+                'date',
+            ],
+
+            'fichier' => [
+                'required',
+                'file',
+                'mimes:pdf,jpg,jpeg,png,webp',
+                'max:5120',
+            ],
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CRÉATION
+        |--------------------------------------------------------------------------
+        */
+
+        try {
+
+            UserService::store($data);
+
+            toast(
+                'Utilisateur créé avec succès.',
+                'success'
+            );
+
+        } catch (Exception $e) {
+
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETOUR
+        |--------------------------------------------------------------------------
+        */
+
+        return back();
+    }
 
 
 
@@ -2353,41 +2363,41 @@ public function store(Request $request)
     |--------------------------------------------------------------------------
     */
 
-    public function corbeilleSelectionDemandeRejetee(Request $request)
-    {
-        /*
-        |--------------------------------------------------------------------------
-        | VALIDATION
-        |--------------------------------------------------------------------------
-        */
+    // public function corbeilleSelectionDemandeRejetee(Request $request)
+    // {
+    //     /*
+    //     |--------------------------------------------------------------------------
+    //     | VALIDATION
+    //     |--------------------------------------------------------------------------
+    //     */
 
-        $data = $request->validate([
+    //     $data = $request->validate([
 
-            'ids' => 'required|array',
-            'ids.*' => 'exists:users,id',
-        ]);
+    //         'ids' => 'required|array',
+    //         'ids.*' => 'exists:users,id',
+    //     ]);
 
-        try {
+    //     try {
 
-            $count = UserService::mettreSelectionCorbeilleDemandeRejetee(
-                $data['ids']
-            );
+    //         $count = UserService::mettreSelectionCorbeilleDemandeRejetee(
+    //             $data['ids']
+    //         );
 
-            toast(
-                $count . ' demande(s) rejetée(s) mise(s) en corbeille avec succès',
-                'success'
-            );
+    //         toast(
+    //             $count . ' demande(s) rejetée(s) mise(s) en corbeille avec succès',
+    //             'success'
+    //         );
 
-        } catch (Exception $e) {
+    //     } catch (Exception $e) {
 
-            toast(
-                $e->getMessage(),
-                'error'
-            );
-        }
+    //         toast(
+    //             $e->getMessage(),
+    //             'error'
+    //         );
+    //     }
 
-        return back();
-    }
+    //     return back();
+    // }
 
 
     /*
