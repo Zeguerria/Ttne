@@ -115,6 +115,7 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
                 Route::post('Admin/Corebeille/Personnel/Tout-Soft', [UserController::class, 'corbeilleAll'])->name('C-All-PERS-pers');
                 Route::post('Admin/Corebeille/Membre/Tout-Soft', [UserController::class, 'corbeilleMembreAll'])->name('C-All-MEMB-memb');
                 Route::post('Admin/Corebeille/Demande/Tout-Soft', [UserController::class, 'corbeilleDemandeAll'])->name('C-All-DEMAN-deman');
+                Route::post('Admin/Corebeille/Rejeter/Tout-Soft', [UserController::class, 'corbeilleDemandeRejeteeAll'])->name('C-All-REJE-reje');
                 Route::post('Admin/Users/Demandes/Valider', [UserController::class, 'validerdemande'])->name('ValiderDemandeUser');
                 Route::post('Admin/Users/Demandes/Refuser',[UserController::class, 'refuserdemande'])->name('RefuserDemandeUser');
                 Route::post('Admin/Users/Demandes/Rejet/Restaurer',[UserController::class, 'restaurerdemande'])->name('RestaurerDemandeUser');
