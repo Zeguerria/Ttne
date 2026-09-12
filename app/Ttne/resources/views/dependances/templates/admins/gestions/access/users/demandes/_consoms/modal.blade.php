@@ -2487,7 +2487,7 @@
                                     <button
                                         type="button"
                                         class="futureBtn darkBtn examenBtnFermer"
-                                        data-bs-dismiss="modal">
+                                        data-dismiss="modal">
 
                                         <i class="fa fa-times"></i>
 
@@ -2550,9 +2550,617 @@
                         </div>
 
                     </div>
-                    <script>
+                    <div class="modal fade futuristicModal" tabindex="-1" aria-hidden="true" id="examinerejet{{ $value->id }}" data-stepper="true" data-step="1" data-max-step="4">
 
-                    </script>
+                        <div class="modal-dialog modal-xl modal-dialog-centered monstepper">
+
+                            <div class="modal-content futuristicContent">
+
+
+                                {{-- =====================================================
+                                    HEADER
+                                ====================================================== --}}
+
+                                <div class="modal-header futuristicHeader">
+
+                                    <div class="headerLeft">
+
+                                        <div class="headerIcon">
+
+                                            <i class="fa fa-user-check"></i>
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <h2 class="futuristicTitle">
+
+                                                Examen de la demande :
+                                                {{ $value->prenom }}
+                                                {{ $value->name }}
+
+                                            </h2>
+
+
+                                            <p class="futuristicSubTitle">
+
+                                                Vérification détaillée de la demande d'adhésion rejetée
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn-close btn-close-white futuristicClose"
+                                        data-bs-dismiss="modal">
+                                    </button>
+
+                                </div>
+
+
+                                {{-- =====================================================
+                                    BODY
+                                ====================================================== --}}
+
+                                <div>
+
+                                    <div class="form">
+
+                                        <div class="modal-body futuristicBody">
+
+
+                                            {{-- =================================================
+                                                STEPPER
+                                            ================================================== --}}
+
+                                            <div class="futureStepper">
+
+
+                                                {{-- STEP 1 --}}
+
+                                                <div
+                                                    class="stepItem active"
+                                                    data-step="1"
+                                                >
+
+                                                    <span>1</span>
+
+                                                    <p>
+                                                        Informations
+                                                    </p>
+
+                                                </div>
+
+
+                                                <div class="stepLine"></div>
+
+
+                                                {{-- STEP 2 --}}
+
+                                                <div
+                                                    class="stepItem"
+                                                    data-step="2"
+                                                >
+
+                                                    <span>2</span>
+
+                                                    <p>
+                                                        Contact
+                                                    </p>
+
+                                                </div>
+
+
+                                                <div class="stepLine"></div>
+
+
+                                                {{-- STEP 3 --}}
+
+                                                <div
+                                                    class="stepItem"
+                                                    data-step="3"
+                                                >
+
+                                                    <span>3</span>
+
+                                                    <p>
+                                                        Identité
+                                                    </p>
+
+                                                </div>
+
+
+                                                <div class="stepLine"></div>
+
+
+                                                {{-- STEP 4 --}}
+
+                                                <div
+                                                    class="stepItem"
+                                                    data-step="4"
+                                                >
+
+                                                    <span>4</span>
+
+                                                    <p>
+                                                        Décision
+                                                    </p>
+
+                                                </div>
+
+
+                                                {{-- <div class="stepLine"></div> --}}
+
+
+                                                {{-- STEP 5 --}}
+
+                                                {{-- <div
+                                                    class="stepItem"
+                                                    data-step="5"
+                                                >
+
+                                                    <span>5</span>
+
+                                                    <p>
+                                                        Décision
+                                                    </p>
+
+                                                </div> --}}
+
+                                            </div>
+
+
+                                            {{-- =================================================
+                                                STEP 1
+                                                INFORMATIONS
+                                            ================================================== --}}
+
+                                            <div
+                                                class="stepContent active"
+                                                data-content="1"
+                                            >
+
+                                                @include(
+                                                    'dependances.templates.admins.gestions.access.users.demandes._consoms._readonlys.steep1'
+                                                )
+
+                                            </div>
+
+
+                                            {{-- =================================================
+                                                STEP 2
+                                                CONTACT
+                                            ================================================== --}}
+
+                                            <div
+                                                class="stepContent"
+                                                data-content="2"
+                                            >
+
+                                                @include(
+                                                    'dependances.templates.admins.gestions.access.users.demandes._consoms._readonlys.steep2'
+                                                )
+
+                                            </div>
+
+
+                                            {{-- =================================================
+                                                STEP 3
+                                                IDENTITÉ
+                                            ================================================== --}}
+
+                                            <div
+                                                class="stepContent"
+                                                data-content="3"
+                                            >
+
+                                                @include(
+                                                    'dependances.templates.admins.gestions.access.users.demandes._consoms._readonlys.steep3'
+                                                )
+
+                                            </div>
+
+
+                                            {{-- =================================================
+                                                STEP 4
+                                                COMPTE
+                                            ================================================== --}}
+
+                                            {{-- <div
+                                                class="stepContent"
+                                                data-content="4"
+                                            >
+
+                                                @include(
+                                                    'dependances.templates.admins.gestions.access.users.demandes._consoms._readonlys.steep4'
+                                                )
+
+                                            </div> --}}
+
+
+                                            {{-- =================================================
+                                                STEP 5
+                                                DÉCISION
+                                            ================================================== --}}
+
+
+
+                                            <div
+                                                class="stepContent"
+                                                data-content="4">
+
+                                                <section class="steep-5">
+
+                                                    <div class="steep-05">
+
+
+                                                        {{-- =====================================================
+                                                            TITRE
+                                                        ====================================================== --}}
+
+                                                        <div class="container-fluid">
+
+                                                            <div class="row p-2">
+
+                                                                <div class="col-12">
+
+                                                                    <div class="futureField">
+
+                                                                        <label>
+
+                                                                            <i class="fa fa-user-check"></i>
+
+                                                                            Décision concernant la demande
+
+                                                                        </label>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                       
+
+
+
+
+
+                                                        {{-- =====================================================
+                                                            INFORMATION DE VALIDATION
+                                                        ====================================================== --}}
+
+                                                        <div class="container-fluid">
+
+                                                            <div class="row inter-input p-2">
+
+                                                                <div class="col-12">
+
+                                                                    <div class="examenDecisionInfo">
+
+                                                                        <div class="examenDecisionInfoIcon">
+
+                                                                            <i class="fa fa-info-circle"></i>
+
+                                                                        </div>
+
+
+                                                                      <div class="examenDecisionInfoContent">
+
+
+                                                                        <strong>
+                                                                            Gestion de la demande rejetée
+                                                                        </strong>
+
+                                                                        <p>
+
+                                                                            Cette demande a précédemment été
+                                                                            <strong>refusée</strong>.
+
+                                                                            Vous pouvez maintenant la
+                                                                            <strong>restaurer</strong> afin de la remettre en attente
+                                                                            pour un nouvel examen, ou la
+                                                                            <strong>restaurer et la valider</strong> directement.
+
+                                                                            Vous pouvez également
+                                                                            <strong>supprimer</strong> cette demande en la mettant à la corbeille.
+
+                                                                        </p>
+
+                                                                        </div>
+
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        {{-- =====================================================
+                                                            ZONE DE DÉCISION
+                                                        ====================================================== --}}
+
+                                                        <div class="container-fluid">
+
+                                                            <div class="row inter-input p-2">
+
+                                                                <div class="col-12">
+
+                                                                    <div class="examenDecisionBox">
+
+
+                                                                        <div class="examenDecisionHeader">
+
+                                                                            <i class="fa fa-gavel"></i>
+
+                                                                            <div>
+
+                                                                                <strong>
+                                                                                    Décision
+                                                                                </strong>
+
+                                                                                <span>
+                                                                                    Choisissez l'action à effectuer
+                                                                                </span>
+
+                                                                            </div>
+
+                                                                        </div>
+
+
+                                                                        <div class="examenDecisionButtons">
+
+
+                                                                          {{-- =====================================
+                                                                                RESTAURER LA DEMANDE
+                                                                            ====================================== --}}
+
+                                                                            <form
+                                                                                action="{{ route('RestaurerDemandeUser') }}"
+                                                                                method="POST"
+                                                                                class="examenDecisionForm">
+
+                                                                                @csrf
+
+                                                                                <input
+                                                                                    type="hidden"
+                                                                                    name="id"
+                                                                                    value="{{ $value->id }}"
+                                                                                >
+
+                                                                                <button
+                                                                                    type="submit"
+                                                                                    class="examenDecisionBtn examenRestaurerBtn examenAccepterBtn"
+                                                                                >
+
+                                                                                    <span class="examenDecisionBtnIcon">
+                                                                                        <i class="fa fa-undo"></i>
+                                                                                    </span>
+
+                                                                                    <span class="examenDecisionBtnText">
+
+                                                                                        <strong>
+                                                                                            Restaurer
+                                                                                        </strong>
+
+                                                                                        <small>
+                                                                                            Restaurer cette demande
+                                                                                        </small>
+
+                                                                                    </span>
+
+                                                                                </button>
+
+                                                                            </form>
+
+
+                                                                            {{-- =====================================
+                                                                                RESTAURER ET VALIDER
+                                                                            ====================================== --}}
+
+                                                                            <form
+                                                                                action="{{ route('RestaurerEtValiderDemandeUser') }}"
+                                                                                method="POST"
+                                                                                class="examenDecisionForm">
+
+                                                                                @csrf
+
+                                                                                <input
+                                                                                    type="hidden"
+                                                                                    name="id"
+                                                                                    value="{{ $value->id }}"
+                                                                                >
+
+                                                                                <button
+                                                                                    type="submit"
+                                                                                    class="examenDecisionBtn examenAccepterBtn"
+                                                                                >
+
+                                                                                    <span class="examenDecisionBtnIcon">
+                                                                                        <i class="fa fa-check-circle"></i>
+                                                                                    </span>
+
+                                                                                    <span class="examenDecisionBtnText">
+
+                                                                                        <strong>
+                                                                                            Restaurer et valider
+                                                                                        </strong>
+
+                                                                                        <small>
+                                                                                            Restaurer et devenir membre de la communauté
+                                                                                        </small>
+
+                                                                                    </span>
+
+                                                                                </button>
+
+                                                                            </form>
+
+
+                                                                            {{-- =====================================
+                                                                                SUPPRIMER
+                                                                            ====================================== --}}
+
+                                                                            <form
+                                                                                action="{{ route('CorbeilleUser') }}"
+                                                                                method="POST"
+                                                                                class="examenDecisionForm">
+
+                                                                                @csrf
+
+                                                                                <input
+                                                                                    type="hidden"
+                                                                                    name="id"
+                                                                                    value="{{ $value->id }}"
+                                                                                >
+
+                                                                                <button
+                                                                                    type="submit"
+                                                                                    class="examenDecisionBtn examenRefuserBtn"
+                                                                                >
+
+                                                                                    <span class="examenDecisionBtnIcon">
+                                                                                        <i class="fa fa-trash"></i>
+                                                                                    </span>
+
+                                                                                    <span class="examenDecisionBtnText">
+
+                                                                                        <strong>
+                                                                                            Supprimer
+                                                                                        </strong>
+
+                                                                                        <small>
+                                                                                            Mettre cette demande à la corbeille
+                                                                                        </small>
+
+                                                                                    </span>
+
+                                                                                </button>
+
+                                                                            </form>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </section>
+
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                {{-- =====================================================
+                                    FOOTER
+                                ====================================================== --}}
+
+                                {{-- =====================================================
+                                    FOOTER EXAMEN DE LA DEMANDE
+                                ====================================================== --}}
+
+                                <div class="modal-footer futuristicFooter examenDemandeFooter">
+
+
+                                    {{-- =================================================
+                                        BOUTON FERMER
+                                    ================================================== --}}
+
+                                    <button
+                                        type="button"
+                                        class="futureBtn darkBtn examenBtnFermer"
+                                        data-dismiss="modal">
+
+                                        <i class="fa fa-times"></i>
+
+                                        Fermer
+
+                                    </button>
+
+
+                                    {{-- =================================================
+                                        GROUPE DES ACTIONS DU STEPPER
+                                    ================================================== --}}
+
+                                    <div class="examenDemandeActions">
+
+
+                                        {{-- =================================================
+                                            RETOUR
+                                        ================================================== --}}
+
+                                        <button
+                                            type="button"
+                                            class="futureBtn dangerBtn examenBtnRetour prevStep"
+                                            style="display:none;">
+
+                                            <i class="fa fa-arrow-left"></i>
+
+                                            Retour
+
+                                        </button>
+
+
+                                        {{-- =================================================
+                                            CONTINUER
+                                        ================================================== --}}
+
+                                        <button
+                                            type="button"
+                                            class="futureBtn successBtn examenBtnContinuer nextStep"
+                                        >
+
+                                            Continuer
+
+                                            <i class="fa fa-arrow-right"></i>
+
+                                        </button>
+
+
+                                        {{-- =================================================
+                                            ACTIONS FINALES
+                                            APPARAISSENT UNIQUEMENT AU STEP 5
+                                        ================================================== --}}
+
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
 
 
                     {{-- =========================================================

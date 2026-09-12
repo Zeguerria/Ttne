@@ -2977,6 +2977,373 @@ class UserService
             );
         }
     }
+    /*
+|--------------------------------------------------------------------------
+| RESTAURER UNE DEMANDE REJETÉE
+|--------------------------------------------------------------------------
+*/
+public static function restaurerDemande(array $data)
+{
+    DB::beginTransaction();
+
+    try {
+
+        /*
+        |--------------------------------------------------------------------------
+        | RÉCUPÉRATION DU PROFIL SIMPLE UTILISATEUR
+        |--------------------------------------------------------------------------
+        */
+
+        $profilSimpleUtilisateur = Profil::where('supprimer', 0)
+            ->where('code', 'SIMPLE-UTILISATEUR')
+            ->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RÉCUPÉRATION DES STATUTS
+        |--------------------------------------------------------------------------
+        */
+
+        $statutAttente = Parametre::where('supprimer', 0)
+            ->where('code', 'S-U-ATTENTE')
+            ->firstOrFail();
+
+        $statutRefuse = Parametre::where('supprimer', 0)
+            ->where('code', 'S-U-REFUSE')
+            ->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RÉCUPÉRATION DE L'UTILISATEUR
+        |--------------------------------------------------------------------------
+        */
+
+        $user = User::findOrFail($data['id']);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VÉRIFICATION DU PROFIL
+        |--------------------------------------------------------------------------
+        |
+        | Seul un SIMPLE-UTILISATEUR peut être restauré
+        | en tant que demande.
+        |
+        */
+
+        if ($user->profil_id !== $profilSimpleUtilisateur->id) {
+
+            throw new Exception(
+                "L'utilisateur sélectionné n'est pas un simple utilisateur."
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VÉRIFICATION DU STATUT
+        |--------------------------------------------------------------------------
+        |
+        | Seul un utilisateur REFUSÉ peut être restauré
+        | en tant que demande.
+        |
+        */
+
+        if ($user->statut_compte_id !== $statutRefuse->id) {
+
+            throw new Exception(
+                "L'utilisateur sélectionné n'est pas une demande refusée."
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ANCIENNE VALEUR POUR L'HISTORIQUE
+        |--------------------------------------------------------------------------
+        */
+
+        $ancienneValeur = $user->toArray();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RESTAURATION DE LA DEMANDE
+        |--------------------------------------------------------------------------
+        |
+        | S-U-REFUSE
+        |      ↓
+        | S-U-ATTENTE
+        |
+        | La date du refus est supprimée puisque
+        | la demande n'est plus refusée.
+        |
+        */
+
+        $user->statut_compte_id = $statutAttente->id;
+
+        $user->date_refus = null;
+
+        $user->derniere_ip = request()->ip();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ENREGISTREMENT
+        |--------------------------------------------------------------------------
+        */
+
+        $user->save();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | HISTORIQUE
+        |--------------------------------------------------------------------------
+        */
+
+        HistoriqueService::modifier(
+            $user,
+            $ancienneValeur,
+            $user->toArray()
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATION TRANSACTION
+        |--------------------------------------------------------------------------
+        */
+
+        DB::commit();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETOUR
+        |--------------------------------------------------------------------------
+        */
+
+        return $user;
+
+
+    } catch (Exception $e) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | ANNULATION TRANSACTION
+        |--------------------------------------------------------------------------
+        */
+
+        DB::rollBack();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ERREUR
+        |--------------------------------------------------------------------------
+        */
+
+        throw new Exception(
+            "Erreur lors de la restauration de la demande : "
+            . $e->getMessage()
+        );
+    }
+}
+/*
+|--------------------------------------------------------------------------
+| RESTAURER ET VALIDER UNE DEMANDE REJETÉE
+|--------------------------------------------------------------------------
+*/
+public static function restaurerEtValider(array $data)
+{
+    DB::beginTransaction();
+
+    try {
+
+        /*
+        |--------------------------------------------------------------------------
+        | RÉCUPÉRATION DES PROFILS
+        |--------------------------------------------------------------------------
+        */
+
+        $profilSimpleUtilisateur = Profil::where('supprimer', 0)
+            ->where('code', 'SIMPLE-UTILISATEUR')
+            ->firstOrFail();
+
+        $profilMembre = Profil::where('supprimer', 0)
+            ->where('code', 'MEMBRE-COMMUNAUTE')
+            ->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RÉCUPÉRATION DES STATUTS
+        |--------------------------------------------------------------------------
+        */
+
+        $statutRefuse = Parametre::where('supprimer', 0)
+            ->where('code', 'S-U-REFUSE')
+            ->firstOrFail();
+
+        $statutAccepte = Parametre::where('supprimer', 0)
+            ->where('code', 'S-U-ACCEPTE')
+            ->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RÉCUPÉRATION DE L'UTILISATEUR
+        |--------------------------------------------------------------------------
+        */
+
+        $user = User::findOrFail($data['id']);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VÉRIFICATION DU PROFIL
+        |--------------------------------------------------------------------------
+        |
+        | Seul un SIMPLE-UTILISATEUR peut être restauré
+        | et validé.
+        |
+        */
+
+        if ($user->profil_id !== $profilSimpleUtilisateur->id) {
+
+            throw new Exception(
+                "L'utilisateur sélectionné n'est pas un simple utilisateur."
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VÉRIFICATION DU STATUT
+        |--------------------------------------------------------------------------
+        |
+        | Seul un utilisateur REFUSÉ peut être restauré
+        | et validé directement.
+        |
+        */
+
+        if ($user->statut_compte_id !== $statutRefuse->id) {
+
+            throw new Exception(
+                "L'utilisateur sélectionné n'est pas une demande refusée."
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ANCIENNE VALEUR POUR L'HISTORIQUE
+        |--------------------------------------------------------------------------
+        */
+
+        $ancienneValeur = $user->toArray();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RESTAURATION + VALIDATION
+        |--------------------------------------------------------------------------
+        |
+        | PROFIL :
+        |
+        | SIMPLE-UTILISATEUR
+        |        ↓
+        | MEMBRE-COMMUNAUTE
+        |
+        | STATUT :
+        |
+        | S-U-REFUSE
+        |        ↓
+        | S-U-ACCEPTE
+        |
+        */
+
+        $user->profil_id = $profilMembre->id;
+
+        $user->statut_compte_id = $statutAccepte->id;
+
+        /*
+        | La demande n'est plus refusée.
+        */
+        $user->date_refus = null;
+
+        /*
+        | Mise à jour de la dernière IP.
+        */
+        $user->derniere_ip = request()->ip();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ENREGISTREMENT
+        |--------------------------------------------------------------------------
+        */
+
+        $user->save();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | HISTORIQUE
+        |--------------------------------------------------------------------------
+        */
+
+        HistoriqueService::modifier(
+            $user,
+            $ancienneValeur,
+            $user->toArray()
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATION TRANSACTION
+        |--------------------------------------------------------------------------
+        */
+
+        DB::commit();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETOUR
+        |--------------------------------------------------------------------------
+        */
+
+        return $user;
+
+
+    } catch (Exception $e) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | ANNULATION TRANSACTION
+        |--------------------------------------------------------------------------
+        */
+
+        DB::rollBack();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ERREUR
+        |--------------------------------------------------------------------------
+        */
+
+        throw new Exception(
+            "Erreur lors de la restauration et validation de la demande : "
+            . $e->getMessage()
+        );
+    }
+}
 
 
 }

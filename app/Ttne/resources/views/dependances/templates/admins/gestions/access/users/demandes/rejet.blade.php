@@ -415,7 +415,7 @@
                                 <tbody id="futureTableBody">
 
                                     @include(
-                                        'dependances.templates.admins.gestions.access.users.demandes._consoms._datas.grandecran'
+                                        'dependances.templates.admins.gestions.access.users.demandes._consoms._datas.grandecranrejet'
                                     )
 
                                 </tbody>
@@ -432,7 +432,7 @@
                         <div class="futureMobileCards">
 
                             @include(
-                                'dependances.templates.admins.gestions.access.users.demandes._consoms._datas.petitecran'
+                                'dependances.templates.admins.gestions.access.users.demandes._consoms._datas.petitecranrejet'
                             )
 
                         </div>

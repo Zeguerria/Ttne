@@ -1371,6 +1371,84 @@ class UserController extends Controller
 
         return back();
     }
+    public function restaurerdemande(Request $request)
+    {
+        $data = $request->validate([
+
+            /*
+            |--------------------------------------------------------------------------
+            | IDENTIFIANT DE L'UTILISATEUR
+            |--------------------------------------------------------------------------
+            */
+
+            'id' => [
+                'required',
+                'integer',
+                'exists:users,id',
+            ],
+
+        ]);
+
+
+        try {
+
+            UserService::restaurerDemande($data);
+
+            toast(
+                'La demande a été restaurée avec succès.',
+                'success'
+            );
+
+        } catch (Exception $e) {
+
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+        }
+
+
+        return back();
+    }
+    public function restaureretvaliderdemande(Request $request)
+    {
+        $data = $request->validate([
+
+            /*
+            |--------------------------------------------------------------------------
+            | IDENTIFIANT DE L'UTILISATEUR
+            |--------------------------------------------------------------------------
+            */
+
+            'id' => [
+                'required',
+                'integer',
+                'exists:users,id',
+            ],
+
+        ]);
+
+
+        try {
+
+            UserService::restaurerEtValider($data);
+
+            toast(
+                'La demande a été restaurée et validée avec succès.',
+                'success'
+            );
+
+        } catch (Exception $e) {
+
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+        }
+
+
+        return back();
+    }
 
 
     public function update(Request $request)
@@ -2005,7 +2083,7 @@ class UserController extends Controller
             );
 
             toast(
-                'Personnel supprimé',
+                'Demande ou Utilisiteur supprimé',
                 'success'
             );
 
