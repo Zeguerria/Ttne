@@ -2811,7 +2811,7 @@ class UserService
     |--------------------------------------------------------------------------
     */
 
-    public function mettreSelectionCorbeilleDemandeRejetee(array $ids)
+    public static function mettreSelectionCorbeilleDemandeRejetee(array $ids)
     {
         DB::beginTransaction();
 

@@ -257,6 +257,7 @@
             {{-- TOUT METTRE EN CORBEILLE DEBUT --}}
                 <div class="suprression-selection">
                     @include('dependances.templates.admins.gestions.access.users.demandes._consoms.toutmettrecorbeille')
+                    @include('dependances.templates.admins.gestions.access.users.demandes._consoms.toutmettrecorbeillerejet')
                 </div>
             {{-- TOUT METTRE EN CORBEILLE FIN --}}
 
@@ -2828,7 +2829,7 @@
                                                         </div>
 
 
-                                                       
+
 
 
 

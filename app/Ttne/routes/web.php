@@ -132,6 +132,7 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
                 Route::post('/select/corbeille/personnels',[UserController::class, 'corbeilleSelection']);
                 Route::post('/select/corbeille/membres',[UserController::class, 'corbeilleSelectionMembre']);
                 Route::post('/select/corbeille/demandes',[UserController::class, 'corbeilleSelectionDemande']);
+                Route::post('/select/corbeille/rejets',[UserController::class, 'corbeilleSelectionDemandeRejetee']);
             // FONCTION FIN
         //USER FIN
 

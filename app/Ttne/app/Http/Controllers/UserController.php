@@ -2441,41 +2441,41 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    // public function corbeilleSelectionDemandeRejetee(Request $request)
-    // {
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | VALIDATION
-    //     |--------------------------------------------------------------------------
-    //     */
+    public function corbeilleSelectionDemandeRejetee(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATION
+        |--------------------------------------------------------------------------
+        */
 
-    //     $data = $request->validate([
+        $data = $request->validate([
 
-    //         'ids' => 'required|array',
-    //         'ids.*' => 'exists:users,id',
-    //     ]);
+            'ids' => 'required|array',
+            'ids.*' => 'exists:users,id',
+        ]);
 
-    //     try {
+        try {
 
-    //         $count = UserService::mettreSelectionCorbeilleDemandeRejetee(
-    //             $data['ids']
-    //         );
+            $count = UserService::mettreSelectionCorbeilleDemandeRejetee(
+                $data['ids']
+            );
 
-    //         toast(
-    //             $count . ' demande(s) rejetée(s) mise(s) en corbeille avec succès',
-    //             'success'
-    //         );
+            toast(
+                $count . ' demande(s) rejetée(s) mise(s) en corbeille avec succès',
+                'success'
+            );
 
-    //     } catch (Exception $e) {
+        } catch (Exception $e) {
 
-    //         toast(
-    //             $e->getMessage(),
-    //             'error'
-    //         );
-    //     }
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+        }
 
-    //     return back();
-    // }
+        return back();
+    }
 
 
     /*
