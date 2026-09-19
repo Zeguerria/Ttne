@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\HabilitationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PieceController;
+use App\Http\Controllers\PeriodiciteController;
 use App\Models\Historique;
 use Illuminate\Support\Facades\Route;
 
@@ -66,6 +67,24 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
 
             // FONCTION FIN
         //PARAMETRE FIN
+        //PERIODICITE DEBUT
+                // CHEMIN DES PAGES DEBUT
+                Route::get('Admin/Parametrages/Periodicite', [PeriodiciteController::class, 'index'])->name('ADM-P-perio');
+                //CHEMIN DES PAGE FIN
+            //AUTRES FUNCTION DEBUT
+                // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
+
+                Route::get('Admin/Corebeille/Periodicite/Tout-Destroy', [PeriodiciteController::class, 'destroyTous'])->name('D-All-AD-PERIO');
+                Route::post('Admin/Corebeille/Periodicite/Tout-Soft', [PeriodiciteController::class, 'corbeilleAll'])->name('C-All-PARAM-PERIO');
+            //AUTRES FUNCTION FIN
+            //FONCTIONS DEBUT
+                Route::post('AjouterPeriodicite', [PeriodiciteController::class, 'store'])->name('AjouterPeriodicite');
+                Route::post('ModifierPeriodicite', [PeriodiciteController::class, 'update'])->name('ModifierPeriodicite');
+                Route::post('CorbeillePeriodicite', [PeriodiciteController::class, 'corbeille'])->name('CorbeillePeriodicite');
+                Route::post('/select/corbeille/periodicite',[PeriodiciteController::class, 'corbeilleSelection']);
+
+            // FONCTION FIN
+        //PERIODICITE FIN
         //PROFIL DEBUT
                 // CHEMIN DES PAGES DEBUT
                 Route::get('Admin/Access/Profil', [ProfilController::class, 'index'])->name('ADM-PRO-pro');
