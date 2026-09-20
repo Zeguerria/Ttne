@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 
 class Periodicite extends Model
@@ -53,5 +54,18 @@ class Periodicite extends Model
     {
         return $this->{$this->nomAttribut}
             ?? class_basename($this) . ' #' . $this->id;
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | GROUPES
+    |--------------------------------------------------------------------------
+    */
+
+    public function groupes(): HasMany
+    {
+        return $this->hasMany(
+            Groupe::class,
+            'periodicite_id'
+        );
     }
 }

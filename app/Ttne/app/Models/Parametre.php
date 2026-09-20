@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 
 class Parametre extends Model
@@ -63,8 +64,66 @@ class Parametre extends Model
         return $this->hasMany(Piece::class, 'statut_piece_id');
     }
     public function utilisateursStatut()
-{
-    return $this->hasMany(User::class, 'statut_compte_id');
-}
+    {
+        return $this->hasMany(User::class, 'statut_compte_id');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | GROUPES — MODE DE DISTRIBUTION
+    |--------------------------------------------------------------------------
+    */
+
+    public function groupesModeDistribution(): HasMany
+    {
+        return $this->hasMany(
+            Groupe::class,
+            'mode_distribution_id'
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | GROUPES — VALIDATION MEMBRE
+    |--------------------------------------------------------------------------
+    */
+
+    public function groupesValidationMembre(): HasMany
+    {
+        return $this->hasMany(
+            Groupe::class,
+            'validation_membre_id'
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | GROUPES — VISIBILITÉ
+    |--------------------------------------------------------------------------
+    */
+
+    public function groupesVisibilite(): HasMany
+    {
+        return $this->hasMany(
+            Groupe::class,
+            'visibilite_id'
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | GROUPES — STATUT
+    |--------------------------------------------------------------------------
+    */
+
+    public function groupesStatut(): HasMany
+    {
+        return $this->hasMany(
+            Groupe::class,
+            'statut_id'
+        );
+    }
 
 }
