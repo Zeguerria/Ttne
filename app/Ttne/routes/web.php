@@ -1,13 +1,14 @@
 <?php
 
 use App\Http\Controllers\CorbeilleController;
-use App\Http\Controllers\ParametreController;
-use App\Http\Controllers\TypeParametreController;
-use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\GroupeController;
 use App\Http\Controllers\HabilitationController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PieceController;
+use App\Http\Controllers\ParametreController;
 use App\Http\Controllers\PeriodiciteController;
+use App\Http\Controllers\PieceController;
+use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\TypeParametreController;
+use App\Http\Controllers\UserController;
 use App\Models\Historique;
 use Illuminate\Support\Facades\Route;
 
@@ -85,6 +86,24 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
 
             // FONCTION FIN
         //PERIODICITE FIN
+        //GROUPE DEBUT
+                // CHEMIN DES PAGES DEBUT
+                Route::get('Admin/Delicatesse/Groupe', [GroupeController::class, 'index'])->name('ADM-G-groupe');
+                //CHEMIN DES PAGE FIN
+            //AUTRES FUNCTION DEBUT
+                // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
+
+                Route::get('Admin/Corebeille/Groupe/Tout-Destroy', [GroupeController::class, 'destroyTous'])->name('D-All-AD-GROUPE');
+                Route::post('Admin/Corebeille/Groupe/Tout-Soft', [GroupeController::class, 'corbeilleAll'])->name('C-All-AD-GROUPE');
+            //AUTRES FUNCTION FIN
+            //FONCTIONS DEBUT
+                Route::post('AjouterGroupe', [GroupeController::class, 'store'])->name('AjouterGroupe');
+                Route::post('ModifierGroupe', [GroupeController::class, 'update'])->name('ModifierGroupe');
+                Route::post('CorbeillePeriodicite', [GroupeController::class, 'corbeille'])->name('CorbeilleGroupe');
+                Route::post('/select/corbeille/groupes',[GroupeController::class, 'corbeilleSelection']);
+
+            // FONCTION FIN
+        //GROUPE FIN
         //PROFIL DEBUT
                 // CHEMIN DES PAGES DEBUT
                 Route::get('Admin/Access/Profil', [ProfilController::class, 'index'])->name('ADM-PRO-pro');
