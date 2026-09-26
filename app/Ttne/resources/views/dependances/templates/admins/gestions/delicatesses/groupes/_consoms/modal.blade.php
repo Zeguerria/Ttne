@@ -9,7 +9,7 @@
                 <div class="modal-dialog modal-xl modal-dialog-centered monstepper">
 
                     <div class="modal-content futuristicContent ">
-                        <form id="futureStepperForm" method="POST" action="{{ route('AjouterUser') }}"  enctype="multipart/form-data">
+                        <form id="futureStepperForm" method="POST" action="{{ route('AjouterGroupe') }}"  enctype="multipart/form-data">
                             @csrf
                             <!-- LIGHT -->
                             <div class="modalLight"></div>
@@ -21,16 +21,16 @@
                                 <div class="headerLeft">
 
                                     <div class="headerIcon">
-                                        <i class="fa fa-user-plus"></i>
+                                        <i class="fa fa-users"></i>
                                     </div>
 
                                     <div>
                                         <h2 class="futuristicTitle">
-                                            Nouveau membre
+                                            Nouveau Groupe
                                         </h2>
 
                                         <p class="futuristicSubTitle">
-                                            Création d'un compte utilisateur
+                                            Création d'un groupe
                                         </p>
                                     </div>
 
@@ -56,68 +56,50 @@
 
                                         <div class="futureStepper">
 
-                                            <!-- STEP 1 -->
-                                            <div class="stepItem active"
-                                                data-step="1">
-
-                                                <span>1</span>
-                                                <p>Informations</p>
-
-                                            </div>
-
-
-                                            <div class="stepLine"></div>
-
-
-                                            <!-- STEP 2 -->
-                                            <div class="stepItem"
-                                                data-step="2">
-
-                                                <span>2</span>
-                                                <p>Contact</p>
-
-                                            </div>
-
-
-                                            <div class="stepLine"></div>
-
-
-                                            <!-- STEP 3 -->
-                                            <div class="stepItem"
-                                                data-step="3">
-
-                                                <span>3</span>
-                                                <p>Identité</p>
-
-                                            </div>
-
-
-                                            <div class="stepLine"></div>
-
-
-                                            <!-- STEP 4 -->
-                                            <div class="stepItem"
-                                                data-step="4">
-
-                                                <span>4</span>
-                                                <p>Compte</p>
-
-                                            </div>
-
-
-                                            <div class="stepLine"></div>
-
-
-                                            <!-- STEP 5 -->
-                                            <div class="stepItem"
-                                                data-step="5">
-
-                                                <span>5</span>
-                                                <p>Validation</p>
-
-                                            </div>
-
+                                        <!-- STEP 1 -->
+                                        <div class="stepItem active"
+                                            data-step="1">
+                                            <span>1</span>
+                                            <p>Groupe</p>
                                         </div>
+
+                                        <div class="stepLine"></div>
+
+                                        <!-- STEP 2 -->
+                                        <div class="stepItem"
+                                            data-step="2">
+                                            <span>2</span>
+                                            <p>Cotisation</p>
+                                        </div>
+
+                                        <div class="stepLine"></div>
+
+                                        <!-- STEP 3 -->
+                                        <div class="stepItem"
+                                            data-step="3">
+                                            <span>3</span>
+                                            <p>Fonctionnement</p>
+                                        </div>
+
+                                        <div class="stepLine"></div>
+
+                                        <!-- STEP 4 -->
+                                        <div class="stepItem"
+                                            data-step="4">
+                                            <span>4</span>
+                                            <p>Administration</p>
+                                        </div>
+
+                                        <div class="stepLine"></div>
+
+                                        <!-- STEP 5 -->
+                                        <div class="stepItem"
+                                            data-step="5">
+                                            <span>5</span>
+                                            <p>Vérification</p>
+                                        </div>
+
+                                    </div>
 
 
                                         <!-- =====================================
@@ -126,7 +108,7 @@
                                         ====================================== -->
 
                                         <div class="stepContent active" data-content="1">
-                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._modalajouts.steep1')
+                                            @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms._modalajouts.steep1')
                                         </div>
                                         <!-- =====================================
                                             STEP 2
@@ -134,7 +116,7 @@
                                         ====================================== -->
 
                                         <div class="stepContent" data-content="2">
-                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._modalajouts.steep2')
+                                            @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms._modalajouts.steep2')
                                         </div>
                                         <!-- =====================================
                                             STEP 3
@@ -142,7 +124,7 @@
                                         ====================================== -->
 
                                         <div class="stepContent" data-content="3">
-                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._modalajouts.steep3')
+                                            @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms._modalajouts.steep3')
                                         </div>
                                         <!-- =====================================
                                             STEP 4
@@ -151,7 +133,7 @@
 
                                         <div class="stepContent" data-content="4">
 
-                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._modalajouts.steep4')
+                                            @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms._modalajouts.steep4')
                                         </div>
                                         <!-- =====================================
                                             STEP 5
@@ -159,7 +141,7 @@
                                         ====================================== -->
 
                                         <div class="stepContent" data-content="5">
-                                            @include('dependances.templates.admins.gestions.access.users.personnels._consoms._modalajouts.steep5')
+                                            @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms._modalajouts.steep5')
 
                                         </div>
 
@@ -436,7 +418,7 @@
                                                 >
 
                                                     {{-- Le contenu viendra ici après réception du STEP 1 --}}
-                                                                    @include('dependances.templates.admins.gestions.access.users.personnels._consoms._readonlys.steep1')
+                                                                    @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms._readonlys.steep1')
 
 
                                                 </div>

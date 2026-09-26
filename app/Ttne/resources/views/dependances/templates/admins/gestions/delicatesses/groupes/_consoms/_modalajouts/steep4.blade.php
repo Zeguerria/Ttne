@@ -1,66 +1,186 @@
+
 {{-- STEEP 4 DEBUT --}}
+
 <section class="steep-4">
+
     <div class="steep-04">
-        <div class="row g-4">
-            <!-- MOT DE PASSE -->
+
+        <div class="row g-4 p-2">
+
+            {{-- DATE DE DÉBUT --}}
             <div class="col-md-6">
-                <div class="futureField">
-                    <label>
-                        <i class="fa fa-lock"></i>
-                        Mot de passe
-                    </label>
-                    <div class="futureInput">
-                        <i class="fa fa-lock inputIcon"></i>
-                        <input type="password" name="password" id="password" class="form-control" placeholder="Entrer le mot de passe" data-review="password" required>
-                        <button type="button" class="passwordToggle"  data-target="#password"  aria-label="Afficher le mot de passe">  <i class="fa fa-eye"></i></button>
-                    </div>
-                </div>
-            </div>
-            <!-- CONFIRMATION -->
-            <div class="col-md-6">
+
                 <div class="futureField">
 
                     <label>
-                        <i class="fa fa-lock"></i>
-                        Confirmation du mot de passe
+                        <i class="fa fa-calendar-check"></i>
+                        Date de début
                     </label>
+
                     <div class="futureInput">
-                        <i class="fa fa-lock inputIcon"></i>
 
-                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Confirmer le mot de passe" required>
-                        <button type="button" class="passwordToggle" data-target="#password_confirmation" aria-label="Afficher la confirmation du mot de passe">
-                            <i class="fa fa-eye"></i>
-                        </button>
+                        <i class="fa fa-calendar-check inputIcon"></i>
+
+                        <input
+                            type="date"
+                            name="date_debut"
+                            class="form-control"
+                            value="{{ old('date_debut') }}"
+                            required
+                            data-review="date_debut"
+                        >
+
                     </div>
-                    <div class="passwordError">
-                        <i class="fa fa-circle-exclamation"></i>
-                        Les mots de passe ne correspondent pas.
-                    </div>
-
-
-
-
 
                 </div>
 
+            </div>
 
+
+            {{-- DATE DE FIN ESTIMÉE --}}
+            <div class="col-md-6">
+
+                <div class="futureField">
+
+                    <label>
+                        <i class="fa fa-calendar-xmark"></i>
+                        Date de fin estimée
+                    </label>
+
+                    <div class="futureInput">
+
+                        <i class="fa fa-calendar-xmark inputIcon"></i>
+
+                        <input
+                            type="date"
+                            name="date_fin_estimee"
+                            class="form-control"
+                            value="{{ old('date_fin_estimee') }}"
+                            data-review="date_fin_estimee"
+                        >
+
+                    </div>
+
+                </div>
 
             </div>
-            <!-- INFORMATIONS COMPLÉMENTAIRES -->
-             <div class="col-md-12">
+
+
+            {{-- CRÉATEUR DU GROUPE --}}
+            <div class="col-md-6">
+
+                <div class="futureField">
+
+                    <label>
+                        <i class="fa fa-user-plus"></i>
+                        Créateur du groupe
+                    </label>
+
+                    <div class="futureInput">
+
+                        <i class="fa fa-user-plus inputIcon"></i>
+
+                        <select
+                            name="createur_id"
+                            class="futureSelect"
+                            required
+                            data-review="createur_id"
+                        >
+
+                            <option value="">
+                                Sélectionner le créateur
+                            </option>
+
+                            @foreach($users ?? [] as $user)
+
+                                <option
+                                    value="{{ $user->id }}"
+                                    {{ old('createur_id') == $user->id ? 'selected' : '' }}
+                                >
+                                    {{ $user->prenom }} {{ $user->name }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {{-- STATUT DU GROUPE --}}
+            <div class="col-md-6">
+
+                <div class="futureField">
+
+                    <label>
+                        <i class="fa fa-circle-check"></i>
+                        Statut du groupe
+                    </label>
+
+                    <div class="futureInput">
+
+                        <i class="fa fa-circle-check inputIcon"></i>
+
+                        <select
+                            name="statut_id"
+                            class="futureSelect"
+                            required
+                            data-review="statut_id"
+                        >
+
+                            <option value="">
+                                Sélectionner le statut
+                            </option>
+
+                            @foreach($statuts ?? [] as $statut)
+
+                                <option
+                                    value="{{ $statut->id }}"
+                                    {{ old('statut_id') == $statut->id ? 'selected' : '' }}
+                                >
+                                    {{ $statut->libelle }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {{-- INFORMATIONS COMPLÉMENTAIRES --}}
+            <div class="col-md-12">
+
                 <div class="futureFinal">
-                    <i class="fa fa-shield-halved"></i>
+
+                    <i class="fa fa-calendar-days"></i>
+
                     <h3>
-                        Sécurité du compte
+                        Période et administration
                     </h3>
+
                     <p>
-                        Le mot de passe sera sécurisé avant
-                        l'enregistrement du compte.
+                        Définissez la période de fonctionnement du groupe,
+                        son créateur ainsi que son statut initial.
                     </p>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
 
 </section>
+
 {{-- STEEP 4 FIN --}}
+
