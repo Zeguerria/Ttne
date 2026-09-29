@@ -23,7 +23,7 @@
 
                             <h2>
 
-                                Groupes
+                                Période
 
                             </h2>
 
@@ -47,7 +47,7 @@
 
                                 <strong>
 
-                                   Groupe
+                                   Periodicités
 
                                 </strong>
 
@@ -112,7 +112,7 @@
 
                                             <p class="futureHistorySubTitle">
 
-                                                Activités liées aux groupes
+                                                Activités liées aux périodes de groupes
 
                                             </p>
 
@@ -143,7 +143,7 @@
                                 <div class="futureHistoryBody" id="futureHistoryBody" >
 
                                     @include(
-                                        'dependances.templates.admins.gestions.delicatesses.groupes._consoms.historique',
+                                        'dependances.templates.admins.gestions.delicatesses.periodicites._consoms.historique',
                                         ['historiques' => $historiques]
                                     )
 

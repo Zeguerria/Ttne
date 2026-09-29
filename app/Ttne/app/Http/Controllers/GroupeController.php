@@ -6,7 +6,9 @@ use App\Models\Groupe;
 use App\Models\Historique;
 use App\Models\Parametre;
 use App\Models\Periodicite;
+use App\Models\User;
 use App\Services\Core\GroupeService;
+use App\Services\GroupeUtilisateurService;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -65,6 +67,12 @@ class GroupeController extends Controller
         )
             ->orderBy('id')
             ->get();
+            $userCreateur = User::where('supprimer', 0)
+                ->whereHas('profil', function ($query) {
+                    $query->where('code', '!=', 'SIMPLE-UTILISATEUR');
+                })
+                ->orderBy('name')
+                ->get();
 
         $modesDistribution = Parametre::where(
             'type_parametre_id',
@@ -162,24 +170,23 @@ class GroupeController extends Controller
                 'visibilites' => $visibilites,
 
                 'statutsGroupe' => $statutsGroupe,
+
+                'users' => $userCreateur,
             ]
         );
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | CREATION
-    |--------------------------------------------------------------------------
+    /**
+     *--------------------------------------------------------------------------
+    * CREATION
+    *--------------------------------------------------------------------------
     */
-
     public function store(Request $request)
     {
         $data = $request->validate([
 
             'nom' => 'required|string|max:255',
-
-            'slug' => 'required|string|max:255|unique:groupes,slug',
 
             'description' => 'nullable|string',
 
@@ -187,28 +194,38 @@ class GroupeController extends Controller
 
             'montant_cotisation' => 'required|numeric|min:0',
 
-            'penalite_pourcentage' => 'nullable|numeric|min:0',
+            'penalite_pourcentage' =>
+                'nullable|numeric|min:0',
 
-            'fonds_assurance_pourcentage' => 'nullable|numeric|min:0',
+            'fonds_assurance_pourcentage' =>
+                'nullable|numeric|min:0',
 
-            'delai_grace_heures' => 'nullable|integer|min:0',
+            'delai_grace_heures' =>
+                'nullable|integer|min:0',
 
-            'nombre_participants_max' => 'required|integer|min:1',
+            'nombre_participants_max' =>
+                'required|integer|min:1',
 
-            'periodicite_id' => 'required|exists:parametres,id',
+            'periodicite_id' =>
+                'required|exists:periodicites,id',
 
-            'date_debut' => 'required|date',
+            'date_debut' =>
+                'required|date',
 
-            'date_fin_estimee' => 'nullable|date|after_or_equal:date_debut',
+            'date_fin_estimee' =>
+                'nullable|date|after_or_equal:date_debut',
 
-            'mode_distribution_id' => 'required|exists:parametres,id',
+            'mode_distribution_id' =>
+                'required|exists:parametres,id',
 
-            'validation_membre_id' => 'required|exists:parametres,id',
+            'validation_membre_id' =>
+                'required|exists:parametres,id',
 
-            'visibilite_id' => 'required|exists:parametres,id',
+            'visibilite_id' =>
+                'required|exists:parametres,id',
 
-            'statut_id' => 'required|exists:parametres,id',
-
+            'statut_id' =>
+                'required|exists:parametres,id',
         ]);
 
         try {
@@ -232,50 +249,62 @@ class GroupeController extends Controller
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | MODIFICATION
-    |--------------------------------------------------------------------------
+    /**
+     *--------------------------------------------------------------------------
+    * MODIFICATION
+    *--------------------------------------------------------------------------
     */
-
     public function update(Request $request)
     {
         $data = $request->validate([
 
-            'id' => 'required|exists:groupes,id',
+            'id' =>
+                'required|exists:groupes,id',
 
-            'nom' => 'required|string|max:255',
+            'nom' =>
+                'required|string|max:255',
 
-            'slug' => 'required|string|max:255|unique:groupes,slug,' . $request->id,
+            'description' =>
+                'nullable|string',
 
-            'description' => 'nullable|string',
+            'createur_id' =>
+                'required|exists:users,id',
 
-            'createur_id' => 'required|exists:users,id',
+            'montant_cotisation' =>
+                'required|numeric|min:0',
 
-            'montant_cotisation' => 'required|numeric|min:0',
+            'penalite_pourcentage' =>
+                'nullable|numeric|min:0',
 
-            'penalite_pourcentage' => 'nullable|numeric|min:0',
+            'fonds_assurance_pourcentage' =>
+                'nullable|numeric|min:0',
 
-            'fonds_assurance_pourcentage' => 'nullable|numeric|min:0',
+            'delai_grace_heures' =>
+                'nullable|integer|min:0',
 
-            'delai_grace_heures' => 'nullable|integer|min:0',
+            'nombre_participants_max' =>
+                'required|integer|min:1',
 
-            'nombre_participants_max' => 'required|integer|min:1',
+            'periodicite_id' =>
+                'required|exists:periodicites,id',
 
-            'periodicite_id' => 'required|exists:parametres,id',
+            'date_debut' =>
+                'required|date',
 
-            'date_debut' => 'required|date',
+            'date_fin_estimee' =>
+                'nullable|date|after_or_equal:date_debut',
 
-            'date_fin_estimee' => 'nullable|date|after_or_equal:date_debut',
+            'mode_distribution_id' =>
+                'required|exists:parametres,id',
 
-            'mode_distribution_id' => 'required|exists:parametres,id',
+            'validation_membre_id' =>
+                'required|exists:parametres,id',
 
-            'validation_membre_id' => 'required|exists:parametres,id',
+            'visibilite_id' =>
+                'required|exists:parametres,id',
 
-            'visibilite_id' => 'required|exists:parametres,id',
-
-            'statut_id' => 'required|exists:parametres,id',
-
+            'statut_id' =>
+                'required|exists:parametres,id',
         ]);
 
         try {
@@ -297,6 +326,153 @@ class GroupeController extends Controller
 
         return back();
     }
+
+   
+    /**
+     * |--------------------------------------------------------------------------
+     * | CREATION UTILISATEUR
+     * |--------------------------------------------------------------------------
+     */
+    public function storeUtilisateur(Request $request)
+    {
+        $data = $request->validate([
+
+            'nom' =>
+                'required|string|max:255',
+
+            'description' =>
+                'nullable|string',
+
+            'montant_cotisation' =>
+                'required|numeric|min:0',
+
+            'penalite_pourcentage' =>
+                'nullable|numeric|min:0',
+
+            'fonds_assurance_pourcentage' =>
+                'nullable|numeric|min:0',
+
+            'delai_grace_heures' =>
+                'nullable|integer|min:0',
+
+            'nombre_participants_max' =>
+                'required|integer|min:1',
+
+            'periodicite_id' =>
+                'required|exists:periodicites,id',
+
+            'date_debut' =>
+                'required|date',
+
+            'date_fin_estimee' =>
+                'nullable|date|after_or_equal:date_debut',
+
+            'mode_distribution_id' =>
+                'required|exists:parametres,id',
+
+            'validation_membre_id' =>
+                'required|exists:parametres,id',
+
+            'visibilite_id' =>
+                'required|exists:parametres,id',
+        ]);
+
+        try {
+
+            GroupeUtilisateurService::store($data);
+
+            toast(
+                'Groupe créé avec succès',
+                'success'
+            );
+
+        } catch (Exception $e) {
+
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+        }
+
+        return back();
+    }
+
+
+    /**
+     * |--------------------------------------------------------------------------
+     * | MODIFICATION UTILISATEUR
+     * |--------------------------------------------------------------------------
+     */
+    public function updateUtilisateur(Request $request)
+    {
+        $data = $request->validate([
+
+            'id' =>
+                'required|exists:groupes,id',
+
+            'nom' =>
+                'required|string|max:255',
+
+            'description' =>
+                'nullable|string',
+
+            'montant_cotisation' =>
+                'required|numeric|min:0',
+
+            'penalite_pourcentage' =>
+                'nullable|numeric|min:0',
+
+            'fonds_assurance_pourcentage' =>
+                'nullable|numeric|min:0',
+
+            'delai_grace_heures' =>
+                'nullable|integer|min:0',
+
+            'nombre_participants_max' =>
+                'required|integer|min:1',
+
+            'periodicite_id' =>
+                'required|exists:periodicites,id',
+
+            'date_debut' =>
+                'required|date',
+
+            'date_fin_estimee' =>
+                'nullable|date|after_or_equal:date_debut',
+
+            'mode_distribution_id' =>
+                'required|exists:parametres,id',
+
+            'validation_membre_id' =>
+                'required|exists:parametres,id',
+
+            'visibilite_id' =>
+                'required|exists:parametres,id',
+        ]);
+
+        try {
+
+            GroupeUtilisateurService::update($data);
+
+            toast(
+                'Groupe modifié avec succès',
+                'success'
+            );
+
+        } catch (Exception $e) {
+
+            toast(
+                $e->getMessage(),
+                'error'
+            );
+        }
+
+        return back();
+    }
+
+
+
+
 
 
     /*

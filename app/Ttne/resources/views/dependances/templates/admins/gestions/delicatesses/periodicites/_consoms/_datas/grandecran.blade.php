@@ -7,7 +7,7 @@ GRAND ECRAN - GROUPES
 
 <div class="grand-ecran">
 
-    @forelse($groupes as $key => $value)
+    @forelse($periodicites as $key => $value)
 
         <tr
             class="futureRow"

@@ -5,6 +5,7 @@ use App\Http\Controllers\GroupeController;
 use App\Http\Controllers\HabilitationController;
 use App\Http\Controllers\ParametreController;
 use App\Http\Controllers\PeriodiciteController;
+
 use App\Http\Controllers\PieceController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\TypeParametreController;
@@ -70,7 +71,7 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
         //PARAMETRE FIN
         //PERIODICITE DEBUT
                 // CHEMIN DES PAGES DEBUT
-                Route::get('Admin/Parametrages/Periodicite', [PeriodiciteController::class, 'index'])->name('ADM-P-perio');
+                Route::get('Admin/Delicatesses/Periodicite', [PeriodiciteController::class, 'index'])->name('ADM-P-perio');
                 //CHEMIN DES PAGE FIN
             //AUTRES FUNCTION DEBUT
                 // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');

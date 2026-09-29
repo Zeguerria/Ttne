@@ -5,6 +5,7 @@ namespace App\Services\Core;
 use Exception;
 use App\Models\Groupe;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class GroupeService
 {
@@ -19,6 +20,20 @@ class GroupeService
         DB::beginTransaction();
 
         try {
+            /*
+            |--------------------------------------------------------------------------
+            | SLUG AUTOMATIQUE
+            |--------------------------------------------------------------------------
+            */
+
+            $slugBase = Str::slug($data['nom']);
+            $slug = $slugBase;
+            $compteur = 1;
+
+            while (Groupe::where('slug', $slug)->exists()) {
+                $slug = $slugBase . '-' . $compteur;
+                $compteur++;
+            }
 
             /*
             |--------------------------------------------------------------------------
@@ -30,7 +45,7 @@ class GroupeService
 
                 'nom' => $data['nom'],
 
-                'slug' => $data['slug'],
+                'slug' => $slug,
 
                 'description' => $data['description'] ?? null,
 
@@ -97,51 +112,78 @@ class GroupeService
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | MODIFICATION
-    |--------------------------------------------------------------------------
+    /**
+     *--------------------------------------------------------------------------
+    * MODIFICATION
+    *--------------------------------------------------------------------------
     */
-
     public static function update(array $data)
     {
         DB::beginTransaction();
 
         try {
 
-            /*
-            |--------------------------------------------------------------------------
-            | RECUPERATION
-            |--------------------------------------------------------------------------
+            /**
+             *--------------------------------------------------------------------------
+            * RECUPERATION
+            *--------------------------------------------------------------------------
             */
-
             $groupe = Groupe::findOrFail(
                 $data['id']
             );
 
-            /*
-            |--------------------------------------------------------------------------
-            | ANCIENNES VALEURS
-            |--------------------------------------------------------------------------
+            /**
+             *--------------------------------------------------------------------------
+            * ANCIENNES VALEURS
+            *--------------------------------------------------------------------------
             */
-
             $ancienneValeur = $groupe->toArray();
 
-            /*
-            |--------------------------------------------------------------------------
-            | UPDATE
-            |--------------------------------------------------------------------------
+            /**
+             *--------------------------------------------------------------------------
+            * SLUG AUTOMATIQUE
+            *--------------------------------------------------------------------------
+            *
+            * Le slug est régénéré uniquement si le nom du groupe
+            * a été modifié.
+            *
             */
+            $slug = $groupe->slug;
 
+            if ($groupe->nom !== $data['nom']) {
+
+                $slugBase = Str::slug($data['nom']);
+
+                $slug = $slugBase;
+
+                $compteur = 1;
+
+                while (
+                    Groupe::where('slug', $slug)
+                        ->where('id', '!=', $groupe->id)
+                        ->exists()
+                ) {
+                    $slug = $slugBase . '-' . $compteur;
+                    $compteur++;
+                }
+            }
+
+            /**
+             *--------------------------------------------------------------------------
+            * UPDATE
+            *--------------------------------------------------------------------------
+            */
             $groupe->update([
 
                 'nom' => $data['nom'],
 
-                'slug' => $data['slug'],
+                'slug' => $slug,
 
-                'description' => $data['description'] ?? null,
+                'description' =>
+                    $data['description'] ?? null,
 
-                'createur_id' => $data['createur_id'],
+                'createur_id' =>
+                    $data['createur_id'],
 
                 'montant_cotisation' =>
                     $data['montant_cotisation'],
@@ -178,15 +220,13 @@ class GroupeService
 
                 'statut_id' =>
                     $data['statut_id'],
-
             ]);
 
-            /*
-            |--------------------------------------------------------------------------
-            | HISTORIQUE
-            |--------------------------------------------------------------------------
+            /**
+             *--------------------------------------------------------------------------
+            * HISTORIQUE
+            *--------------------------------------------------------------------------
             */
-
             HistoriqueService::modifier(
                 $groupe,
                 $ancienneValeur,
@@ -207,6 +247,8 @@ class GroupeService
             );
         }
     }
+
+
 
 
     /*

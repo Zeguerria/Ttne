@@ -1,7 +1,5 @@
 
-{{-- ============================================================
-    STEEP 2 DEBUT
-============================================================ --}}
+{{-- STEEP 2 DEBUT --}}
 
 <section class="steep-2">
 
@@ -11,10 +9,7 @@
 
             <div class="row g-4 p-2">
 
-                {{-- ==================================================
-                    MONTANT DE COTISATION
-                =================================================== --}}
-
+                {{-- MONTANT DE COTISATION --}}
                 <div class="col-md-6">
 
                     <div class="futureField">
@@ -33,7 +28,7 @@
                                 name="montant_cotisation"
                                 class="form-control"
                                 placeholder="Ex : 10000"
-                                value="{{ old('montant_cotisation', $value->montant_cotisation) }}"
+                                value="{{ old('montant_cotisation') }}"
                                 min="0"
                                 step="500"
                                 required
@@ -47,10 +42,7 @@
                 </div>
 
 
-                {{-- ==================================================
-                    PÉNALITÉ
-                =================================================== --}}
-
+                {{-- PÉNALITÉ --}}
                 <div class="col-md-6">
 
                     <div class="futureField">
@@ -69,7 +61,7 @@
                                 name="penalite_pourcentage"
                                 class="form-control"
                                 placeholder="Ex : 5"
-                                value="{{ old('penalite_pourcentage', $value->penalite_pourcentage) }}"
+                                value="{{ old('penalite_pourcentage') }}"
                                 min="0"
                                 step="1"
                                 data-review="penalite_pourcentage"
@@ -82,10 +74,7 @@
                 </div>
 
 
-                {{-- ==================================================
-                    FONDS D'ASSURANCE
-                =================================================== --}}
-
+                {{-- FONDS D'ASSURANCE --}}
                 <div class="col-md-6">
 
                     <div class="futureField">
@@ -104,7 +93,7 @@
                                 name="fonds_assurance_pourcentage"
                                 class="form-control"
                                 placeholder="Ex : 2"
-                                value="{{ old('fonds_assurance_pourcentage', $value->fonds_assurance_pourcentage) }}"
+                                value="{{ old('fonds_assurance_pourcentage') }}"
                                 min="0"
                                 step="1"
                                 data-review="fonds_assurance_pourcentage"
@@ -117,10 +106,7 @@
                 </div>
 
 
-                {{-- ==================================================
-                    DÉLAI DE GRÂCE
-                =================================================== --}}
-
+                {{-- DÉLAI DE GRÂCE --}}
                 <div class="col-md-6">
 
                     <div class="futureField">
@@ -139,7 +125,7 @@
                                 name="delai_grace_heures"
                                 class="form-control"
                                 placeholder="Ex : 24"
-                                value="{{ old('delai_grace_heures', $value->delai_grace_heures) }}"
+                                value="{{ old('delai_grace_heures') }}"
                                 min="0"
                                 step="1"
                                 data-review="delai_grace_heures"
@@ -159,7 +145,5 @@
 
 </section>
 
-{{-- ============================================================
-    STEEP 2 FIN
-============================================================ --}}
+{{-- STEEP 2 FIN --}}
 

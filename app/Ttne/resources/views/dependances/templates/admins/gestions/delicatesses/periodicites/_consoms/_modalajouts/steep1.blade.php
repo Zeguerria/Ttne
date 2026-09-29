@@ -1,7 +1,5 @@
 
-{{-- ============================================================
-    STEP 1 DEBUT
-============================================================ --}}
+{{-- STEP 1 DEBUT --}}
 
 <section class="steep-1">
 
@@ -9,12 +7,9 @@
 
         <div class="container-fluid mb-4">
 
-            <div class="row g-4 p-2">
+            <div class="row g-4 p-2 ">
 
-                {{-- ==================================================
-                    NOM DU GROUPE
-                =================================================== --}}
-
+                {{-- NOM DU GROUPE --}}
                 <div class="col-md-6">
 
                     <div class="futureField">
@@ -33,7 +28,7 @@
                                 name="nom"
                                 class="form-control"
                                 placeholder="Entrer le nom du groupe"
-                                value="{{ old('nom', $value->nom) }}"
+                                value="{{ old('nom') }}"
                                 maxlength="255"
                                 required
                                 data-review="nom"
@@ -46,10 +41,7 @@
                 </div>
 
 
-                {{-- ==================================================
-                    VISIBILITÉ
-                =================================================== --}}
-
+                {{-- VISIBILITÉ --}}
                 <div class="col-md-6">
 
                     <div class="futureField">
@@ -78,14 +70,7 @@
 
                                     <option
                                         value="{{ $visibilite->id }}"
-                                        {{
-                                            old(
-                                                'visibilite_id',
-                                                $value->visibilite_id
-                                            ) == $visibilite->id
-                                                ? 'selected'
-                                                : ''
-                                        }}
+                                        {{ old('visibilite_id') == $visibilite->id ? 'selected' : '' }}
                                     >
                                         {{ $visibilite->libelle }}
                                     </option>
@@ -100,54 +85,39 @@
 
                 </div>
 
+
+
+
             </div>
 
         </div>
-
-
-        {{-- ========================================================
-            DESCRIPTION
-        ========================================================= --}}
-
         <div class="container-fluid">
-
             <div class="row g-4 p-2">
-
-                <div class="col-12 col-md-12 mb-4">
+                <div class="col-12 col-md-12 mb-4 ">
 
                     <div class="futureField">
 
-                        <label>
-
-                            <i class="fa fa-comment"></i>
-                            Description
-
+                        <label class="">
+                            <i class="fa fa-comment"></i>Description
                         </label>
 
                         <div class="futureTextarea">
 
                             <i class="fa fa-align-left inputIcon textareaIcon"></i>
 
-                            <textarea
-                                name="description"
-                                rows="6"
-                                placeholder="Décrire le groupe..."
-                                data-review="description"
-                            >{{ old('description', $value->description) }}</textarea>
+                            <textarea name="description" rows="6" placeholder="Décrire le groupe..." data-review="description">{{ old('description') }}</textarea>
 
                         </div>
 
                     </div>
 
                 </div>
-
             </div>
-
         </div>
 
     </div>
 
 </section>
 
-
+{{-- STEP 1 FIN --}}
 

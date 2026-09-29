@@ -7,7 +7,7 @@
 
     <div class="petit-ecran">
 
-        @forelse($groupes as $key => $value)
+        @forelse($periodicites as $key => $value)
 
             <div
                 class="futureMobileCard"

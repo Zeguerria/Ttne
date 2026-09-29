@@ -1,6 +1,6 @@
 @extends('dependances.templates.admins.navigations.menus.menu')
 @section('titre')
-    Groupe
+    Périodicite
 @endsection
 @section('header')
 
@@ -9,19 +9,19 @@
 @section('corps')
     <section class="">
         <div class="modals">
-            @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms.modal')
+            @include('dependances.templates.admins.gestions.delicatesses.periodicites._consoms.modal')
         </div>
     </section>
     <section class="">
         <div class="head-ent">
-            @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms.head')
+            @include('dependances.templates.admins.gestions.delicatesses.periodicites._consoms.head')
         </div>
     </section>
     <div>
         <div>
             <div>
 
-                <div class="futureTableWrapper" data-bulk-delete-url="{{ url('select/corbeille/groupes') }}">
+                <div class="futureTableWrapper" data-bulk-delete-url="{{ url('select/corbeille/periodicites') }}">
 
                     <div class="futureTableCard">
 
@@ -181,7 +181,7 @@
 
                                             <span class="futureStatValue">
 
-                                                {{ $GroupeT ?? 0 }}
+                                                {{ $PeriodiciteT ?? 0 }}
 
                                             </span>
 
@@ -201,8 +201,7 @@
                                     <div
                                         class="futureStatCard danger"
                                         data-bs-toggle="tooltip"
-                                        title="Éléments dans la corbeille"
-                                    >
+                                        title="Éléments dans la corbeille">
 
                                         <i class="fa fa-trash"></i>
 
@@ -210,7 +209,7 @@
 
                                             <span class="futureStatValue">
 
-                                                {{ $GroupeTC ?? 0 }}
+                                                {{ $PeriodiciteTC ?? 0 }}
 
                                             </span>
 
@@ -425,7 +424,7 @@
                                 {{-- TABLE BODY --}}
                                 <tbody id="futureTableBody">
 
-                                            @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms._datas.grandecran')
+                                            @include('dependances.templates.admins.gestions.delicatesses.periodicites._consoms._datas.grandecran')
 
 
                                 </tbody>
@@ -441,7 +440,7 @@
                         ========================================= --}}
                         <div class="futureMobileCards">
 
-                            @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms._datas.petitecran')
+                            @include('dependances.templates.admins.gestions.delicatesses.periodicites._consoms._datas.petitecran')
 
 
                         </div>
@@ -588,6 +587,6 @@
 @endsection
 @section('footer')
     <div class="suprression-selection">
-        @include('dependances.templates.admins.gestions.delicatesses.groupes._consoms.mettreselectcorbeille')
+        @include('dependances.templates.admins.gestions.delicatesses.periodicites._consoms.mettreselectcorbeille')
     </div>
 @endsection

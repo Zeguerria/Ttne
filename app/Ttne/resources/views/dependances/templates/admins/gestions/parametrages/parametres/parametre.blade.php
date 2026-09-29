@@ -1,6 +1,6 @@
 @extends('dependances.templates.admins.navigations.menus.menu')
 @section('titre')
-    Paramètres
+    Periodicité
 @endsection
 @section('header')
 
@@ -9,19 +9,19 @@
 @section('corps')
     <section class="">
         <div class="modals">
-            @include('dependances.templates.admins.gestions.parametrages.parametres._consoms.modal')
+            @include('dependances.templates.admins.gestions.delicatesses.periodicites._consoms.modal')
         </div>
     </section>
     <section class="">
         <div class="head-ent">
-            @include('dependances.templates.admins.gestions.parametrages.parametres._consoms.head')
+            @include('dependances.templates.admins.gestions.delicatesses.periodicites._consoms.head')
         </div>
     </section>
     <div>
         <div>
             <div>
 
-                <div class="futureTableWrapper" data-bulk-delete-url="{{ url('select/corbeille/parametre') }}">
+                <div class="futureTableWrapper" data-bulk-delete-url="{{ url('select/corbeille/periodicites') }}">
 
                     <div class="futureTableCard">
 
@@ -181,7 +181,7 @@
 
                                             <span class="futureStatValue">
 
-                                                {{ $ParametreT ?? 0 }}
+                                                {{ $PeriodiciteT ?? 0 }}
 
                                             </span>
 
@@ -210,7 +210,7 @@
 
                                             <span class="futureStatValue">
 
-                                                {{ $ParametreTC ?? 0 }}
+                                                {{ $PeriodiciteTC ?? 0 }}
 
                                             </span>
 
@@ -320,7 +320,10 @@
 
                                     <tr>
 
-                                        {{-- CHECKBOX --}}
+                                        {{-- ==================================================
+                                            CHECKBOX
+                                        =================================================== --}}
+
                                         <th
                                             width="50"
                                             data-export="false"
@@ -337,57 +340,79 @@
                                         </th>
 
 
+                                        {{-- ==================================================
+                                            INDEX
+                                        =================================================== --}}
 
-                                        {{-- INDEX --}}
                                         <th>
-
                                             #
-
                                         </th>
 
 
+                                        {{-- ==================================================
+                                            NOM DU GROUPE
+                                        =================================================== --}}
 
-                                        {{-- CODE --}}
                                         <th>
-
-                                            CODE
-
+                                            NOM DU GROUPE
                                         </th>
 
 
+                                        {{-- ==================================================
+                                            CRÉATEUR
+                                        =================================================== --}}
 
-                                        {{-- LIBELLE --}}
                                         <th>
-
-                                            LIBELLÉ
-
-                                        </th>
-                                         <th>
-
-                                            TYPE DE PARAMETRE
-
+                                            CRÉATEUR
                                         </th>
 
 
+                                        {{-- ==================================================
+                                            COTISATION
+                                        =================================================== --}}
 
-                                        {{-- DESCRIPTION --}}
                                         <th>
-
-                                            DESCRIPTION
-
+                                            COTISATION
                                         </th>
 
 
+                                        {{-- ==================================================
+                                            PARTICIPANTS
+                                        =================================================== --}}
 
-                                        {{-- ACTIONS --}}
+                                        <th>
+                                            PARTICIPANTS
+                                        </th>
+
+
+                                        {{-- ==================================================
+                                            PÉRIODICITÉ
+                                        =================================================== --}}
+
+                                        <th>
+                                            PÉRIODICITÉ
+                                        </th>
+
+
+                                        {{-- ==================================================
+                                            STATUT
+                                        =================================================== --}}
+
+                                        <th>
+                                            STATUT
+                                        </th>
+
+
+                                        {{-- ==================================================
+                                            ACTIONS
+                                        =================================================== --}}
+
                                         <th
                                             width="170"
                                             data-export="false"
                                             data-sort="false"
                                         >
-
                                             ACTIONS
-
                                         </th>
 
                                     </tr>
@@ -396,180 +421,12 @@
 
 
 
+
                                 {{-- TABLE BODY --}}
                                 <tbody id="futureTableBody">
 
-                                    @forelse($parametres as $key => $value)
+                                            @include('dependances.templates.admins.gestions.periodicites.groupes._consoms._datas.grandecran')
 
-                                    <tr class="futureRow" data-row="{{ $value->id }}">
-
-                                        {{-- CHECKBOX --}}
-                                        <td>
-
-                                            <input
-                                                type="checkbox"
-                                                class="futureCheckbox rowCheckbox"
-                                                data-row="{{ $value->id }}"
-                                            >
-
-                                        </td>
-
-
-
-                                        {{-- INDEX --}}
-                                        <td>
-
-                                            {{ $key + 1 }}
-
-                                        </td>
-
-
-
-                                        {{-- CODE --}}
-                                        <td>
-
-                                            <span class="futureCode">
-
-                                                {{ $value->code }}
-
-                                            </span>
-
-                                        </td>
-
-
-
-                                        {{-- LIBELLE --}}
-                                        <td>
-
-                                            {{ $value->libelle }}
-
-                                        </td>
-                                        {{-- TYPE DE PARAMETRE --}}
-                                        <td>
-
-                                            @if($value->typeParametre)
-
-                                                {{ $value->typeParametre->libelle }}
-
-                                            @else
-
-                                                <span class="futureEmptyText">
-
-                                                    Aucun type
-
-                                                </span>
-
-                                            @endif
-
-                                        </td>
-
-
-
-                                        {{-- DESCRIPTION --}}
-                                        <td>
-
-                                           @if($value->description)
-
-                                            <span title="{{ $value->description }}">
-                                                {{ \Illuminate\Support\Str::limit($value->description, 40, '...') }}
-                                            </span>
-
-                                        @else
-
-                                            <span class="futureEmptyText">
-                                                Aucune observation
-                                            </span>
-
-                                        @endif
-
-                                        </td>
-
-
-
-                                        {{-- ACTIONS --}}
-                                        <td>
-
-                                            <div class="futureActions">
-
-                                                {{-- CONSULTER --}}
-                                                <button
-                                                    class="futureMiniBtn infoBtn"
-                                                    data-bs-toggle="tooltip"
-                                                    data-placement="bottom"
-                                                    data-toggle="modal"
-                                                    data-target="#consulter{{$value->id}}"
-                                                    title="Consulter"
-                                                    type="button"
-                                                >
-
-                                                    <i class="fa fa-eye"></i>
-
-                                                </button>
-
-
-
-                                                {{-- MODIFIER --}}
-                                                <button
-                                                    class="futureMiniBtn warningBtn"
-                                                    data-bs-toggle="tooltip"
-                                                    data-placement="bottom"
-                                                    data-toggle="modal"
-                                                    data-target="#modifier{{$value->id}}"
-                                                    title="Modifier"
-                                                    type="button"
-                                                >
-
-                                                    <i class="fa fa-edit"></i>
-
-                                                </button>
-
-
-
-                                                {{-- DELETE --}}
-                                                <button
-                                                    class="futureMiniBtn dangerBtn"
-                                                    data-bs-toggle="tooltip"
-                                                    data-placement="bottom"
-                                                    data-toggle="modal"
-                                                    data-target="#corbeille{{$value->id}}"
-                                                    title="Supprimer"
-                                                    type="button"
-                                                >
-
-                                                    <i class="fa fa-trash"></i>
-
-                                                </button>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-                                    @empty
-
-                                    {{-- EMPTY --}}
-                                    <tr>
-
-                                        <td colspan="6">
-
-                                            <div class="futureEmpty">
-
-                                                <i class="fa fa-database mb-3"></i>
-
-                                                <h5>
-
-                                                    Aucune donnée trouvée
-
-                                                </h5>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-                                    @endforelse
 
                                 </tbody>
 
@@ -584,224 +441,8 @@
                         ========================================= --}}
                         <div class="futureMobileCards">
 
-                            @foreach($parametres as $key => $value)
+                            @include('dependances.templates.admins.gestions.delicatesses.periodicites._consoms._datas.petitecran')
 
-                            <div
-                                class="futureMobileCard"
-                                data-row="{{ $value->id }}"
-                            >
-
-                                {{-- TOP --}}
-                                <div class="futureMobileTop">
-
-                                    <div>
-
-                                        <h5>
-
-                                            {{ $value->code }}
-
-                                        </h5>
-
-                                        <p>
-
-                                            {{ $value->libelle }}
-
-                                        </p>
-                                        <p>
-
-                                           @if($value->typeParametre)
-
-                                                {{ $value->typeParametre->libelle }}
-
-                                            @else
-
-                                                <span class="futureEmptyText">
-
-                                                    Aucun type
-
-                                                </span>
-
-                                            @endif
-
-                                        </p>
-
-                                    </div>
-
-
-
-                                    <input
-                                        type="checkbox"
-                                        class="futureCheckbox futureMobileCheckbox"
-                                        data-row="{{ $value->id }}"
-                                    >
-
-                                </div>
-
-
-
-                                {{-- BODY --}}
-                                <div class="futureMobileBody">
-
-                                    <div class="futureMobileItem">
-
-                                        <span>
-
-                                            #
-
-                                        </span>
-
-                                        <strong>
-
-                                            {{ $key + 1 }}
-
-                                        </strong>
-
-                                    </div>
-
-
-
-                                    <div class="futureMobileItem">
-
-                                        <span>
-
-                                            Code
-
-                                        </span>
-
-                                        <strong>
-
-                                            {{ $value->code }}
-
-                                        </strong>
-
-                                    </div>
-
-
-
-                                    <div class="futureMobileItem">
-
-                                        <span>
-
-                                            Libellé
-
-                                        </span>
-
-                                        <strong>
-
-                                            {{ $value->libelle }}
-
-                                        </strong>
-
-                                    </div>
-                                    <div class="futureMobileItem">
-
-                                        <span>
-
-                                            TYPE PARAMETRE
-
-                                        </span>
-
-                                        <strong>
-
-                                            @if($value->typeParametre)
-
-                                                {{ $value->typeParametre->libelle }}
-
-                                            @else
-
-                                                <span class="futureEmptyText">
-
-                                                    Aucun type
-
-                                                </span>
-
-                                            @endif
-
-                                        </strong>
-
-                                    </div>
-
-
-
-                                    <div class="futureMobileItem">
-
-                                        <span>
-
-                                            Description
-
-                                        </span>
-
-                                        <strong>
-
-                                            <span title="{{ $value->description }}">
-                                                {{ \Illuminate\Support\Str::limit($value->description, 20, '...') }}
-                                            </span>
-
-                                        </strong>
-
-                                    </div>
-
-                                </div>
-
-
-
-                                {{-- MOBILE ACTIONS --}}
-                                <div class="futureMobileActions">
-
-                                    {{-- CONSULTER --}}
-                                    <button
-                                        class="futureMiniBtn infoBtn"
-                                        data-bs-toggle="tooltip"
-                                        data-placement="bottom"
-                                        data-toggle="modal"
-                                        data-target="#consulter{{$value->id}}"
-                                        title="Consulter"
-                                        type="button"
-                                    >
-
-                                        <i class="fa fa-eye"></i>
-
-                                    </button>
-
-
-
-                                    {{-- MODIFIER --}}
-                                    <button
-                                        class="futureMiniBtn warningBtn"
-                                        data-bs-toggle="tooltip"
-                                        data-placement="bottom"
-                                        data-toggle="modal"
-                                        data-target="#modifier{{$value->id}}"
-                                        title="Modifier"
-                                        type="button"
-                                    >
-
-                                        <i class="fa fa-edit"></i>
-
-                                    </button>
-
-
-
-                                    {{-- CORBEILLE --}}
-                                    <button
-                                        class="futureMiniBtn dangerBtn"
-                                        data-bs-toggle="tooltip"
-                                        data-placement="bottom"
-                                        data-toggle="modal"
-                                        data-target="#corbeille{{$value->id}}"
-                                        title="Supprimer"
-                                        type="button"
-                                    >
-
-                                        <i class="fa fa-trash"></i>
-
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                            @endforeach
 
                         </div>
 
@@ -947,6 +588,6 @@
 @endsection
 @section('footer')
     <div class="suprression-selection">
-        @include('dependances.templates.admins.gestions.parametrages.parametres._consoms.mettreselectcorbeille')
+        @include('dependances.templates.admins.gestions.delicatesses.periodicites._consoms.mettreselectcorbeille')
     </div>
 @endsection

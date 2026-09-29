@@ -143,7 +143,7 @@
                                 <div class="futureHistoryBody" id="futureHistoryBody" >
 
                                     @include(
-                                        'dependances.templates.admins.gestions.access.profils._consoms.historique',
+                                        'dependances.templates.admins.gestions.access.users.personnels._consoms.historique',
                                         ['historiques' => $historiques]
                                     )
 

@@ -37,7 +37,7 @@ class PeriodiciteController extends Controller
             return response()->json([
 
                 'historiques' => view(
-                    'dependances.templates.admins.gestions.parametrages.periodicites._consoms.historique',
+                    'dependances.templates.admins.gestions.delicatesses.periodicites._consoms.historique',
                     compact('historiques')
                 )->render(),
 
@@ -51,7 +51,7 @@ class PeriodiciteController extends Controller
         }
 
         return view(
-            'dependances.templates.admins.gestions.parametrages.periodicites.periodicite',
+            'dependances.templates.admins.gestions.delicatesses.periodicites.periodicite',
             [
 
                 'PeriodiciteT' => Periodicite::where(
