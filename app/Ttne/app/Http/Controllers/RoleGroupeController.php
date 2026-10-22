@@ -91,7 +91,7 @@ class RoleGroupeController extends Controller
                 |--------------------------------------------------------------------------
                 */
 
-                'roleGroupes' => RoleGroupe::where(
+                'roles' => RoleGroupe::where(
                     'supprimer',
                     0
                 )

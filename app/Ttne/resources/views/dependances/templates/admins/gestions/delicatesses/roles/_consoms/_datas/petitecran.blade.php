@@ -1,4 +1,3 @@
-
 {{-- =====================================================
     PETIT ECRAN DEBUT
 ====================================================== --}}
@@ -7,7 +6,7 @@
 
     <div class="petit-ecran">
 
-        @forelse($periodicites as $key => $value)
+        @forelse($roles as $key => $value)
 
             <div
                 class="futureMobileCard"
@@ -15,16 +14,16 @@
             >
 
                 {{-- =====================================================
-                     TOP
+                    TOP
                 ====================================================== --}}
 
                 <div class="futureMobileTop">
 
-                    {{-- NOM DU GROUPE --}}
+                    {{-- CODE + NOM --}}
 
                     <div class="d-flex align-items-center gap-3">
 
-                        {{-- ICÔNE GROUPE --}}
+                        {{-- ICÔNE ROLE GROUPE --}}
 
                         <div
                             class="d-flex justify-content-center align-items-center"
@@ -36,10 +35,13 @@
                                 flex-shrink:0;
                             "
                         >
-                            <i class="fa fa-users"></i>
+
+                            <i class="fa fa-users-cog"></i>
+
                         </div>
 
-                        {{-- NOM + STATUT --}}
+
+                        {{-- NOM + CODE --}}
 
                         <div>
 
@@ -50,27 +52,13 @@
                                 {{ $value->nom }}
                             </h5>
 
-                            @if($value->statut)
+                            <p class="mb-0">
 
-                                <p class="mb-0">
+                                <span class="futureCode">
+                                    {{ $value->code }}
+                                </span>
 
-                                    <span class="futureCode">
-                                        {{ $value->statut->libelle }}
-                                    </span>
-
-                                </p>
-
-                            @else
-
-                                <p class="mb-0">
-
-                                    <span class="futureEmptyText">
-                                        Statut non défini
-                                    </span>
-
-                                </p>
-
-                            @endif
+                            </p>
 
                         </div>
 
@@ -89,36 +77,35 @@
 
 
                 {{-- =====================================================
-                     BODY
+                    BODY
                 ====================================================== --}}
 
                 <div class="futureMobileBody">
 
-                    {{-- CRÉATEUR --}}
+                    {{-- DESCRIPTION --}}
 
                     <div class="futureMobileItem">
 
                         <span>
 
-                            <i class="fa fa-user me-1"></i>
+                            <i class="fa fa-comment me-1"></i>
 
-                            Créateur
+                            Description
 
                         </span>
 
-                        @if($value->createur)
+                        @if($value->description)
 
-                            <strong>
-
-                                {{ $value->createur->name }}
-                                {{ $value->createur->prenom }}
-
+                            <strong
+                                title="{{ $value->description }}"
+                            >
+                                {{ \Illuminate\Support\Str::limit($value->description, 60) }}
                             </strong>
 
                         @else
 
                             <span class="futureEmptyText">
-                                Non défini
+                                Aucune description
                             </span>
 
                         @endif
@@ -126,82 +113,28 @@
                     </div>
 
 
-                    {{-- COTISATION --}}
+                    {{-- ÉTAT --}}
 
                     <div class="futureMobileItem">
 
                         <span>
 
-                            <i class="fa fa-money me-1"></i>
+                            <i class="fa fa-toggle-on me-1"></i>
 
-                            Cotisation
+                            État
 
                         </span>
 
-                        @if($value->montant_cotisation !== null)
+                        @if($value->active)
 
                             <strong>
-
-                                {{ number_format($value->montant_cotisation, 0, ',', ' ') }}
-
+                                Active
                             </strong>
 
                         @else
 
                             <span class="futureEmptyText">
-                                Non définie
-                            </span>
-
-                        @endif
-
-                    </div>
-
-
-                    {{-- PARTICIPANTS --}}
-
-                    <div class="futureMobileItem">
-
-                        <span>
-
-                            <i class="fa fa-users me-1"></i>
-
-                            Participants
-
-                        </span>
-
-                        <strong>
-
-                            {{ $value->nombre_participants_max }}
-
-                        </strong>
-
-                    </div>
-
-
-                    {{-- PÉRIODICITÉ --}}
-
-                    <div class="futureMobileItem">
-
-                        <span>
-
-                            <i class="fa fa-calendar me-1"></i>
-
-                            Périodicité
-
-                        </span>
-
-                        @if($value->periodicite)
-
-                            <strong>
-
-                                {{ $value->periodicite->nom }}
-
-                            </strong>
-
-                        @else
-
-                            <span class="futureEmptyText">
-                                Non définie
+                                Inactive
                             </span>
 
                         @endif
@@ -212,7 +145,7 @@
 
 
                 {{-- =====================================================
-                     MOBILE ACTIONS
+                    MOBILE ACTIONS
                 ====================================================== --}}
 
                 <div class="futureMobileActions">
@@ -275,10 +208,10 @@
 
             <div class="futureEmpty">
 
-                <i class="fa fa-users mb-3"></i>
+                <i class="fa fa-users-cog mb-3"></i>
 
                 <h5>
-                    Aucun groupe trouvé
+                    Aucun rôle groupe trouvé
                 </h5>
 
             </div>
@@ -292,4 +225,3 @@
 {{-- =====================================================
     PETIT ECRAN FIN
 ====================================================== --}}
-

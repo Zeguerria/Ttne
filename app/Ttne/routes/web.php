@@ -5,9 +5,9 @@ use App\Http\Controllers\GroupeController;
 use App\Http\Controllers\HabilitationController;
 use App\Http\Controllers\ParametreController;
 use App\Http\Controllers\PeriodiciteController;
-
 use App\Http\Controllers\PieceController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\RoleGroupeController;
 use App\Http\Controllers\TypeParametreController;
 use App\Http\Controllers\UserController;
 use App\Models\Historique;
@@ -87,6 +87,24 @@ Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name(
 
             // FONCTION FIN
         //PERIODICITE FIN
+        //ROLE DE GROUPE DEBUT
+                // CHEMIN DES PAGES DEBUT
+                Route::get('Admin/Delicatesses/RoleGroupe', [RoleGroupeController::class, 'index'])->name('ADM-PRO-pro');
+                //CHEMIN DES PAGE FIN
+            //AUTRES FUNCTION DEBUT
+                // Route::post('/Admin/Parametrages/Parametre/Statut', [ParametreController::class, 'StatutTp'])->name('StatutTp');
+                // Route::patch('profils/switch-validateur',[ProfilController::class, 'switchValidateur'])->name('profils.switchValidateur');
+
+                Route::get('Admin/Corebeille/RoleGroupe/Tout-Destroy', [RoleGroupeController::class, 'destroyTous'])->name('D-All-AD-RGP');
+                Route::post('Admin/Corebeille/RoleGroupe/Tout-Soft', [RoleGroupeController::class, 'corbeilleAll'])->name('C-All-AD-RGP');
+            //AUTRES FUNCTION FIN
+            //FONCTIONS DEBUT
+                Route::post('AjouterRoleGroupe', [RoleGroupeController::class, 'store'])->name('AjouterRoleGroupe');
+                Route::post('ModifierRoleGroupe', [RoleGroupeController::class, 'update'])->name('ModifierRoleGroupe');
+                Route::post('CorbeilleRoleGroupe', [RoleGroupeController::class, 'corbeille'])->name('CorbeilleRoleGroupe');
+                Route::post('/select/corbeille/role_groupes',[RoleGroupeController::class, 'corbeilleSelection']);
+            // FONCTION FIN
+        //ROLE DE GROUPE FIN
         //GROUPE DEBUT
                 // CHEMIN DES PAGES DEBUT
                 Route::get('Admin/Delicatesse/Groupe', [GroupeController::class, 'index'])->name('ADM-G-groupe');

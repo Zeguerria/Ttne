@@ -78,6 +78,7 @@ class Corbeille extends Model
             'habilitations' => \App\Models\Habilitation::class,
             'periodicites' => \App\Models\Periodicite::class,
             'groupes' => \App\Models\Groupe::class,
+            'role_groupes' => \App\Models\RoleGroupe::class,
 
             // ajouter les autres tables ici
             // 'users' => User::class,

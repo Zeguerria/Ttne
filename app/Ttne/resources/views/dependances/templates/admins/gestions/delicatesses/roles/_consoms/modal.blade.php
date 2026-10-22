@@ -283,12 +283,12 @@
 
             {{-- TOUT METTRE EN CORBEILLE DEBUT --}}
                 <div class="suprression-selection">
-                    @include('dependances.templates.admins.gestions.delicatesses.periodicites._consoms.toutmettrecorbeille')
+                    @include('dependances.templates.admins.gestions.delicatesses.roles._consoms.toutmettrecorbeille')
                 </div>
             {{-- TOUT METTRE EN CORBEILLE FIN --}}
 
             {{-- AUTRES MODALS DEBUT --}}
-                @foreach($periodicites as $key => $value)
+                @foreach($roles as $key => $value)
                     {{-- CONSULTER DEBUT --}}
                        {{-- =========================================================
                             CONSULTER DEBUT
@@ -348,15 +348,17 @@
                                         <input
                                             type="hidden"
                                             name="id"
-                                            value="{{ $value->id }}"
-                                        >
+                                            value="{{ $value->id }}">
 
                                         @csrf
 
+
                                         {{-- BODY --}}
+
                                         <div class="modal-body futuristicBody">
 
                                             <div class="form">
+
 
                                                 {{-- =====================================================
                                                     CODE + NOM
@@ -366,7 +368,9 @@
 
                                                     <div class="row">
 
+
                                                         {{-- CODE --}}
+
                                                         <div class="col-12 col-md-6 mb-4">
 
                                                             <div class="futureField">
@@ -386,7 +390,7 @@
                                                                         value="{{ $value->code }}"
                                                                         readonly
                                                                         id="consulter{{ $value->id }}"
-                                                                        placeholder="Entrer le code"
+                                                                        placeholder="Code"
                                                                     >
 
                                                                 </div>
@@ -397,6 +401,7 @@
 
 
                                                         {{-- NOM --}}
+
                                                         <div class="col-12 col-md-6 mb-4">
 
                                                             <div class="futureField">
@@ -416,7 +421,7 @@
                                                                         value="{{ $value->nom }}"
                                                                         readonly
                                                                         id="consulter{{ $value->id }}"
-                                                                        placeholder="Entrer le nom"
+                                                                        placeholder="Nom"
                                                                     >
 
                                                                 </div>
@@ -425,128 +430,6 @@
 
                                                         </div>
 
-                                                    </div>
-
-                                                </div>
-
-
-                                                {{-- =====================================================
-                                                    UNITÉ + VALEUR
-                                                ====================================================== --}}
-
-                                                <div class="container-fluid">
-
-                                                    <div class="row">
-
-                                                        {{-- UNITÉ --}}
-                                                        <div class="col-12 col-md-6 mb-4">
-
-                                                            <div class="futureField">
-
-                                                                <label>
-                                                                    <i class="fa fa-clock"></i>
-                                                                    Unité
-                                                                </label>
-
-                                                                <div class="futureInput">
-
-                                                                    <i class="fa fa-clock inputIcon"></i>
-
-                                                                    <select
-                                                                        class="futureSelect"
-                                                                        name="unite"
-                                                                        disabled
-                                                                    >
-
-                                                                        <option value="">
-                                                                            Sélectionner une unité
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="heure"
-                                                                            {{ $value->unite === 'heure' ? 'selected' : '' }}
-                                                                        >
-                                                                            Heure
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="jour"
-                                                                            {{ $value->unite === 'jour' ? 'selected' : '' }}
-                                                                        >
-                                                                            Jour
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="semaine"
-                                                                            {{ $value->unite === 'semaine' ? 'selected' : '' }}
-                                                                        >
-                                                                            Semaine
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="mois"
-                                                                            {{ $value->unite === 'mois' ? 'selected' : '' }}
-                                                                        >
-                                                                            Mois
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="trimestre"
-                                                                            {{ $value->unite === 'trimestre' ? 'selected' : '' }}
-                                                                        >
-                                                                            Trimestre
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="semestre"
-                                                                            {{ $value->unite === 'semestre' ? 'selected' : '' }}
-                                                                        >
-                                                                            Semestre
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="année"
-                                                                            {{ $value->unite === 'année' ? 'selected' : '' }}
-                                                                        >
-                                                                            Année
-                                                                        </option>
-
-                                                                    </select>
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-
-
-                                                        {{-- VALEUR --}}
-                                                        <div class="col-12 col-md-6 mb-4">
-
-                                                            <div class="futureField">
-
-                                                                <label>
-                                                                    <i class="fa fa-hashtag"></i>
-                                                                    Valeur
-                                                                </label>
-
-                                                                <div class="futureInput">
-
-                                                                    <i class="fa fa-hashtag inputIcon"></i>
-
-                                                                    <input
-                                                                        type="number"
-                                                                        name="valeur"
-                                                                        value="{{ $value->valeur }}"
-                                                                        readonly
-                                                                        min="1"
-                                                                    >
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
 
                                                     </div>
 
@@ -562,7 +445,8 @@
                                                     <div class="row mt-4">
 
                                                         {{-- DESCRIPTION --}}
-                                                        <div class="col-12 col-md-12 mb-4">
+
+                                                        <div class="col-12 mb-4">
 
                                                             <div class="futureField">
 
@@ -576,11 +460,11 @@
                                                                     <i class="fa fa-align-left inputIcon textareaIcon"></i>
 
                                                                     <textarea
-                                                                        class=""
+                                                                        class="form-control"
                                                                         readonly
                                                                         name="description"
                                                                         rows="6"
-                                                                        placeholder="Entrer la description"
+                                                                        placeholder="Description"
                                                                     >{{ $value->description ?? 'Aucune description' }}</textarea>
 
                                                                 </div>
@@ -602,7 +486,9 @@
 
                                                     <div class="row">
 
+
                                                         {{-- ACTIVE --}}
+
                                                         <div class="col-12 col-md-6 mb-4">
 
                                                             <div class="futureField">
@@ -644,9 +530,11 @@
 
                                                         </div>
 
+
                                                     </div>
 
                                                 </div>
+
 
                                             </div>
 
@@ -654,6 +542,7 @@
 
 
                                         {{-- FOOTER --}}
+
                                         <div class="modal-footer futuristicFooter">
 
                                             <button
@@ -737,7 +626,7 @@
                                     {{-- FORM --}}
                                     <form
                                         method="POST"
-                                        action="{{ route('ModifierPeriodicite') }}"
+                                        action="{{ route('ModifierRoleGroupe') }}"
                                         enctype="multipart/form-data">
 
                                         <input
@@ -748,10 +637,13 @@
 
                                         @csrf
 
+
                                         {{-- BODY --}}
+
                                         <div class="modal-body futuristicBody">
 
                                             <div class="form">
+
 
                                                 {{-- =====================================================
                                                     CODE + NOM
@@ -761,7 +653,9 @@
 
                                                     <div class="row">
 
+
                                                         {{-- CODE --}}
+
                                                         <div class="col-12 col-md-6 mb-4">
 
                                                             <div class="futureField">
@@ -792,6 +686,7 @@
 
 
                                                         {{-- NOM --}}
+
                                                         <div class="col-12 col-md-6 mb-4">
 
                                                             <div class="futureField">
@@ -820,129 +715,6 @@
 
                                                         </div>
 
-                                                    </div>
-
-                                                </div>
-
-
-                                                {{-- =====================================================
-                                                    UNITÉ + VALEUR
-                                                ====================================================== --}}
-
-                                                <div class="container-fluid">
-
-                                                    <div class="row">
-
-                                                        {{-- UNITÉ --}}
-                                                        <div class="col-12 col-md-6 mb-4">
-
-                                                            <div class="futureField">
-
-                                                                <label>
-                                                                    <i class="fa fa-clock"></i>
-                                                                    Unité
-                                                                </label>
-
-                                                                <div class="futureInput">
-
-                                                                    <i class="fa fa-clock inputIcon"></i>
-
-                                                                    <select
-                                                                        class="futureSelect"
-                                                                        name="unite"
-                                                                        required
-                                                                    >
-
-                                                                        <option value="">
-                                                                            Sélectionner une unité
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="heure"
-                                                                            {{ old('unite', $value->unite) === 'heure' ? 'selected' : '' }}
-                                                                        >
-                                                                            Heure
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="jour"
-                                                                            {{ old('unite', $value->unite) === 'jour' ? 'selected' : '' }}
-                                                                        >
-                                                                            Jour
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="semaine"
-                                                                            {{ old('unite', $value->unite) === 'semaine' ? 'selected' : '' }}
-                                                                        >
-                                                                            Semaine
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="mois"
-                                                                            {{ old('unite', $value->unite) === 'mois' ? 'selected' : '' }}
-                                                                        >
-                                                                            Mois
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="trimestre"
-                                                                            {{ old('unite', $value->unite) === 'trimestre' ? 'selected' : '' }}
-                                                                        >
-                                                                            Trimestre
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="semestre"
-                                                                            {{ old('unite', $value->unite) === 'semestre' ? 'selected' : '' }}
-                                                                        >
-                                                                            Semestre
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="année"
-                                                                            {{ old('unite', $value->unite) === 'année' ? 'selected' : '' }}
-                                                                        >
-                                                                            Année
-                                                                        </option>
-
-                                                                    </select>
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-
-
-                                                        {{-- VALEUR --}}
-                                                        <div class="col-12 col-md-6 mb-4">
-
-                                                            <div class="futureField">
-
-                                                                <label>
-                                                                    <i class="fa fa-hashtag"></i>
-                                                                    Valeur
-                                                                </label>
-
-                                                                <div class="futureInput">
-
-                                                                    <i class="fa fa-hashtag inputIcon"></i>
-
-                                                                    <input
-                                                                        type="number"
-                                                                        name="valeur"
-                                                                        value="{{ old('valeur', $value->valeur) }}"
-                                                                        min="1"
-                                                                        placeholder="Exemple : 1"
-                                                                        required
-                                                                    >
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
 
                                                     </div>
 
@@ -957,8 +729,7 @@
 
                                                     <div class="row mt-4">
 
-                                                        {{-- DESCRIPTION --}}
-                                                        <div class="col-12 col-md-12 mb-4">
+                                                        <div class="col-12 mb-4">
 
                                                             <div class="futureField">
 
@@ -974,6 +745,7 @@
                                                                     <textarea
                                                                         name="description"
                                                                         rows="6"
+                                                                        class="form-control"
                                                                         placeholder="Entrer la description"
                                                                     >{{ old('description', $value->description) }}</textarea>
 
@@ -996,7 +768,9 @@
 
                                                     <div class="row">
 
+
                                                         {{-- ACTIVE --}}
+
                                                         <div class="col-12 col-md-6 mb-4">
 
                                                             <div class="futureField">
@@ -1038,9 +812,11 @@
 
                                                         </div>
 
+
                                                     </div>
 
                                                 </div>
+
 
                                             </div>
 
@@ -1048,7 +824,10 @@
 
 
                                         {{-- FOOTER --}}
+
                                         <div class="modal-footer futuristicFooter">
+
+                                            {{-- FERMER --}}
 
                                             <button
                                                 type="button"
@@ -1063,6 +842,8 @@
                                             </button>
 
 
+                                            {{-- MODIFIER --}}
+
                                             <button
                                                 type="submit"
                                                 class="futureBtn successBtn"
@@ -1070,14 +851,13 @@
 
                                                 <i class="fa fa-check"></i>
 
-                                                Valider
+                                                Modifier
 
                                             </button>
 
                                         </div>
 
                                     </form>
-
 
 
                                 </div>
@@ -1144,18 +924,19 @@
                                     {{-- FORM --}}
                                     <form
                                         method="POST"
-                                        action=""
+                                        action="{{ route('CorbeilleRoleGroupe') }}"
                                         enctype="multipart/form-data">
-
                                         <input
                                             type="hidden"
                                             name="id"
-                                            value="{{ $value->id }}"
-                                        >
+                                            value="{{ $value->id }}" >
 
                                         @csrf
 
-                                        {{-- BODY --}}
+                                        {{-- =======================================================
+                                            BODY
+                                        ======================================================== --}}
+
                                         <div class="modal-body futuristicBody">
 
                                             <div class="form">
@@ -1197,7 +978,6 @@
 
                                                         </div>
 
-
                                                         {{-- NOM --}}
                                                         <div class="col-12 col-md-6 mb-4">
 
@@ -1233,129 +1013,6 @@
 
 
                                                 {{-- =====================================================
-                                                    UNITÉ + VALEUR
-                                                ====================================================== --}}
-
-                                                <div class="container-fluid">
-
-                                                    <div class="row">
-
-                                                        {{-- UNITÉ --}}
-                                                        <div class="col-12 col-md-6 mb-4">
-
-                                                            <div class="futureField">
-
-                                                                <label>
-                                                                    <i class="fa fa-clock"></i>
-                                                                    Unité
-                                                                </label>
-
-                                                                <div class="futureInput">
-
-                                                                    <i class="fa fa-clock inputIcon"></i>
-
-                                                                    <select
-                                                                        class="futureSelect"
-                                                                        name="unite"
-                                                                        disabled
-                                                                    >
-
-                                                                        <option value="">
-                                                                            Sélectionner une unité
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="heure"
-                                                                            {{ $value->unite === 'heure' ? 'selected' : '' }}
-                                                                        >
-                                                                            Heure
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="jour"
-                                                                            {{ $value->unite === 'jour' ? 'selected' : '' }}
-                                                                        >
-                                                                            Jour
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="semaine"
-                                                                            {{ $value->unite === 'semaine' ? 'selected' : '' }}
-                                                                        >
-                                                                            Semaine
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="mois"
-                                                                            {{ $value->unite === 'mois' ? 'selected' : '' }}
-                                                                        >
-                                                                            Mois
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="trimestre"
-                                                                            {{ $value->unite === 'trimestre' ? 'selected' : '' }}
-                                                                        >
-                                                                            Trimestre
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="semestre"
-                                                                            {{ $value->unite === 'semestre' ? 'selected' : '' }}
-                                                                        >
-                                                                            Semestre
-                                                                        </option>
-
-                                                                        <option
-                                                                            value="année"
-                                                                            {{ $value->unite === 'année' ? 'selected' : '' }}
-                                                                        >
-                                                                            Année
-                                                                        </option>
-
-                                                                    </select>
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-
-
-                                                        {{-- VALEUR --}}
-                                                        <div class="col-12 col-md-6 mb-4">
-
-                                                            <div class="futureField">
-
-                                                                <label>
-                                                                    <i class="fa fa-hashtag"></i>
-                                                                    Valeur
-                                                                </label>
-
-                                                                <div class="futureInput">
-
-                                                                    <i class="fa fa-hashtag inputIcon"></i>
-
-                                                                    <input
-                                                                        type="number"
-                                                                        name="valeur"
-                                                                        value="{{ $value->valeur }}"
-                                                                        readonly
-                                                                        min="1"
-                                                                    >
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-
-                                                {{-- =====================================================
                                                     DESCRIPTION
                                                 ====================================================== --}}
 
@@ -1364,7 +1021,7 @@
                                                     <div class="row mt-4">
 
                                                         {{-- DESCRIPTION --}}
-                                                        <div class="col-12 col-md-12 mb-4">
+                                                        <div class="col-12 mb-4">
 
                                                             <div class="futureField">
 
@@ -1454,7 +1111,10 @@
                                         </div>
 
 
-                                        {{-- FOOTER --}}
+                                        {{-- =======================================================
+                                            FOOTER
+                                        ======================================================== --}}
+
                                         <div class="modal-footer futuristicFooter">
 
                                             <button
@@ -1462,23 +1122,16 @@
                                                 data-dismiss="modal"
                                                 class="futureBtn dangerBtn"
                                             >
-
                                                 <i class="fa fa-times"></i>
-
                                                 Fermer
-
                                             </button>
-
 
                                             <button
                                                 type="submit"
                                                 class="futureBtn successBtn"
                                             >
-
                                                 <i class="fa fa-trash"></i>
-
                                                 Mettre en corbeille
-
                                             </button>
 
                                         </div>
@@ -1497,7 +1150,7 @@
                         CORBEILLE FIN
                     ========================================================= --}}
                     {{-- CORBEILLE FIN --}}
-                   
+
 
                 @endforeach
             {{-- AUTRES MODALS FIN --}}
