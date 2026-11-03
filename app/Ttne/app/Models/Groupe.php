@@ -196,4 +196,9 @@ class Groupe extends Model
             'statut_id'
         );
     }
+    // MEMBRES DU GROUPE
+public function membres()
+{
+    return $this->hasMany(GroupeMembre::class, 'groupe_id');
+}
 }

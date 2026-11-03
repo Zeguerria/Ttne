@@ -22,5 +22,10 @@ protected $casts = [
     'supprimer' => 'boolean',
     'active' => 'boolean',
 ];
+// MEMBRES AYANT CE ROLE
+public function membres()
+{
+    return $this->hasMany(GroupeMembre::class, 'role_groupe_id');
+}
 
 }

@@ -134,4 +134,15 @@ class User extends Authenticatable
             'createur_id'
         );
     }
+    // GROUPES AUXQUELS L'UTILISATEUR APPARTIENT
+public function groupesMembres()
+{
+    return $this->hasMany(GroupeMembre::class, 'utilisateur_id');
+}
+
+// MEMBRES VALIDÉS PAR L'UTILISATEUR
+public function membresValides()
+{
+    return $this->hasMany(GroupeMembre::class, 'valider_par');
+}
 }

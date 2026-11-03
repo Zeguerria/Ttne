@@ -125,5 +125,10 @@ class Parametre extends Model
             'statut_id'
         );
     }
+    // MEMBRES AYANT CE STATUT
+public function membres()
+{
+    return $this->hasMany(GroupeMembre::class, 'statut_id');
+}
 
 }
