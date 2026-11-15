@@ -66,6 +66,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="block-groupe product-sales-area mg-tb-30">
+                    <div class="container-fluid">
+                        <div class="row">
+                            @include('dependances.templates.admins.navigations.homes._homes.blockgroupe')
+                        </div>
+
+                    </div>
+                </div>
+
                 <div class="product-sales-area mg-tb-30">
                     <div class="container-fluid">
                         <div class="row">
@@ -102,6 +111,8 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div class="traffice-source-area mg-b-30">
                     <div class="container-fluid">
                         <div class="row">
