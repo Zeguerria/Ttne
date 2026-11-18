@@ -167,7 +167,7 @@
                 </div>
 
                 {{-- INFORMATIONS --}}
-                <div class="col-md-12">
+                {{-- <div class="col-md-12">
                     <div class="futureFinal">
                         <i class="fa fa-cogs"></i>
 
@@ -179,7 +179,7 @@
                             qui encadreront les cotisations de votre communauté.
                         </p>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>

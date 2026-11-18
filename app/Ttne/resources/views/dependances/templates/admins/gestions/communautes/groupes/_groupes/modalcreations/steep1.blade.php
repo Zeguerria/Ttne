@@ -58,26 +58,29 @@
 
                 {{-- DESCRIPTION --}}
                 <div class="col-md-12">
-                    <div class="futureField">
-                        <label>
-                            <i class="fa fa-align-left"></i>
-                            Description
-                        </label>
+                    <div class="row mt-4">
+                        {{-- DESCRIPTION --}}
+                        <div class="col-12 col-md-12 mb-4 ">
+                                <div class="futureField">
+                                    <label class="">
+                                        <i class="fa fa-comment"></i>
+                                        Description
+                                    </label>
+                                    <div class="futureTextarea">
+                                        <i class="fa fa-align-left inputIcon textareaIcon"></i>
 
-                        <div class="futureInput">
-                            <i class="fa fa-pencil inputIcon"></i>
+                                            <textarea class="" disabled name="description" value="description" placeholder="Entrer la description"></textarea>
 
-                            <textarea name="description"
-                                      class="form-control"
-                                      rows="3"
-                                      maxlength="1000"
-                                      placeholder="Présentez votre groupe..."></textarea>
+                                    </div>
+
+                                </div>
+
                         </div>
                     </div>
                 </div>
 
                 {{-- INFORMATIONS --}}
-                <div class="col-md-12">
+                {{-- <div class="col-md-12">
                     <div class="futureFinal">
                         <i class="fa fa-lightbulb-o"></i>
 
@@ -90,7 +93,7 @@
                             règles de fonctionnement et gérer ses participants.
                         </p>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>
@@ -103,7 +106,7 @@
 
 
 <style>
-    
+
 /* ==========================================================
    COMMUNAUTE — STYLES PARTAGES
    Bootstrap 4 — Font Awesome 4.7

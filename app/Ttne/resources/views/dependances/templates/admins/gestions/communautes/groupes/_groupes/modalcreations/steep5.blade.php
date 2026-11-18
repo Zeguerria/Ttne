@@ -289,7 +289,7 @@
                 </div>
 
                 {{-- INFORMATIONS --}}
-                <div class="col-md-12">
+                {{-- <div class="col-md-12">
                     <div class="futureFinal">
                         <i class="fa fa-info-circle"></i>
                         <h3>Construisez votre communauté</h3>
@@ -301,7 +301,7 @@
                             demander à le rejoindre selon les règles que vous avez définies.
                         </p>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>

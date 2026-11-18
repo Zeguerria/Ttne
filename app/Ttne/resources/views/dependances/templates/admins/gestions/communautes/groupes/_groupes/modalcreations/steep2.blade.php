@@ -1,4 +1,3 @@
-
 {{-- ==========================================================
      STEEP 2 — PERSONNALISATION DU GROUPE
 ========================================================== --}}
@@ -62,130 +61,183 @@
                     value="fa-users"
                 >
 
-                {{-- RECHERCHE D'ICONE --}}
+                {{-- OUVRIR LA BIBLIOTHEQUE D'ICONES --}}
                 <div class="col-12">
-                    <div class="community-icon-search-panel">
-
-                        <div class="community-icon-search-heading">
-                            <div>
-                                <i class="fa fa-search"></i>
-                                <span>Explorer les icônes</span>
-                            </div>
-
+                    <div class="community-icon-library-access">
+                        <div class="community-icon-library-access-info">
+                            <span class="community-preview-overline">PERSONNALISATION</span>
+                            <strong>Choisissez le symbole de votre communauté</strong>
                             <small>
-                                Retrouvez rapidement le symbole idéal.
+                                La bibliothèque s'ouvre uniquement lorsque vous souhaitez
+                                rechercher ou changer votre icône.
                             </small>
                         </div>
 
-                        <div class="futureField">
-                            <div class="futureInput">
-                                <i class="fa fa-search inputIcon"></i>
-
-                                <input
-                                    type="search"
-                                    id="groupIconSearch"
-                                    class="form-control"
-                                    placeholder="Rechercher une icône..."
-                                    autocomplete="off"
-                                >
-
-                                <span class="community-search-shortcut">
-                                    <i class="fa fa-keyboard-o"></i>
-                                </span>
-                            </div>
-                        </div>
-
+                        <button
+                            type="button"
+                            class="community-icon-open-library"
+                            data-open-icon-library
+                        >
+                            <i class="fa fa-th-large"></i>
+                            <span>Parcourir les icônes</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
 
-                {{-- SELECTION DES ICONES --}}
-                <div class="col-12">
+                {{-- BIBLIOTHEQUE D'ICONES : MODALE --}}
+                <div
+                    class="community-icon-modal"
+                    id="communityIconModal"
+                    aria-hidden="true">
+                    <div class="community-icon-modal-backdrop" data-close-icon-library></div>
 
-                    <div class="community-icon-library">
-
-                        <div class="community-icon-library-heading">
+                    <div
+                        class="community-icon-modal-dialog"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="communityIconModalTitle"
+                    >
+                        <div class="community-icon-modal-header">
                             <div>
-                                <strong>Bibliothèque d'icônes</strong>
-                                <small>
-                                    Sélectionnez une seule icône pour votre groupe.
-                                </small>
+                                <span class="community-preview-overline">BIBLIOTHEQUE</span>
+                                <h3 id="communityIconModalTitle">Choisir une icône</h3>
+                                <p>Recherchez un symbole ou explorez les catégories.</p>
                             </div>
 
-                            <span class="community-icon-count">
-                                <i class="fa fa-th-large"></i>
-                                <b id="groupIconVisibleCount">16</b>
+                            <button
+                                type="button"
+                                class="community-icon-modal-close"
+                                data-close-icon-library
+                                aria-label="Fermer"
+                            >
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+
+                        <div class="community-icon-modal-search">
+                            <i class="fa fa-search"></i>
+                            <input
+                                type="search"
+                                id="groupIconSearch"
+                                placeholder="Rechercher : entraide, famille, éducation..."
+                                autocomplete="off"
+                            >
+                            <span class="community-search-shortcut">
+                                <i class="fa fa-keyboard-o"></i>
                             </span>
                         </div>
 
-                        <div
-                            class="community-icon-selector"
-                            id="groupIconSelector"
-                        >
+                        <div class="community-icon-categories" aria-label="Catégories d'icônes">
+                            <button type="button" class="community-icon-category active" data-icon-category="all">Tout</button>
+                            <button type="button" class="community-icon-category" data-icon-category="communaute">Communauté</button>
+                            <button type="button" class="community-icon-category" data-icon-category="solidarite">Solidarité</button>
+                            <button type="button" class="community-icon-category" data-icon-category="famille">Famille</button>
+                            <button type="button" class="community-icon-category" data-icon-category="professionnel">Professionnel</button>
+                            <button type="button" class="community-icon-category" data-icon-category="education">Éducation</button>
+                            <button type="button" class="community-icon-category" data-icon-category="reussite">Réussite</button>
+                            <button type="button" class="community-icon-category" data-icon-category="protection">Protection</button>
+                            <button type="button" class="community-icon-category" data-icon-category="nature">Nature</button>
+                            <button type="button" class="community-icon-category" data-icon-category="divers">Divers</button>
+                        </div>
 
+                        <div class="community-icon-modal-results-heading">
+                            <span>Icônes disponibles</span>
+                            <span><b id="groupIconVisibleCount">0</b> résultat(s)</span>
+                        </div>
+
+                        <div class="community-icon-selector" id="groupIconSelector">
                             @php
                                 $groupIcons = [
-                                    ['value' => 'fa-users', 'label' => 'Communauté'],
-                                    ['value' => 'fa-handshake-o', 'label' => 'Entraide'],
-                                    ['value' => 'fa-home', 'label' => 'Famille'],
-                                    ['value' => 'fa-briefcase', 'label' => 'Professionnel'],
-                                    ['value' => 'fa-graduation-cap', 'label' => 'Éducation'],
-                                    ['value' => 'fa-heart', 'label' => 'Solidarité'],
-                                    ['value' => 'fa-star', 'label' => 'Prestige'],
-                                    ['value' => 'fa-trophy', 'label' => 'Réussite'],
-                                    ['value' => 'fa-lightbulb-o', 'label' => 'Innovation'],
-                                    ['value' => 'fa-globe', 'label' => 'Réseau'],
-                                    ['value' => 'fa-shield', 'label' => 'Protection'],
-                                    ['value' => 'fa-leaf', 'label' => 'Nature'],
-                                    ['value' => 'fa-building', 'label' => 'Entreprise'],
-                                    ['value' => 'fa-users', 'label' => 'Association'],
-                                    ['value' => 'fa-bullseye', 'label' => 'Objectif'],
-                                    ['value' => 'fa-diamond', 'label' => 'Excellence'],
+                                    ['value' => 'fa-users', 'label' => 'Communauté', 'category' => 'communaute', 'keywords' => 'groupe membres collectif association'],
+                                    ['value' => 'fa-handshake-o', 'label' => 'Entraide', 'category' => 'solidarite', 'keywords' => 'aide soutien partage coopération'],
+                                    ['value' => 'fa-heart', 'label' => 'Solidarité', 'category' => 'solidarite', 'keywords' => 'amour entraide union'],
+                                    ['value' => 'fa-home', 'label' => 'Famille', 'category' => 'famille', 'keywords' => 'maison foyer proches'],
+                                    ['value' => 'fa-child', 'label' => 'Enfants', 'category' => 'famille', 'keywords' => 'jeunesse enfant'],
+                                    ['value' => 'fa-briefcase', 'label' => 'Professionnel', 'category' => 'professionnel', 'keywords' => 'travail métier carrière'],
+                                    ['value' => 'fa-building', 'label' => 'Entreprise', 'category' => 'professionnel', 'keywords' => 'société bureau organisation'],
+                                    ['value' => 'fa-industry', 'label' => 'Industrie', 'category' => 'professionnel', 'keywords' => 'production usine activité'],
+                                    ['value' => 'fa-graduation-cap', 'label' => 'Éducation', 'category' => 'education', 'keywords' => 'école études formation diplôme'],
+                                    ['value' => 'fa-book', 'label' => 'Savoir', 'category' => 'education', 'keywords' => 'livre lecture connaissance'],
+                                    ['value' => 'fa-flask', 'label' => 'Recherche', 'category' => 'education', 'keywords' => 'science laboratoire innovation'],
+                                    ['value' => 'fa-trophy', 'label' => 'Réussite', 'category' => 'reussite', 'keywords' => 'victoire succès récompense'],
+                                    ['value' => 'fa-star', 'label' => 'Prestige', 'category' => 'reussite', 'keywords' => 'étoile distinction'],
+                                    ['value' => 'fa-bullseye', 'label' => 'Objectif', 'category' => 'reussite', 'keywords' => 'cible ambition but'],
+                                    ['value' => 'fa-lightbulb-o', 'label' => 'Innovation', 'category' => 'reussite', 'keywords' => 'idée créativité inspiration'],
+                                    ['value' => 'fa-shield', 'label' => 'Protection', 'category' => 'protection', 'keywords' => 'sécurité défense confiance'],
+                                    ['value' => 'fa-lock', 'label' => 'Sécurité', 'category' => 'protection', 'keywords' => 'verrou privé confidentialité'],
+                                    ['value' => 'fa-leaf', 'label' => 'Nature', 'category' => 'nature', 'keywords' => 'écologie plante environnement'],
+                                    ['value' => 'fa-tree', 'label' => 'Arbre', 'category' => 'nature', 'keywords' => 'forêt croissance'],
+                                    ['value' => 'fa-globe', 'label' => 'Réseau', 'category' => 'communaute', 'keywords' => 'monde planète connexion'],
+                                    ['value' => 'fa-comments', 'label' => 'Discussion', 'category' => 'communaute', 'keywords' => 'échange parole dialogue'],
+                                    ['value' => 'fa-bell', 'label' => 'Information', 'category' => 'divers', 'keywords' => 'notification alerte annonce'],
+                                    ['value' => 'fa-calendar', 'label' => 'Événement', 'category' => 'divers', 'keywords' => 'date agenda rencontre'],
+                                    ['value' => 'fa-gift', 'label' => 'Cadeau', 'category' => 'solidarite', 'keywords' => 'don générosité offrande'],
+                                    ['value' => 'fa-money', 'label' => 'Finance', 'category' => 'divers', 'keywords' => 'argent cotisation économie'],
+                                    ['value' => 'fa-credit-card', 'label' => 'Cotisation', 'category' => 'divers', 'keywords' => 'paiement contribution'],
+                                    ['value' => 'fa-rocket', 'label' => 'Projet', 'category' => 'reussite', 'keywords' => 'lancement évolution ambition'],
+                                    ['value' => 'fa-map-marker', 'label' => 'Localité', 'category' => 'communaute', 'keywords' => 'lieu quartier ville'],
+                                    ['value' => 'fa-flag', 'label' => 'Engagement', 'category' => 'communaute', 'keywords' => 'cause objectif drapeau'],
+                                    ['value' => 'fa-life-ring', 'label' => 'Assistance', 'category' => 'solidarite', 'keywords' => 'secours aide urgence'],
+                                    ['value' => 'fa-diamond', 'label' => 'Excellence', 'category' => 'reussite', 'keywords' => 'qualité valeur distinction'],
+                                    ['value' => 'fa-bicycle', 'label' => 'Activité', 'category' => 'divers', 'keywords' => 'sport loisir mouvement'],
                                 ];
                             @endphp
 
                             @foreach($groupIcons as $icon)
                                 <label
-                                    class="community-icon-option {{ $loop->first ? 'selected' : '' }}"
-                                    data-icon-search="{{ strtolower($icon['label']) }}"
+                                    class="community-icon-option"
+                                    data-icon-category="{{ $icon['category'] }}"
+                                    data-icon-search="{{ strtolower($icon['label'] . ' ' . $icon['keywords'] . ' ' . $icon['value']) }}"
                                     title="{{ $icon['label'] }}"
                                 >
-
                                     <input
                                         type="radio"
                                         name="icone_selection"
                                         value="{{ $icon['value'] }}"
-                                        {{ $loop->first ? 'checked' : '' }}
+                                        data-icon-label="{{ $icon['label'] }}"
                                     >
 
                                     <span class="community-icon-option-content">
                                         <i class="fa {{ $icon['value'] }}"></i>
                                         <small>{{ $icon['label'] }}</small>
                                     </span>
-
                                 </label>
                             @endforeach
 
-                            {{-- AUCUN RESULTAT --}}
-                            <div
-                                class="community-icon-no-result"
-                                id="groupIconNoResult"
-                                style="display:none;"
-                            >
+                            <div class="community-icon-no-result" id="groupIconNoResult" style="display:none;">
                                 <i class="fa fa-search"></i>
                                 <strong>Aucune icône trouvée</strong>
-                                <small>
-                                    Essayez avec un autre mot-clé.
-                                </small>
+                                <small>Essayez un autre mot-clé ou une autre catégorie.</small>
                             </div>
-
                         </div>
 
-                    </div>
+                        <div class="community-icon-modal-footer">
+                            <div class="community-icon-modal-selection">
+                                <span class="community-icon-modal-selection-preview">
+                                    <i class="fa fa-users" id="groupIconModalPreview"></i>
+                                </span>
+                                <span>
+                                    <small>Votre choix</small>
+                                    <strong id="groupIconModalLabel">Communauté</strong>
+                                </span>
+                            </div>
 
+                            <div class="community-icon-modal-actions">
+                                <button type="button" class="community-icon-cancel" data-close-icon-library>
+                                    Annuler
+                                </button>
+                                <button type="button" class="community-icon-confirm" id="confirmGroupIcon">
+                                    <i class="fa fa-check"></i>
+                                    Confirmer le choix
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {{-- INFORMATIONS --}}
-                <div class="col-12">
+                {{-- <div class="col-12">
                     <div class="futureFinal">
                         <i class="fa fa-picture-o"></i>
 
@@ -197,7 +249,7 @@
                             facilement votre groupe dans l'espace communautaire.
                         </p>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>
@@ -744,152 +796,690 @@
     }
 }
 
+
+
+/* ==========================================================
+   BIBLIOTHEQUE D'ICONES — OUVERTURE A LA DEMANDE
+========================================================== */
+
+.steep-2 .community-icon-library-access {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    padding: 20px 22px;
+    border: 1px solid var(--community-border);
+    border-radius: 17px;
+    background:
+        radial-gradient(circle at 90% 50%, rgba(0,217,239,.07), transparent 35%),
+        rgba(13,19,25,.78);
+}
+
+.steep-2 .community-icon-library-access-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.steep-2 .community-icon-library-access-info strong {
+    color: #f1f8fa;
+    font-size: 13px;
+}
+
+.steep-2 .community-icon-library-access-info small {
+    color: var(--community-muted);
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+.steep-2 .community-icon-open-library,
+.steep-2 .community-icon-confirm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-shrink: 0;
+    min-height: 44px;
+    padding: 0 17px;
+    border: 1px solid rgba(0,217,239,.35);
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(0,217,239,.17), rgba(0,217,239,.07));
+    color: #dffbff;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.steep-2 .community-icon-open-library:hover,
+.steep-2 .community-icon-confirm:hover {
+    border-color: var(--community-cyan);
+    background: rgba(0,217,239,.20);
+    transform: translateY(-2px);
+}
+
+.steep-2 .community-icon-open-library > i:first-child,
+.steep-2 .community-icon-confirm > i {
+    color: var(--community-cyan);
+}
+
+.steep-2 .community-icon-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+}
+
+.steep-2 .community-icon-modal.is-open {
+    display: flex;
+}
+
+.steep-2 .community-icon-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2,7,11,.82);
+    backdrop-filter: blur(8px);
+}
+
+.steep-2 .community-icon-modal-dialog {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: min(900px, 100%);
+    max-height: min(850px, calc(100vh - 44px));
+    min-height: 0;
+    padding: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(0,217,239,.22);
+    border-radius: 20px;
+    background:
+        radial-gradient(ellipse at 0 0, rgba(0,217,239,.09), transparent 36%),
+        #0d141b;
+    box-shadow: 0 25px 90px rgba(0,0,0,.55);
+}
+
+.steep-2 .community-icon-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.steep-2 .community-icon-modal-header h3 {
+    margin: 5px 0;
+    color: #f4fafc;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.steep-2 .community-icon-modal-header p {
+    margin: 0;
+    color: #91a2ac;
+    font-size: 11px;
+}
+
+.steep-2 .community-icon-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 11px;
+    background: rgba(255,255,255,.035);
+    color: #aab8bf;
+    cursor: pointer;
+}
+
+.steep-2 .community-icon-modal-close:hover {
+    border-color: rgba(255,100,100,.35);
+    color: #ff9292;
+}
+
+.steep-2 .community-icon-modal-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-top: 17px;
+}
+
+.steep-2 .community-icon-modal-search > i {
+    position: absolute;
+    left: 15px;
+    color: var(--community-cyan);
+    pointer-events: none;
+}
+
+.steep-2 .community-icon-modal-search input {
+    width: 100%;
+    height: 47px;
+    padding: 0 45px 0 43px;
+    border: 1px solid rgba(0,217,239,.18);
+    border-radius: 12px;
+    outline: none;
+    background: rgba(255,255,255,.035);
+    color: #fff;
+    font-size: 12px;
+}
+
+.steep-2 .community-icon-modal-search input:focus {
+    border-color: rgba(0,217,239,.55);
+    box-shadow: 0 0 0 3px rgba(0,217,239,.07);
+}
+
+.steep-2 .community-icon-modal-search input::placeholder {
+    color: #71818b;
+}
+
+.steep-2 .community-icon-categories {
+    display: flex;
+    gap: 7px;
+    padding: 14px 0 12px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.steep-2 .community-icon-category {
+    flex: 0 0 auto;
+    padding: 7px 11px;
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 30px;
+    background: rgba(255,255,255,.025);
+    color: #9eafb8;
+    font-size: 10px;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.steep-2 .community-icon-category:hover,
+.steep-2 .community-icon-category.active {
+    border-color: rgba(0,217,239,.38);
+    background: rgba(0,217,239,.10);
+    color: #c9faff;
+}
+
+.steep-2 .community-icon-modal-results-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0 2px 10px;
+    color: #dce8ed;
+    font-size: 10px;
+}
+
+.steep-2 .community-icon-modal-results-heading span:last-child {
+    color: #8fa1aa;
+}
+
+.steep-2 .community-icon-modal-results-heading b {
+    color: var(--community-cyan);
+}
+
+.steep-2 .community-icon-modal .community-icon-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+    gap: 9px;
+    min-height: 120px;
+    padding: 2px 4px 12px 2px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,217,239,.35) rgba(255,255,255,.04);
+}
+
+.steep-2 .community-icon-modal .community-icon-option {
+    min-height: 92px;
+}
+
+.steep-2 .community-icon-modal .community-icon-option.is-filtered {
+    display: none !important;
+}
+
+.steep-2 .community-icon-modal .community-icon-no-result {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 150px;
+    border: 1px dashed rgba(0,217,239,.20);
+    border-radius: 14px;
+    text-align: center;
+}
+
+.steep-2 .community-icon-modal .community-icon-no-result > i {
+    color: var(--community-cyan);
+    font-size: 24px;
+}
+
+.steep-2 .community-icon-modal .community-icon-no-result strong {
+    color: #edf5f7;
+    font-size: 12px;
+}
+
+.steep-2 .community-icon-modal .community-icon-no-result small {
+    color: var(--community-muted);
+    font-size: 10px;
+}
+
+.steep-2 .community-icon-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,255,255,.07);
+}
+
+.steep-2 .community-icon-modal-selection {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.steep-2 .community-icon-modal-selection-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 39px;
+    height: 39px;
+    flex: 0 0 39px;
+    border: 1px solid rgba(0,217,239,.22);
+    border-radius: 12px;
+    background: rgba(0,217,239,.08);
+    color: var(--community-cyan);
+    font-size: 17px;
+}
+
+.steep-2 .community-icon-modal-selection > span:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.steep-2 .community-icon-modal-selection small {
+    color: #82949e;
+    font-size: 9px;
+}
+
+.steep-2 .community-icon-modal-selection strong {
+    color: #eaf7fa;
+    font-size: 11px;
+}
+
+.steep-2 .community-icon-modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.steep-2 .community-icon-cancel {
+    min-height: 42px;
+    padding: 0 14px;
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 11px;
+    background: rgba(255,255,255,.035);
+    color: #b5c1c7;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.steep-2 .community-icon-cancel:hover {
+    background: rgba(255,255,255,.07);
+    color: #fff;
+}
+
+.steep-2 .community-icon-confirm {
+    min-height: 42px;
+}
+
+body.community-icon-modal-open {
+    overflow: hidden;
+}
+
+@media (max-width: 600px) {
+    .steep-2 .community-icon-library-access {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .steep-2 .community-icon-open-library {
+        width: 100%;
+    }
+
+    .steep-2 .community-icon-modal {
+        padding: 8px;
+    }
+
+    .steep-2 .community-icon-modal-dialog {
+        max-height: calc(100vh - 16px);
+        padding: 15px;
+        border-radius: 16px;
+    }
+
+    .steep-2 .community-icon-modal-header h3 {
+        font-size: 16px;
+    }
+
+    .steep-2 .community-icon-modal .community-icon-selector {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    .steep-2 .community-icon-modal .community-icon-option {
+        min-height: 82px;
+        padding: 8px 4px;
+    }
+
+    .steep-2 .community-icon-modal-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .steep-2 .community-icon-modal-actions {
+        display: grid;
+        grid-template-columns: .8fr 1.2fr;
+    }
+
+    .steep-2 .community-icon-cancel,
+    .steep-2 .community-icon-confirm {
+        width: 100%;
+        padding: 0 8px;
+    }
+}
+
 </style>
 <script>
 
-(function ($) {
+(function () {
     'use strict';
 
-    if (!$) {
-        console.error('Communauté — Étape 2 : jQuery est requis.');
-        return;
-    }
+    function initialiserBibliothequeIcones() {
+        const modal = document.getElementById('communityIconModal');
+        const selector = document.getElementById('groupIconSelector');
+        const hidden = document.getElementById('selectedGroupIcon');
+        const preview = document.getElementById('selectedGroupIconPreview');
+        const previewLabel = document.getElementById('selectedGroupIconLabel');
+        const search = document.getElementById('groupIconSearch');
+        const counter = document.getElementById('groupIconVisibleCount');
+        const noResult = document.getElementById('groupIconNoResult');
+        const modalPreview = document.getElementById('groupIconModalPreview');
+        const modalLabel = document.getElementById('groupIconModalLabel');
 
-    const namespace = '.communityIcons';
-
-    function initialiserIconesGroupe() {
-
-        const $selector = $('#groupIconSelector');
-        const $hidden = $('#selectedGroupIcon');
-        const $preview = $('#selectedGroupIconPreview');
-        const $label = $('#selectedGroupIconLabel');
-        const $search = $('#groupIconSearch');
-        const $counter = $('#groupIconVisibleCount');
-        const $noResult = $('#groupIconNoResult');
-
-        if (
-            !$selector.length ||
-            !$hidden.length ||
-            !$preview.length
-        ) {
+        if (!modal || !selector || !hidden || !preview || !search) {
+            console.error('Bibliothèque d’icônes : élément HTML introuvable.');
             return;
         }
 
-        const $options = $selector.find('.community-icon-option');
+        if (modal.dataset.iconLibraryInitialized === 'true') return;
+        modal.dataset.iconLibraryInitialized = 'true';
 
-        /* --------------------------------------------------
-           MISE A JOUR DE L'APERÇU
-        -------------------------------------------------- */
+        const options = Array.from(
+            selector.querySelectorAll('.community-icon-option')
+        );
 
-        function actualiserIcone($radio) {
+        const categories = Array.from(
+            modal.querySelectorAll('.community-icon-category')
+        );
 
-            if (!$radio || !$radio.length) {
-                return;
-            }
+        let activeCategory = 'all';
+        let temporaryValue = hidden.value || 'fa-users';
+        let temporaryLabel = 'Communauté';
 
-            const icone = String($radio.val() || '').trim();
-
-            if (!icone) {
-                return;
-            }
-
-            const $option = $radio.closest('.community-icon-option');
-            const nom = $option.find('small').first().text().trim();
-
-            $hidden.val(icone);
-
-            $preview.attr('class', 'fa ' + icone);
-
-            if ($label.length) {
-                $label.text('Icône sélectionnée : ' + (nom || 'Personnalisée'));
-            }
-
-            $options.removeClass('selected');
-            $option.addClass('selected');
+        // Normalisation : retire les accents pour faciliter la recherche.
+        function normaliser(texte) {
+            return String(texte || '')
+                .toLocaleLowerCase('fr')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .trim();
         }
 
-        /* --------------------------------------------------
-           SELECTION D'UNE ICONE
-        -------------------------------------------------- */
+        function obtenirOption(valeur) {
+            return options.find(function (option) {
+                const radio = option.querySelector('input[type="radio"]');
+                return radio && radio.value === valeur;
+            }) || null;
+        }
 
-        $(document)
-            .off('change' + namespace, '#groupIconSelector input[name="icone_selection"]')
-            .on(
-                'change' + namespace,
-                '#groupIconSelector input[name="icone_selection"]',
-                function () {
-                    actualiserIcone($(this));
-                }
-            );
+        // Mise à jour de la sélection temporaire.
+        function mettreAJourChoix(option) {
+            if (!option) return;
 
-        /* --------------------------------------------------
-           RECHERCHE D'ICONE
-        -------------------------------------------------- */
+            const radio = option.querySelector('input[type="radio"]');
+            if (!radio) return;
 
-        function rechercherIcones(recherche) {
+            temporaryValue = radio.value;
 
-            recherche = String(recherche || '')
-                .toLocaleLowerCase()
-                .trim();
+            const label = option.querySelector('small');
 
-            let resultat = 0;
+            temporaryLabel =
+                radio.dataset.iconLabel ||
+                (label ? label.textContent.trim() : 'Icône');
 
-            $options.each(function () {
+            options.forEach(function (item) {
+                item.classList.remove('selected');
 
-                const $option = $(this);
+                const input = item.querySelector('input[type="radio"]');
 
-                const contenu = (
-                    $option.attr('data-icon-search') + ' ' +
-                    $option.find('small').text() + ' ' +
-                    $option.find('input').val()
-                ).toLocaleLowerCase();
-
-                const visible = contenu.includes(recherche);
-
-                $option.toggleClass('hidden-by-search', !visible);
-
-                if (visible) {
-                    resultat++;
-                }
+                if (input) input.checked = false;
             });
 
-            if ($counter.length) {
-                $counter.text(resultat);
+            option.classList.add('selected');
+            radio.checked = true;
+
+            if (modalPreview) {
+                modalPreview.className = 'fa ' + temporaryValue;
             }
 
-            if ($noResult.length) {
-                $noResult.toggle(resultat === 0);
+            if (modalLabel) {
+                modalLabel.textContent = temporaryLabel;
             }
         }
 
-        if ($search.length) {
+        // Recherche et filtrage combinés.
+        function filtrerIcones() {
+            const recherche = normaliser(search.value);
+            let visibles = 0;
 
-            $search
-                .off('input' + namespace)
-                .on('input' + namespace, function () {
-                    rechercherIcones($(this).val());
+            options.forEach(function (option) {
+                const categorie = option.dataset.iconCategory || '';
+
+                const motsCles = normaliser(
+                    option.dataset.iconSearch || option.textContent
+                );
+
+                const correspondRecherche =
+                    recherche === '' || motsCles.includes(recherche);
+
+                const correspondCategorie =
+                    activeCategory === 'all' ||
+                    categorie === activeCategory;
+
+                const visible =
+                    correspondRecherche && correspondCategorie;
+
+                option.classList.toggle('is-filtered', !visible);
+                option.setAttribute('aria-hidden', visible ? 'false' : 'true');
+
+                if (visible) visibles++;
+            });
+
+            if (counter) {
+                counter.textContent = String(visibles);
+            }
+
+            if (noResult) {
+                noResult.style.display = visibles === 0 ? 'flex' : 'none';
+            }
+        }
+
+        // Ouverture de la bibliothèque.
+        function ouvrirBibliotheque() {
+            const optionActuelle =
+                obtenirOption(hidden.value) ||
+                obtenirOption('fa-users');
+
+            if (optionActuelle) {
+                mettreAJourChoix(optionActuelle);
+            }
+
+            activeCategory = 'all';
+
+            categories.forEach(function (button) {
+                button.classList.toggle(
+                    'active',
+                    button.dataset.iconCategory === 'all'
+                );
+            });
+
+            search.value = '';
+            filtrerIcones();
+
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+
+            document.body.classList.add('community-icon-modal-open');
+
+            window.requestAnimationFrame(function () {
+                search.focus();
+            });
+        }
+
+        // Fermeture de la bibliothèque.
+        function fermerBibliotheque() {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+
+            document.body.classList.remove('community-icon-modal-open');
+        }
+
+        // Validation du choix.
+        function confirmerChoix() {
+            if (!temporaryValue) return;
+
+            hidden.value = temporaryValue;
+
+            preview.className = 'fa ' + temporaryValue;
+
+            if (previewLabel) {
+                previewLabel.textContent =
+                    'Icône sélectionnée : ' + temporaryLabel;
+            }
+
+            hidden.dispatchEvent(
+                new Event('change', { bubbles: true })
+            );
+
+            fermerBibliotheque();
+        }
+
+        // Gestion des clics.
+        document.addEventListener('click', function (event) {
+
+            const ouvrir = event.target.closest('[data-open-icon-library]');
+
+            if (ouvrir) {
+                event.preventDefault();
+                ouvrirBibliotheque();
+                return;
+            }
+
+            const fermer = event.target.closest('[data-close-icon-library]');
+
+            if (fermer && modal.classList.contains('is-open')) {
+                event.preventDefault();
+                fermerBibliotheque();
+                return;
+            }
+
+            if (event.target.closest('#confirmGroupIcon')) {
+                event.preventDefault();
+                confirmerChoix();
+            }
+        });
+
+        // Recherche en temps réel.
+        search.addEventListener('input', filtrerIcones);
+        search.addEventListener('search', filtrerIcones);
+
+        // Sélection d'une icône.
+        selector.addEventListener('change', function (event) {
+            if (event.target.matches('input[name="icone_selection"]')) {
+                mettreAJourChoix(
+                    event.target.closest('.community-icon-option')
+                );
+            }
+        });
+
+        // Filtrage par catégorie.
+        categories.forEach(function (button) {
+            button.addEventListener('click', function () {
+
+                activeCategory =
+                    button.dataset.iconCategory || 'all';
+
+                categories.forEach(function (item) {
+                    item.classList.toggle('active', item === button);
                 });
+
+                filtrerIcones();
+            });
+        });
+
+        // Fermeture avec Échap.
+        document.addEventListener('keydown', function (event) {
+            if (
+                event.key === 'Escape' &&
+                modal.classList.contains('is-open')
+            ) {
+                fermerBibliotheque();
+            }
+        });
+
+        // Initialisation de l'aperçu.
+        const initiale =
+            obtenirOption(hidden.value) ||
+            obtenirOption('fa-users');
+
+        if (initiale) {
+            mettreAJourChoix(initiale);
+
+            preview.className = 'fa ' + temporaryValue;
+
+            if (previewLabel) {
+                previewLabel.textContent =
+                    'Icône sélectionnée : ' + temporaryLabel;
+            }
         }
 
-        /* --------------------------------------------------
-           INITIALISATION
-        -------------------------------------------------- */
-
-        const $initiale = $selector
-            .find('input[name="icone_selection"]:checked')
-            .first();
-
-        if ($initiale.length) {
-            actualiserIcone($initiale);
-        } else if ($hidden.val()) {
-            $preview.attr('class', 'fa ' + $hidden.val());
-        }
-
-        rechercherIcones($search.val() || '');
+        filtrerIcones();
     }
 
-    $(document).ready(initialiserIconesGroupe);
+    // Fonctionne avant ou après le chargement du DOM.
+    if (document.readyState === 'loading') {
+        document.addEventListener(
+            'DOMContentLoaded',
+            initialiserBibliothequeIcones,
+            { once: true }
+        );
+    } else {
+        initialiserBibliothequeIcones();
+    }
 
-})(window.jQuery);
+})();
 
 </script>
