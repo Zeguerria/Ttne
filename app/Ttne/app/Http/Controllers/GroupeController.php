@@ -9,6 +9,8 @@ use App\Models\Periodicite;
 use App\Models\User;
 use App\Services\Core\GroupeService;
 use App\Services\GroupeUtilisateurService;
+use Illuminate\Support\Facades\Auth;
+
 use Exception;
 use Illuminate\Http\Request;
 
@@ -327,148 +329,8 @@ class GroupeController extends Controller
         return back();
     }
 
-   
-    /**
-     * |--------------------------------------------------------------------------
-     * | CREATION UTILISATEUR
-     * |--------------------------------------------------------------------------
-     */
-    public function storeUtilisateur(Request $request)
-    {
-        $data = $request->validate([
-
-            'nom' =>
-                'required|string|max:255',
-
-            'description' =>
-                'nullable|string',
-
-            'montant_cotisation' =>
-                'required|numeric|min:0',
-
-            'penalite_pourcentage' =>
-                'nullable|numeric|min:0',
-
-            'fonds_assurance_pourcentage' =>
-                'nullable|numeric|min:0',
-
-            'delai_grace_heures' =>
-                'nullable|integer|min:0',
-
-            'nombre_participants_max' =>
-                'required|integer|min:1',
-
-            'periodicite_id' =>
-                'required|exists:periodicites,id',
-
-            'date_debut' =>
-                'required|date',
-
-            'date_fin_estimee' =>
-                'nullable|date|after_or_equal:date_debut',
-
-            'mode_distribution_id' =>
-                'required|exists:parametres,id',
-
-            'validation_membre_id' =>
-                'required|exists:parametres,id',
-
-            'visibilite_id' =>
-                'required|exists:parametres,id',
-        ]);
-
-        try {
-
-            GroupeUtilisateurService::store($data);
-
-            toast(
-                'Groupe créé avec succès',
-                'success'
-            );
-
-        } catch (Exception $e) {
-
-            toast(
-                $e->getMessage(),
-                'error'
-            );
-        }
-
-        return back();
-    }
 
 
-    /**
-     * |--------------------------------------------------------------------------
-     * | MODIFICATION UTILISATEUR
-     * |--------------------------------------------------------------------------
-     */
-    public function updateUtilisateur(Request $request)
-    {
-        $data = $request->validate([
-
-            'id' =>
-                'required|exists:groupes,id',
-
-            'nom' =>
-                'required|string|max:255',
-
-            'description' =>
-                'nullable|string',
-
-            'montant_cotisation' =>
-                'required|numeric|min:0',
-
-            'penalite_pourcentage' =>
-                'nullable|numeric|min:0',
-
-            'fonds_assurance_pourcentage' =>
-                'nullable|numeric|min:0',
-
-            'delai_grace_heures' =>
-                'nullable|integer|min:0',
-
-            'nombre_participants_max' =>
-                'required|integer|min:1',
-
-            'periodicite_id' =>
-                'required|exists:periodicites,id',
-
-            'date_debut' =>
-                'required|date',
-
-            'date_fin_estimee' =>
-                'nullable|date|after_or_equal:date_debut',
-
-            'mode_distribution_id' =>
-                'required|exists:parametres,id',
-
-            'validation_membre_id' =>
-                'required|exists:parametres,id',
-
-            'visibilite_id' =>
-                'required|exists:parametres,id',
-        ]);
-
-        try {
-
-            GroupeUtilisateurService::update($data);
-
-            toast(
-                'Groupe modifié avec succès',
-                'success'
-            );
-
-        } catch (Exception $e) {
-
-            toast(
-                $e->getMessage(),
-                'error'
-            );
-        }
-
-        return back();
-    }
 
 
 
@@ -602,4 +464,389 @@ class GroupeController extends Controller
 
         return back();
     }
+
+    // COTE UTILISATEUR DEBUT
+        /**
+         * Liste des icônes disponibles pour la personnalisation des groupes.
+         */
+        private function obtenirIconesGroupe(): array
+        {
+            return [
+                [
+                    'value' => 'fa-users',
+                    'label' => 'Communauté',
+                    'category' => 'communaute',
+                    'keywords' => 'groupe membres collectif association'
+                ],
+                [
+                    'value' => 'fa-handshake-o',
+                    'label' => 'Entraide',
+                    'category' => 'solidarite',
+                    'keywords' => 'aide soutien partage coopération'
+                ],
+                [
+                    'value' => 'fa-heart',
+                    'label' => 'Solidarité',
+                    'category' => 'solidarite',
+                    'keywords' => 'amour entraide union'
+                ],
+                [
+                    'value' => 'fa-home',
+                    'label' => 'Famille',
+                    'category' => 'famille',
+                    'keywords' => 'maison foyer proches'
+                ],
+                [
+                    'value' => 'fa-child',
+                    'label' => 'Enfants',
+                    'category' => 'famille',
+                    'keywords' => 'jeunesse enfant'
+                ],
+                [
+                    'value' => 'fa-briefcase',
+                    'label' => 'Professionnel',
+                    'category' => 'professionnel',
+                    'keywords' => 'travail métier carrière'
+                ],
+                [
+                    'value' => 'fa-building',
+                    'label' => 'Entreprise',
+                    'category' => 'professionnel',
+                    'keywords' => 'société bureau organisation'
+                ],
+                [
+                    'value' => 'fa-industry',
+                    'label' => 'Industrie',
+                    'category' => 'professionnel',
+                    'keywords' => 'production usine activité'
+                ],
+                [
+                    'value' => 'fa-graduation-cap',
+                    'label' => 'Éducation',
+                    'category' => 'education',
+                    'keywords' => 'école études formation diplôme'
+                ],
+                [
+                    'value' => 'fa-book',
+                    'label' => 'Savoir',
+                    'category' => 'education',
+                    'keywords' => 'livre lecture connaissance'
+                ],
+                [
+                    'value' => 'fa-flask',
+                    'label' => 'Recherche',
+                    'category' => 'education',
+                    'keywords' => 'science laboratoire innovation'
+                ],
+                [
+                    'value' => 'fa-trophy',
+                    'label' => 'Réussite',
+                    'category' => 'reussite',
+                    'keywords' => 'victoire succès récompense'
+                ],
+                [
+                    'value' => 'fa-star',
+                    'label' => 'Prestige',
+                    'category' => 'reussite',
+                    'keywords' => 'étoile distinction'
+                ],
+                [
+                    'value' => 'fa-bullseye',
+                    'label' => 'Objectif',
+                    'category' => 'reussite',
+                    'keywords' => 'cible ambition but'
+                ],
+                [
+                    'value' => 'fa-lightbulb-o',
+                    'label' => 'Innovation',
+                    'category' => 'reussite',
+                    'keywords' => 'idée créativité inspiration'
+                ],
+                [
+                    'value' => 'fa-shield',
+                    'label' => 'Protection',
+                    'category' => 'protection',
+                    'keywords' => 'sécurité défense confiance'
+                ],
+                [
+                    'value' => 'fa-lock',
+                    'label' => 'Sécurité',
+                    'category' => 'protection',
+                    'keywords' => 'verrou privé confidentialité'
+                ],
+                [
+                    'value' => 'fa-leaf',
+                    'label' => 'Nature',
+                    'category' => 'nature',
+                    'keywords' => 'écologie plante environnement'
+                ],
+                [
+                    'value' => 'fa-tree',
+                    'label' => 'Arbre',
+                    'category' => 'nature',
+                    'keywords' => 'forêt croissance'
+                ],
+                [
+                    'value' => 'fa-globe',
+                    'label' => 'Réseau',
+                    'category' => 'communaute',
+                    'keywords' => 'monde planète connexion'
+                ],
+                [
+                    'value' => 'fa-comments',
+                    'label' => 'Discussion',
+                    'category' => 'communaute',
+                    'keywords' => 'échange parole dialogue'
+                ],
+                [
+                    'value' => 'fa-bell',
+                    'label' => 'Information',
+                    'category' => 'divers',
+                    'keywords' => 'notification alerte annonce'
+                ],
+                [
+                    'value' => 'fa-calendar',
+                    'label' => 'Événement',
+                    'category' => 'divers',
+                    'keywords' => 'date agenda rencontre'
+                ],
+                [
+                    'value' => 'fa-gift',
+                    'label' => 'Cadeau',
+                    'category' => 'solidarite',
+                    'keywords' => 'don générosité offrande'
+                ],
+                [
+                    'value' => 'fa-money',
+                    'label' => 'Finance',
+                    'category' => 'divers',
+                    'keywords' => 'argent cotisation économie'
+                ],
+                [
+                    'value' => 'fa-credit-card',
+                    'label' => 'Cotisation',
+                    'category' => 'divers',
+                    'keywords' => 'paiement contribution'
+                ],
+                [
+                    'value' => 'fa-rocket',
+                    'label' => 'Projet',
+                    'category' => 'reussite',
+                    'keywords' => 'lancement évolution ambition'
+                ],
+                [
+                    'value' => 'fa-map-marker',
+                    'label' => 'Localité',
+                    'category' => 'communaute',
+                    'keywords' => 'lieu quartier ville'
+                ],
+                [
+                    'value' => 'fa-flag',
+                    'label' => 'Engagement',
+                    'category' => 'communaute',
+                    'keywords' => 'cause objectif drapeau'
+                ],
+                [
+                    'value' => 'fa-life-ring',
+                    'label' => 'Assistance',
+                    'category' => 'solidarite',
+                    'keywords' => 'secours aide urgence'
+                ],
+                [
+                    'value' => 'fa-diamond',
+                    'label' => 'Excellence',
+                    'category' => 'reussite',
+                    'keywords' => 'qualité valeur distinction'
+                ],
+                [
+                    'value' => 'fa-bicycle',
+                    'label' => 'Activité',
+                    'category' => 'divers',
+                    'keywords' => 'sport loisir mouvement'
+                ],
+            ];
+        }
+        /**
+         * |--------------------------------------------------------------------------
+         * | ESPACE COMMUNAUTAIRE
+         * |--------------------------------------------------------------------------
+         */
+        public function indexCommunaute()
+        {
+            $user = Auth::user();
+
+            /*
+            |--------------------------------------------------------------------------
+            | DONNÉES DE LA VUE
+            |--------------------------------------------------------------------------
+            */
+
+            $data = [];
+
+            // Utilisateur connecté
+            $data['user'] = $user;
+
+            // Bibliothèque des icônes disponibles
+            $data['groupIcons'] = $this->obtenirIconesGroupe();
+
+            /*
+            |--------------------------------------------------------------------------
+            | AFFICHAGE
+            |--------------------------------------------------------------------------
+            */
+
+            return view(
+                'dependances.templates.admins.gestions.communautes.groupes.groupe',
+                $data
+            );
+        }
+
+        /**
+         * |--------------------------------------------------------------------------
+         * | CREATION UTILISATEUR
+         * |--------------------------------------------------------------------------
+         */
+        public function storeUtilisateur(Request $request)
+        {
+            $data = $request->validate([
+
+                'nom' =>
+                    'required|string|max:255',
+
+                'description' =>
+                    'nullable|string',
+
+                // IDENTITÉ VISUELLE
+                'icone' =>
+                    'nullable|string|max:100',
+
+                'montant_cotisation' =>
+                    'required|numeric|min:0',
+
+                'penalite_pourcentage' =>
+                    'nullable|numeric|min:0',
+
+                'fonds_assurance_pourcentage' =>
+                    'nullable|numeric|min:0',
+
+                'delai_grace_heures' =>
+                    'nullable|integer|min:0',
+
+                'nombre_participants_max' =>
+                    'required|integer|min:1',
+
+                'periodicite_id' =>
+                    'required|exists:periodicites,id',
+
+                'date_debut' =>
+                    'required|date',
+
+                'date_fin_estimee' =>
+                    'nullable|date|after_or_equal:date_debut',
+
+                'mode_distribution_id' =>
+                    'required|exists:parametres,id',
+
+                'validation_membre_id' =>
+                    'required|exists:parametres,id',
+
+                'visibilite_id' =>
+                    'required|exists:parametres,id',
+            ]);
+
+            try {
+
+                GroupeUtilisateurService::store($data);
+
+                toast(
+                    'Groupe créé avec succès',
+                    'success'
+                );
+
+            } catch (Exception $e) {
+
+                toast(
+                    $e->getMessage(),
+                    'error'
+                );
+            }
+
+            return back();
+        }
+        /**
+         * |--------------------------------------------------------------------------
+         * | MODIFICATION UTILISATEUR
+         * |--------------------------------------------------------------------------
+         */
+        public function updateUtilisateur(Request $request)
+        {
+            $data = $request->validate([
+
+                'id' =>
+                    'required|exists:groupes,id',
+
+                'nom' =>
+                    'required|string|max:255',
+
+                'description' =>
+                    'nullable|string',
+
+                // IDENTITÉ VISUELLE
+                'icone' =>
+                    'nullable|string|max:100',
+
+                'montant_cotisation' =>
+                    'required|numeric|min:0',
+
+                'penalite_pourcentage' =>
+                    'nullable|numeric|min:0',
+
+                'fonds_assurance_pourcentage' =>
+                    'nullable|numeric|min:0',
+
+                'delai_grace_heures' =>
+                    'nullable|integer|min:0',
+
+                'nombre_participants_max' =>
+                    'required|integer|min:1',
+
+                'periodicite_id' =>
+                    'required|exists:periodicites,id',
+
+                'date_debut' =>
+                    'required|date',
+
+                'date_fin_estimee' =>
+                    'nullable|date|after_or_equal:date_debut',
+
+                'mode_distribution_id' =>
+                    'required|exists:parametres,id',
+
+                'validation_membre_id' =>
+                    'required|exists:parametres,id',
+
+                'visibilite_id' =>
+                    'required|exists:parametres,id',
+            ]);
+
+            try {
+
+                GroupeUtilisateurService::update($data);
+
+                toast(
+                    'Groupe modifié avec succès',
+                    'success'
+                );
+
+            } catch (Exception $e) {
+
+                toast(
+                    $e->getMessage(),
+                    'error'
+                );
+            }
+
+            return back();
+        }
+    // COTE UTILISATEUR N
 }

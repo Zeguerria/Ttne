@@ -28,7 +28,7 @@ Route::get('/', function () {
 // LES REDIRECTIONS DEBUT
 Route::get('/dashboard', 'App\Http\Controllers\RouteController@lesdirections')->name('redirects');
 Route::get('Admin/Home','App\Http\Controllers\RouteController@AdminHome')->name('AdminHome');
-Route::get('Admin/Communaute/Groupe','App\Http\Controllers\RouteController@IndexCommunaute')->name('AdminCommunaute');
+Route::get('Admin/Communaute/Groupe','App\Http\Controllers\GroupeController@IndexCommunaute')->name('AdminCommunaute');
 //TYPE DE PARAMETRE DEBUT
                 // CHEMIN DES PAGES DEBUT
                 Route::get('Admin/Parametrages/Type-Parametre', [TypeParametreController::class, 'index'])->name('ADM-TP-type');

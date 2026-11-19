@@ -1,13 +1,15 @@
 {{-- DEBUT --}}
+
 <section class="steep-1">
     <div class="steep-01">
 
         <div class="container-fluid">
             <div class="row g-4 p-2">
 
-                {{-- NOM --}}
+                {{-- NOM DU GROUPE --}}
                 <div class="col-md-6">
                     <div class="futureField">
+
                         <label>
                             <i class="fa fa-users"></i>
                             Nom du groupe
@@ -16,19 +18,24 @@
                         <div class="futureInput">
                             <i class="fa fa-users inputIcon"></i>
 
-                            <input type="text"
-                                   name="nom"
-                                   class="form-control"
-                                   placeholder="Ex : Les Bâtisseurs"
-                                   maxlength="100"
-                                   required>
+                            <input
+                                type="text"
+                                name="nom"
+                                class="form-control"
+                                placeholder="Ex : Les Bâtisseurs"
+                                maxlength="100"
+                                data-review="nom"
+                                required
+                            >
                         </div>
+
                     </div>
                 </div>
 
-                {{-- VISIBILITE --}}
+                {{-- VISIBILITE DU GROUPE --}}
                 <div class="col-md-6">
                     <div class="futureField">
+
                         <label>
                             <i class="fa fa-eye"></i>
                             Visibilité du groupe
@@ -37,10 +44,12 @@
                         <div class="futureInput">
                             <i class="fa fa-eye inputIcon"></i>
 
-                            <select name="visibilite_id"
-                                    class="form-control"
-                                    required>
-
+                            <select
+                                name="visibilite_id"
+                                class="form-control"
+                                data-review="visibilite"
+                                required
+                            >
                                 <option value="" selected disabled>
                                     Choisir la visibilité
                                 </option>
@@ -53,35 +62,52 @@
 
                             </select>
                         </div>
+
                     </div>
                 </div>
 
-                {{-- DESCRIPTION --}}
+                {{-- DESCRIPTION DU GROUPE --}}
                 <div class="col-md-12">
+
                     <div class="row mt-4">
-                        {{-- DESCRIPTION --}}
-                        <div class="col-12 col-md-12 mb-4 ">
-                                <div class="futureField">
-                                    <label class="">
-                                        <i class="fa fa-comment"></i>
-                                        Description
-                                    </label>
-                                    <div class="futureTextarea">
-                                        <i class="fa fa-align-left inputIcon textareaIcon"></i>
 
-                                            <textarea class="" disabled name="description" value="description" placeholder="Entrer la description"></textarea>
+                        <div class="col-12 mb-4">
 
-                                    </div>
+                            <div class="futureField">
+
+                                <label>
+                                    <i class="fa fa-comment"></i>
+                                    Description
+                                </label>
+
+                                <div class="futureTextarea">
+
+                                    <i class="fa fa-align-left inputIcon textareaIcon"></i>
+
+                                    <textarea
+                                        name="description"
+                                        class="form-control"
+                                        rows="5"
+                                        maxlength="1000"
+                                        placeholder="Présentez votre groupe, ses objectifs et les raisons de sa création..."
+                                        data-review="description"
+                                    ></textarea>
 
                                 </div>
 
+                            </div>
+
                         </div>
+
                     </div>
+
                 </div>
 
                 {{-- INFORMATIONS --}}
-                {{-- <div class="col-md-12">
+                {{--
+                <div class="col-md-12">
                     <div class="futureFinal">
+
                         <i class="fa fa-lightbulb-o"></i>
 
                         <h3>Définissez votre communauté</h3>
@@ -92,14 +118,17 @@
                             ensuite personnaliser son apparence, définir ses
                             règles de fonctionnement et gérer ses participants.
                         </p>
+
                     </div>
-                </div> --}}
+                </div>
+                --}}
 
             </div>
         </div>
 
     </div>
 </section>
+
 {{-- FIN --}}
 
 

@@ -50,20 +50,5 @@ class RouteController extends Controller
     // toast("Votre compte est désactivé. Veuillez contacter l'administrateur.", "error");
         return view('dependances.templates.admins.navigations.homes.home');
     }
-    public function indexCommunaute()
-    {
-    $user = Auth::user();
-
-    // 🔒 Vérifie si l'utilisateur est désactivé
-    // if ($user->active === '1') {
-    //     Auth::guard('web')->logout();
-    //     // $request->session()->invalidate();
-    //     // $request->session()->regenerateToken();
-
-    //     toast("Votre compte est désactivé. Veuillez contacter l'administrateur.", "error");
-    //     return redirect('login');
-    // }
-    // toast("Votre compte est désactivé. Veuillez contacter l'administrateur.", "error");
-        return view('dependances.templates.admins.gestions.communautes.groupes.groupe');
-    }
+   
 }

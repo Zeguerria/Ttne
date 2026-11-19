@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('nom');
 
             $table->string('slug')->unique();
+            $table->string('icone')
+    ->default('fa-users');
 
             $table->text('description')->nullable();
 

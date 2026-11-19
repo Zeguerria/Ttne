@@ -23,55 +23,41 @@ class GroupeUtilisateurService
 
         try {
 
-            /**
-             * |--------------------------------------------------------------------------
-             * | UTILISATEUR CONNECTÉ
-             * |--------------------------------------------------------------------------
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | UTILISATEUR CONNECTÉ
+            |--------------------------------------------------------------------------
+            */
 
             $createurId = Auth::id();
 
             if (!$createurId) {
-
                 throw new Exception(
                     'Vous devez être connecté pour créer un groupe.'
                 );
             }
 
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | SLUG AUTOMATIQUE
-             * |--------------------------------------------------------------------------
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | SLUG AUTOMATIQUE
+            |--------------------------------------------------------------------------
+            */
 
             $slugBase = Str::slug($data['nom']);
 
             $slug = $slugBase;
-
             $compteur = 1;
 
-            while (
-                Groupe::where('slug', $slug)->exists()
-            ) {
-
+            while (Groupe::where('slug', $slug)->exists()) {
                 $slug = $slugBase . '-' . $compteur;
-
                 $compteur++;
             }
 
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | STATUT INITIAL
-             * |--------------------------------------------------------------------------
-             *
-             * Un groupe créé par un utilisateur commence
-             * automatiquement en BROUILLON.
-             *
-             * Code :
-             * S-G-BROUILLON
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | STATUT INITIAL : BROUILLON
+            |--------------------------------------------------------------------------
+            */
 
             $statutBrouillon = Parametre::where(
                 'code',
@@ -82,18 +68,16 @@ class GroupeUtilisateurService
                 ->first();
 
             if (!$statutBrouillon) {
-
                 throw new Exception(
                     'Le statut S-G-BROUILLON est introuvable.'
                 );
             }
 
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | CREATION
-             * |--------------------------------------------------------------------------
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | CREATION
+            |--------------------------------------------------------------------------
+            */
 
             $groupe = Groupe::create([
 
@@ -101,16 +85,15 @@ class GroupeUtilisateurService
 
                 'slug' => $slug,
 
-                'description' =>
-                    $data['description'] ?? null,
+                'description' => $data['description'] ?? null,
 
-                /**
-                 * Créateur automatique
-                 */
+                // Identité visuelle
+                'icone' => $data['icone'] ?? 'fa-users',
+
+                // Créateur automatique
                 'createur_id' => $createurId,
 
-                'montant_cotisation' =>
-                    $data['montant_cotisation'],
+                'montant_cotisation' => $data['montant_cotisation'],
 
                 'penalite_pourcentage' =>
                     $data['penalite_pourcentage'] ?? 0,
@@ -124,47 +107,36 @@ class GroupeUtilisateurService
                 'nombre_participants_max' =>
                     $data['nombre_participants_max'],
 
-                'periodicite_id' =>
-                    $data['periodicite_id'],
+                'periodicite_id' => $data['periodicite_id'],
 
-                'date_debut' =>
-                    $data['date_debut'],
+                'date_debut' => $data['date_debut'],
 
-                'date_fin_estimee' =>
-                    $data['date_fin_estimee'] ?? null,
+                'date_fin_estimee' => $data['date_fin_estimee'] ?? null,
 
-                'mode_distribution_id' =>
-                    $data['mode_distribution_id'],
+                'mode_distribution_id' => $data['mode_distribution_id'],
 
-                'validation_membre_id' =>
-                    $data['validation_membre_id'],
+                'validation_membre_id' => $data['validation_membre_id'],
 
-                'visibilite_id' =>
-                    $data['visibilite_id'],
+                'visibilite_id' => $data['visibilite_id'],
 
-                /**
-                 * Statut automatique
-                 */
-                'statut_id' =>
-                    $statutBrouillon->id,
+                // Statut automatique
+                'statut_id' => $statutBrouillon->id,
 
             ]);
 
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | HISTORIQUE
-             * |--------------------------------------------------------------------------
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | HISTORIQUE
+            |--------------------------------------------------------------------------
+            */
 
             HistoriqueService::creer($groupe);
 
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | VALIDATION TRANSACTION
-             * |--------------------------------------------------------------------------
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | VALIDATION TRANSACTION
+            |--------------------------------------------------------------------------
+            */
 
             DB::commit();
 
@@ -193,66 +165,53 @@ class GroupeUtilisateurService
 
         try {
 
-            /**
-             * |--------------------------------------------------------------------------
-             * | UTILISATEUR CONNECTÉ
-             * |--------------------------------------------------------------------------
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | UTILISATEUR CONNECTÉ
+            |--------------------------------------------------------------------------
+            */
 
             $createurId = Auth::id();
 
             if (!$createurId) {
-
                 throw new Exception(
                     'Vous devez être connecté pour modifier un groupe.'
                 );
             }
 
+            /*
+            |--------------------------------------------------------------------------
+            | RECUPERATION DU GROUPE
+            |--------------------------------------------------------------------------
+            */
 
-            /**
-             * |--------------------------------------------------------------------------
-             * | RECUPERATION DU GROUPE
-             * |--------------------------------------------------------------------------
-             */
+            $groupe = Groupe::findOrFail($data['id']);
 
-            $groupe = Groupe::findOrFail(
-                $data['id']
-            );
-
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | VERIFICATION DU CREATEUR
-             * |--------------------------------------------------------------------------
-             *
-             * Un utilisateur ne peut modifier que
-             * les groupes qu'il a créés.
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | VERIFICATION DU CREATEUR
+            |--------------------------------------------------------------------------
+            */
 
             if ($groupe->createur_id !== $createurId) {
-
                 throw new Exception(
                     'Vous n\'êtes pas autorisé à modifier ce groupe.'
                 );
             }
 
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | ANCIENNES VALEURS
-             * |--------------------------------------------------------------------------
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | ANCIENNES VALEURS
+            |--------------------------------------------------------------------------
+            */
 
             $ancienneValeur = $groupe->toArray();
 
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | SLUG AUTOMATIQUE
-             * |--------------------------------------------------------------------------
-             *
-             * Le slug reste identique si le nom ne change pas.
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | SLUG AUTOMATIQUE
+            |--------------------------------------------------------------------------
+            */
 
             $slug = $groupe->slug;
 
@@ -261,7 +220,6 @@ class GroupeUtilisateurService
                 $slugBase = Str::slug($data['nom']);
 
                 $slug = $slugBase;
-
                 $compteur = 1;
 
                 while (
@@ -269,45 +227,32 @@ class GroupeUtilisateurService
                         ->where('id', '!=', $groupe->id)
                         ->exists()
                 ) {
-
                     $slug = $slugBase . '-' . $compteur;
-
                     $compteur++;
                 }
             }
 
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | MODIFICATION
-             * |--------------------------------------------------------------------------
-             *
-             * createur_id n'est PAS modifié.
-             *
-             * statut_id n'est PAS envoyé par l'utilisateur.
-             * Le statut actuel du groupe est conservé.
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | MODIFICATION
+            |--------------------------------------------------------------------------
+            */
 
             $groupe->update([
 
-                'nom' =>
-                    $data['nom'],
+                'nom' => $data['nom'],
 
-                'slug' =>
-                    $slug,
+                'slug' => $slug,
 
-                'description' =>
-                    $data['description'] ?? null,
+                'description' => $data['description'] ?? null,
 
-                /**
-                 * Le créateur reste celui qui a créé
-                 * le groupe.
-                 */
-                'createur_id' =>
-                    $groupe->createur_id,
+                // Identité visuelle
+                'icone' => $data['icone'] ?? $groupe->icone ?? 'fa-users',
 
-                'montant_cotisation' =>
-                    $data['montant_cotisation'],
+                // Le créateur reste inchangé
+                'createur_id' => $groupe->createur_id,
+
+                'montant_cotisation' => $data['montant_cotisation'],
 
                 'penalite_pourcentage' =>
                     $data['penalite_pourcentage'] ?? 0,
@@ -321,38 +266,28 @@ class GroupeUtilisateurService
                 'nombre_participants_max' =>
                     $data['nombre_participants_max'],
 
-                'periodicite_id' =>
-                    $data['periodicite_id'],
+                'periodicite_id' => $data['periodicite_id'],
 
-                'date_debut' =>
-                    $data['date_debut'],
+                'date_debut' => $data['date_debut'],
 
-                'date_fin_estimee' =>
-                    $data['date_fin_estimee'] ?? null,
+                'date_fin_estimee' => $data['date_fin_estimee'] ?? null,
 
-                'mode_distribution_id' =>
-                    $data['mode_distribution_id'],
+                'mode_distribution_id' => $data['mode_distribution_id'],
 
-                'validation_membre_id' =>
-                    $data['validation_membre_id'],
+                'validation_membre_id' => $data['validation_membre_id'],
 
-                'visibilite_id' =>
-                    $data['visibilite_id'],
+                'visibilite_id' => $data['visibilite_id'],
 
-                /**
-                 * Le statut actuel est conservé.
-                 */
-                'statut_id' =>
-                    $groupe->statut_id,
+                // Le statut actuel est conservé
+                'statut_id' => $groupe->statut_id,
 
             ]);
 
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | HISTORIQUE
-             * |--------------------------------------------------------------------------
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | HISTORIQUE
+            |--------------------------------------------------------------------------
+            */
 
             HistoriqueService::modifier(
                 $groupe,
@@ -360,12 +295,11 @@ class GroupeUtilisateurService
                 $groupe->toArray()
             );
 
-
-            /**
-             * |--------------------------------------------------------------------------
-             * | VALIDATION TRANSACTION
-             * |--------------------------------------------------------------------------
-             */
+            /*
+            |--------------------------------------------------------------------------
+            | VALIDATION TRANSACTION
+            |--------------------------------------------------------------------------
+            */
 
             DB::commit();
 
@@ -382,4 +316,3 @@ class GroupeUtilisateurService
         }
     }
 }
-
