@@ -689,6 +689,47 @@ class GroupeController extends Controller
             // Bibliothèque des icônes disponibles
             $data['groupIcons'] = $this->obtenirIconesGroupe();
 
+            $$data['periodicites']  = Periodicite::where(
+            'active',
+            false
+        )
+            ->orderBy('id')
+            ->get();
+            $data['userCreateur']  = User::where('supprimer', 0)
+                ->whereHas('profil', function ($query) {
+                    $query->where('code', '!=', 'SIMPLE-UTILISATEUR');
+                })
+                ->orderBy('name')
+                ->get();
+
+        $data['modesDistribution']  = Parametre::where(
+            'type_parametre_id',
+            4
+        )
+            ->orderBy('id')
+            ->get();
+
+        $data['validationsMembre']  = Parametre::where(
+            'type_parametre_id',
+            5
+        )
+            ->orderBy('id')
+            ->get();
+
+        $data['visibilites'] = Parametre::where(
+            'type_parametre_id',
+            6
+        )
+            ->orderBy('id')
+            ->get();
+
+        $data['statutsGroupe'] = Parametre::where(
+            'type_parametre_id',
+            7
+        )
+            ->orderBy('id')
+            ->get();
+
             /*
             |--------------------------------------------------------------------------
             | AFFICHAGE
