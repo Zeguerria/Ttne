@@ -29,6 +29,7 @@ class Groupe extends Model
 
         'nom',
         'slug',
+        'icone',
         'description',
 
         'createur_id',

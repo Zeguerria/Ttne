@@ -118,6 +118,7 @@ Route::get('Admin/Communaute/Groupe','App\Http\Controllers\GroupeController@Inde
             //AUTRES FUNCTION FIN
             //FONCTIONS DEBUT
                 Route::post('AjouterGroupe', [GroupeController::class, 'store'])->name('AjouterGroupe');
+                Route::post('AjouterGroupeUtilisateur', [GroupeController::class, 'storeUtilisateur'])->name('AjouterGroupeUtilisateur');
                 Route::post('ModifierGroupe', [GroupeController::class, 'update'])->name('ModifierGroupe');
                 Route::post('CorbeillePeriodicite', [GroupeController::class, 'corbeille'])->name('CorbeilleGroupe');
                 Route::post('/select/corbeille/groupes',[GroupeController::class, 'corbeilleSelection']);

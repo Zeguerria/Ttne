@@ -8,7 +8,7 @@ use App\Models\Parametre;
 use App\Models\Periodicite;
 use App\Models\User;
 use App\Services\Core\GroupeService;
-use App\Services\GroupeUtilisateurService;
+use App\Services\Core\GroupeUtilisateurService;
 use Illuminate\Support\Facades\Auth;
 
 use Exception;
@@ -671,76 +671,82 @@ class GroupeController extends Controller
          * | ESPACE COMMUNAUTAIRE
          * |--------------------------------------------------------------------------
          */
-        public function indexCommunaute()
-        {
-            $user = Auth::user();
 
-            /*
-            |--------------------------------------------------------------------------
-            | DONNÉES DE LA VUE
-            |--------------------------------------------------------------------------
-            */
+public function indexCommunaute()
+{
+    $user = Auth::user();
 
-            $data = [];
+    /*
+    |--------------------------------------------------------------------------
+    | DONNÉES DE LA VUE
+    |--------------------------------------------------------------------------
+    */
 
-            // Utilisateur connecté
-            $data['user'] = $user;
+    $data = [];
 
-            // Bibliothèque des icônes disponibles
-            $data['groupIcons'] = $this->obtenirIconesGroupe();
+    // Utilisateur connecté
+    $data['user'] = $user;
 
-            $$data['periodicites']  = Periodicite::where(
-            'active',
-            false
-        )
-            ->orderBy('id')
-            ->get();
-            $data['userCreateur']  = User::where('supprimer', 0)
-                ->whereHas('profil', function ($query) {
-                    $query->where('code', '!=', 'SIMPLE-UTILISATEUR');
-                })
-                ->orderBy('name')
-                ->get();
+    // Bibliothèque des icônes disponibles
+    $data['groupIcons'] = $this->obtenirIconesGroupe();
 
-        $data['modesDistribution']  = Parametre::where(
-            'type_parametre_id',
-            4
-        )
-            ->orderBy('id')
-            ->get();
+    // Périodicités
+    $data['periodicites'] = Periodicite::where('active', false)
+        ->orderBy('id')
+        ->get();
 
-        $data['validationsMembre']  = Parametre::where(
-            'type_parametre_id',
-            5
-        )
-            ->orderBy('id')
-            ->get();
+    // Utilisateurs pouvant être créateurs
+    $data['userCreateur'] = User::where('supprimer', 0)
+        ->whereHas('profil', function ($query) {
+            $query->where('code', '!=', 'SIMPLE-UTILISATEUR');
+        })
+        ->orderBy('name')
+        ->get();
 
-        $data['visibilites'] = Parametre::where(
-            'type_parametre_id',
-            6
-        )
-            ->orderBy('id')
-            ->get();
+    // Modes de distribution
+    $data['modesDistribution'] = Parametre::where(
+        'type_parametre_id',
+        4
+    )
+        ->orderBy('id')
+        ->get();
 
-        $data['statutsGroupe'] = Parametre::where(
-            'type_parametre_id',
-            7
-        )
-            ->orderBy('id')
-            ->get();
+    // Modes de validation des membres
+    $data['validationsMembre'] = Parametre::where(
+        'type_parametre_id',
+        5
+    )
+        ->orderBy('id')
+        ->get();
 
-            /*
-            |--------------------------------------------------------------------------
-            | AFFICHAGE
-            |--------------------------------------------------------------------------
-            */
+    // Visibilités des groupes
+    $data['visibilites'] = Parametre::where(
+        'type_parametre_id',
+        6
+    )
+        ->orderBy('id')
+        ->get();
 
-            return view(
-                'dependances.templates.admins.gestions.communautes.groupes.groupe',
-                $data
-            );
-        }
+    // Statuts des groupes
+    $data['statutsGroupe'] = Parametre::where(
+        'type_parametre_id',
+        7
+    )
+        ->orderBy('id')
+        ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | AFFICHAGE
+    |--------------------------------------------------------------------------
+    */
+
+    return view(
+        'dependances.templates.admins.gestions.communautes.groupes.groupe',
+        $data
+    );
+}
+
 
         /**
          * |--------------------------------------------------------------------------

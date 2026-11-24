@@ -50,7 +50,7 @@
 
                                 @foreach($periodicites ?? [] as $periodicite)
                                     <option value="{{ $periodicite->id }}">
-                                        {{ $periodicite->libelle }}
+                                        {{ $periodicite->nom }}
                                     </option>
                                 @endforeach
 

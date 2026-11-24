@@ -857,7 +857,7 @@
 
             <form id="staticCreateGroupForm"
                   method="POST"
-                  action="#">
+                  action="{{route('AjouterGroupeUtilisateur')}}">
 
                 @csrf
 
@@ -992,7 +992,7 @@
                         <button type="submit"
                                 class="futureBtn successBtn submitStep"
                                 form="staticCreateGroupForm"
-                                style="display:none;">
+                                >
                             <i class="fa fa-check"></i>
                             Créer le groupe
                         </button>
@@ -4923,20 +4923,7 @@ $grid.html(currentItems.map(renderGroupCard).join(""));
                CRÉATION STATIQUE D'UN GROUPE
             ========================================================= */
 
-            $(document)
-                .off("submit.community", SELECTORS.createForm)
-                .on("submit.community", SELECTORS.createForm, function (event) {
-                    event.preventDefault();
-
-                    notify(
-                        "Votre formulaire de création a bien été pris en compte pour cette démonstration. Aucun groupe n'a été enregistré."
-                    );
-
-                    this.reset();
-
-                    $(SELECTORS.createModal).modal("hide");
-                });
-
+           
             /* =========================================================
                RACCOURCIS
             ========================================================= */

@@ -56,7 +56,7 @@
                                     Choisir une validation
                                 </option>
 
-                                @foreach($validationsMembres ?? [] as $validation)
+                                @foreach($validationsMembre ?? [] as $validation)
                                     <option value="{{ $validation->id }}">
                                         {{ $validation->libelle }}
                                     </option>

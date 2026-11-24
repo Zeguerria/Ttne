@@ -1,6 +1,5 @@
 <?php
-
-namespace App\Services;
+namespace App\Services\Core;
 
 use App\Models\Groupe;
 use App\Models\Parametre;
