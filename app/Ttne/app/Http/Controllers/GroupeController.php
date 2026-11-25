@@ -672,80 +672,194 @@ class GroupeController extends Controller
          * |--------------------------------------------------------------------------
          */
 
-public function indexCommunaute()
-{
-    $user = Auth::user();
 
-    /*
-    |--------------------------------------------------------------------------
-    | DONNÉES DE LA VUE
-    |--------------------------------------------------------------------------
-    */
+        public function indexCommunaute()
+        {
+            $user = Auth::user();
 
-    $data = [];
+            if (!$user) {
+                abort(403, 'Accès non autorisé.');
+            }
 
-    // Utilisateur connecté
-    $data['user'] = $user;
+            $profilConnecte = $user->profil;
 
-    // Bibliothèque des icônes disponibles
-    $data['groupIcons'] = $this->obtenirIconesGroupe();
+            if (!$profilConnecte) {
+                abort(403, 'Aucun profil associé à cet utilisateur.');
+            }
 
-    // Périodicités
-    $data['periodicites'] = Periodicite::where('active', false)
-        ->orderBy('id')
-        ->get();
+            /*
+            |--------------------------------------------------------------------------
+            | DONNÉES DE LA VUE
+            |--------------------------------------------------------------------------
+            */
 
-    // Utilisateurs pouvant être créateurs
-    $data['userCreateur'] = User::where('supprimer', 0)
-        ->whereHas('profil', function ($query) {
-            $query->where('code', '!=', 'SIMPLE-UTILISATEUR');
-        })
-        ->orderBy('name')
-        ->get();
+            $data = [];
 
-    // Modes de distribution
-    $data['modesDistribution'] = Parametre::where(
-        'type_parametre_id',
-        4
-    )
-        ->orderBy('id')
-        ->get();
+            // Utilisateur connecté
+            $data['user'] = $user;
 
-    // Modes de validation des membres
-    $data['validationsMembre'] = Parametre::where(
-        'type_parametre_id',
-        5
-    )
-        ->orderBy('id')
-        ->get();
+            // Profil connecté
+            $data['profilConnecte'] = $profilConnecte;
 
-    // Visibilités des groupes
-    $data['visibilites'] = Parametre::where(
-        'type_parametre_id',
-        6
-    )
-        ->orderBy('id')
-        ->get();
+            // Bibliothèque des icônes disponibles
+            $data['groupIcons'] = $this->obtenirIconesGroupe();
 
-    // Statuts des groupes
-    $data['statutsGroupe'] = Parametre::where(
-        'type_parametre_id',
-        7
-    )
-        ->orderBy('id')
-        ->get();
+            /*
+            |--------------------------------------------------------------------------
+            | PÉRIODICITÉS
+            |--------------------------------------------------------------------------
+            */
 
-    /*
-    |--------------------------------------------------------------------------
-    | AFFICHAGE
-    |--------------------------------------------------------------------------
-    */
+            $data['periodicites'] = Periodicite::where('active', false)
+                ->orderBy('id')
+                ->get();
 
-    return view(
-        'dependances.templates.admins.gestions.communautes.groupes.groupe',
-        $data
-    );
-}
+            /*
+            |--------------------------------------------------------------------------
+            | UTILISATEURS POUVANT ÊTRE CRÉATEURS
+            |--------------------------------------------------------------------------
+            */
+
+            $data['userCreateur'] = User::where('supprimer', 0)
+                ->whereHas('profil', function ($query) {
+                    $query->where('code', '!=', 'SIMPLE-UTILISATEUR');
+                })
+                ->orderBy('name')
+                ->get();
+
+            /*
+            |--------------------------------------------------------------------------
+            | UTILISATEURS POUVANT ÊTRE INVITÉS DANS UNE TONTINE
+            |--------------------------------------------------------------------------
+            */
+
+            $profilsInvitables = match ($profilConnecte->code) {
+
+                // Un membre de la communauté ne peut inviter
+                // que d'autres membres de la communauté.
+                'MEMBRE-COMMUNAUTE' => [
+                    'MEMBRE-COMMUNAUTE',
+                ],
+
+                // Les profils intermédiaires et administratifs
+                // peuvent inviter tous les profils sauf les développeurs.
+                'OPERATEUR',
+                'JURISTE',
+                'RH',
+                'DRH',
+                'ADMIN',
+                'DIRECTEUR-GENERAL' => [
+                    'MEMBRE-COMMUNAUTE',
+                    'OPERATEUR',
+                    'JURISTE',
+                    'RH',
+                    'DRH',
+                    'ADMIN',
+                    'DIRECTEUR-GENERAL',
+                ],
+
+                // Le développeur peut inviter tout le monde
+                // sauf le super développeur.
+                'DEVELOPPEUR' => [
+                    'MEMBRE-COMMUNAUTE',
+                    'OPERATEUR',
+                    'JURISTE',
+                    'RH',
+                    'DRH',
+                    'ADMIN',
+                    'DIRECTEUR-GENERAL',
+                    'DEVELOPPEUR',
+                ],
+
+                // Le super développeur peut inviter tout le monde.
+                'SUPER-DEVELOPPEUR' => [
+                    'MEMBRE-COMMUNAUTE',
+                    'OPERATEUR',
+                    'JURISTE',
+                    'RH',
+                    'DRH',
+                    'ADMIN',
+                    'DIRECTEUR-GENERAL',
+                    'DEVELOPPEUR',
+                    'SUPER-DEVELOPPEUR',
+                ],
+
+                default => [],
+            };
+
+            $data['usersInvitables'] = User::where('supprimer', 0)
+                ->where('id', '!=', $user->id)
+                ->whereHas('profil', function ($query) use ($profilsInvitables) {
+                    $query->whereIn('code', $profilsInvitables);
+                })
+                ->with('profil')
+                ->orderBy('name')
+                ->get();
+
+            /*
+            |--------------------------------------------------------------------------
+            | MODES DE DISTRIBUTION
+            |--------------------------------------------------------------------------
+            */
+
+            $data['modesDistribution'] = Parametre::where(
+                'type_parametre_id',
+                4
+            )
+                ->orderBy('id')
+                ->get();
+
+            /*
+            |--------------------------------------------------------------------------
+            | MODES DE VALIDATION DES MEMBRES
+            |--------------------------------------------------------------------------
+            */
+
+            $data['validationsMembre'] = Parametre::where(
+                'type_parametre_id',
+                5
+            )
+                ->orderBy('id')
+                ->get();
+
+            /*
+            |--------------------------------------------------------------------------
+            | VISIBILITÉS DES GROUPES
+            |--------------------------------------------------------------------------
+            */
+
+            $data['visibilites'] = Parametre::where(
+                'type_parametre_id',
+                6
+            )
+                ->orderBy('id')
+                ->get();
+
+            /*
+            |--------------------------------------------------------------------------
+            | STATUTS DES GROUPES
+            |--------------------------------------------------------------------------
+            */
+
+            $data['statutsGroupe'] = Parametre::where(
+                'type_parametre_id',
+                7
+            )
+                ->orderBy('id')
+                ->get();
+
+            /*
+            |--------------------------------------------------------------------------
+            | AFFICHAGE
+            |--------------------------------------------------------------------------
+            */
+
+            return view(
+                'dependances.templates.admins.gestions.communautes.groupes.groupe',
+                $data
+            );
+        }
+
 
 
         /**
